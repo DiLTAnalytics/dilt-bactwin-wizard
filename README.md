@@ -67,7 +67,9 @@ Software, Plugins und Referenzdaten: [AGPL-3.0-only](LICENSES/AGPL-3.0-only.txt)
 BACtwin, AMEV, BACnet (ASHRAE) und Project Haystack sind Namen bzw. Marken ihrer Inhaber, werden nur
 beschreibend verwendet und sind mit diesem Projekt nicht verbunden.
 
-## Förderung
+## Entwicklung und Förderung
+
+Entwickelt von [DiLT Analytics](https://diltanalytics.com/).
 
 Das Open Source Tool wurde im Rahmen des FFG Projekts BOSS (FO99992319) erstellt. Dieses Projekt wird
 aus Mitteln der FFG gefördert ([www.ffg.at](https://www.ffg.at)). Die FFG ist die zentrale nationale
