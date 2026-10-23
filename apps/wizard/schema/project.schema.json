@@ -1,0 +1,395 @@
+{
+  "$id": "https://diltanalytics.github.io/dilt-bactwin-wizard/schema/project.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "description": "URL of this schema, for editors",
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^1\\.\\d+$",
+      "description": "Format version. Files of a newer version, minor included, are refused; 1.0 is current"
+    },
+    "header": {
+      "type": "object",
+      "properties": {
+        "project_name": {
+          "default": "",
+          "type": "string"
+        },
+        "ede_sources": {
+          "default": [],
+          "description": "Imported EDE files, one entry per import. Their data is in points; the file is never needed to open the project",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "filename": {
+                "type": "string"
+              },
+              "imported_at": {
+                "description": "Import time, ISO 8601",
+                "type": "string"
+              },
+              "meta": {
+                "description": "The EDE file's own header lines (lines 2-7) as KEY: value",
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "path": {
+                "description": "Where the file was, relative to the project file, with / separators. Absent when it was on another drive",
+                "type": "string"
+              },
+              "sha256": {
+                "description": "Checksum of the file as imported, to tell whether it changed since",
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "size": {
+                "description": "Size in bytes as imported",
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "filename"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "sequences": {
+          "default": [],
+          "description": "The sequence files, in the order they run. Each is a file of its own, e.g. one shared between projects",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Relative to the project file, with / separators; absolute when on another drive"
+              }
+            },
+            "required": [
+              "path"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "layout": {
+          "description": "How the project is shown, so it opens the same for everyone",
+          "type": "object",
+          "properties": {
+            "table": {
+              "type": "object",
+              "properties": {
+                "pinned_left": {
+                  "description": "Columns kept at the left edge",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "pinned_right": {
+                  "description": "Columns kept at the right edge; absent: the BACtwin name",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "widths": {
+                  "description": "Widths set by hand, in pixels; other columns fit their content",
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {
+                    "type": "integer",
+                    "minimum": 16,
+                    "maximum": 9007199254740991
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "description": "How the point table is laid out"
+            }
+          },
+          "additionalProperties": false
+        },
+        "reference": {
+          "description": "Reference data the project was saved with; opening with different data shows the differences",
+          "type": "object",
+          "properties": {
+            "template": {
+              "type": "string",
+              "description": "Name template version"
+            },
+            "plugins": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "version"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Enabled plugins"
+            }
+          },
+          "required": [
+            "template",
+            "plugins"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "points": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "object",
+            "properties": {
+              "filename": {
+                "type": "string",
+                "description": "Name of the EDE file"
+              },
+              "invalid": {
+                "default": {},
+                "description": "Cells refused on import, as their original text by EDE field; each is shown as an error on the point",
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "duplicated_keyname": {
+                "default": false,
+                "description": "The source repeated this point's identity; the repeat was not imported",
+                "type": "boolean"
+              },
+              "missing_from_source": {
+                "default": false,
+                "description": "The source file was updated and no longer contains this point; it is kept, not deleted",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "filename"
+            ],
+            "additionalProperties": false,
+            "description": "Where the point came from"
+          },
+          "ede": {
+            "description": "The imported row, typed as in the EDE row schema; absent numbers and booleans are null",
+            "default": {},
+            "type": "object",
+            "properties": {
+              "keyname": {
+                "default": "",
+                "type": "string"
+              },
+              "device_obj_instance": {
+                "default": null,
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "object_name": {
+                "default": "",
+                "type": "string"
+              },
+              "object_type": {
+                "default": null,
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "object_instance": {
+                "default": null,
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "description": {
+                "default": "",
+                "type": "string"
+              },
+              "present_value_default": {
+                "default": null,
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "min_present_value": {
+                "default": null,
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "max_present_value": {
+                "default": null,
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "settable": {
+                "default": "",
+                "type": "string"
+              },
+              "commandable": {
+                "default": "",
+                "type": "string"
+              },
+              "supports_cov": {
+                "default": "",
+                "type": "string"
+              },
+              "hi_limit": {
+                "default": null,
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "low_limit": {
+                "default": null,
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "state_text_reference": {
+                "default": null,
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "unit_code": {
+                "default": null,
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "vendor_specific_address": {
+                "default": null,
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "notification_class": {
+                "default": null,
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "object_tag": {
+                "default": null,
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "object_tag_text": {
+                "default": "",
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "source"
+        ],
+        "additionalProperties": false,
+        "description": "One imported data point. Fields at their default and empty areas are left out. Its translation and status are not stored: they are the result of the sequence, replayed on load."
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "header"
+  ],
+  "additionalProperties": false,
+  "description": "A BACtwin Wizard project"
+}

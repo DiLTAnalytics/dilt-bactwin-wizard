@@ -1,0 +1,17 @@
+{
+  "id": "parse-ede/repeated-column-fails",
+  "title": "A file naming one column twice fails",
+  "why": "Which of the two columns holds the value cannot be told; taking either would silently drop the other.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "parse_ede",
+    "content": "#Engineering-Data-Exchange - test\nPROJECT_NAME;Demo\nVERSION_OF_REFERENCEFILE;1\nTIMESTAMP_OF_LAST_CHANGE;01.10.2026\nAUTHOR_OF_LAST_CHANGE;test\nVERSION_OF_LAYOUT;2.3\n#mandatory;mandatory;mandatory;mandatory;mandatory;optional\n# keyname;device obj.-instance;object-name;object-type;object-instance;description;description\nK1;1;A;0;1;x;y\n",
+    "filename": "test.csv"
+  },
+  "expected": {
+    "error": {
+      "type": "EDEFormatError",
+      "code": "EDE_REPEATED_COLUMNS"
+    }
+  }
+}

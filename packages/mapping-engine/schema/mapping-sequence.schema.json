@@ -1,0 +1,249 @@
+{
+  "$id": "https://diltanalytics.github.io/dilt-bactwin-wizard/schema/mapping-sequence.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "description": "URL of this schema, for editors",
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^1\\.\\d+$",
+      "description": "Format version. Files of a newer version, minor included, are refused; 1.0 is current"
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "What the step does, shown in the sequence list"
+          },
+          "filter": {
+            "default": [],
+            "description": "No conditions selects every point",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "description": "The field read, as area.field",
+                  "$ref": "#/$defs/readable_field"
+                },
+                "regex": {
+                  "type": "string",
+                  "description": "Must match the field's value as text (absent is \"\"), case-insensitively unless written inside (?-i:...)"
+                }
+              },
+              "required": [
+                "field",
+                "regex"
+              ],
+              "additionalProperties": false,
+              "description": "A point is selected when every condition matches"
+            }
+          },
+          "actions": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "enum": [
+                        "state.ignore",
+                        "state.reminder"
+                      ],
+                      "description": "The flag switched"
+                    },
+                    "value": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "value"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "const": "state.comment",
+                      "description": "The comment written"
+                    },
+                    "value": {
+                      "type": "string",
+                      "description": "Written as it is"
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "value"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "enum": [
+                        "bactwin.ort",
+                        "bactwin.gewerk",
+                        "bactwin.anlage",
+                        "bactwin.anlage_number",
+                        "bactwin.sub_anlage_number",
+                        "bactwin.baugruppe",
+                        "bactwin.baugruppe_number",
+                        "bactwin.medium_position",
+                        "bactwin.aggregat",
+                        "bactwin.aggregat_number",
+                        "bactwin.betriebsmittel",
+                        "bactwin.betriebsmittel_number",
+                        "bactwin.funktion",
+                        "bactwin.funktion_number",
+                        "bactwin.funktion_erweiterung"
+                      ],
+                      "description": "The field written"
+                    },
+                    "value": {
+                      "type": "string",
+                      "description": "Written as it is; with from a template where $1-$9 are the capture groups of all sources, counted in order, and $$ a dollar sign"
+                    },
+                    "from": {
+                      "description": "The sources the template reads, in order",
+                      "minItems": 1,
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "field": {
+                            "description": "The field read, as area.field; may be the written field itself",
+                            "$ref": "#/$defs/readable_field"
+                          },
+                          "regex": {
+                            "type": "string",
+                            "description": "Must match the field's value as text (absent is \"\"), case-insensitively unless written inside (?-i:...); a point where it does not match is skipped"
+                          }
+                        },
+                        "required": [
+                          "field",
+                          "regex"
+                        ],
+                        "additionalProperties": false,
+                        "description": "A field the value is taken from"
+                      }
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "value"
+                  ],
+                  "additionalProperties": false
+                }
+              ],
+              "description": "One write onto every selected point"
+            },
+            "description": "Applied in order to the points the filter selected before any of them"
+          },
+          "disabled": {
+            "description": "Kept in the sequence but passed over when it is replayed",
+            "type": "boolean"
+          },
+          "combination_mode": {
+            "description": "Which keys the editor offered when the step was written: those the combinations allow, those common for the trade, or all. Does not change what the step does",
+            "type": "string",
+            "enum": [
+              "combination",
+              "gewerk_specific",
+              "free"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "actions"
+        ],
+        "additionalProperties": false,
+        "description": "Select points, then write onto them"
+      },
+      "description": "Replayed in order: a later step sees what earlier ones wrote"
+    }
+  },
+  "required": [
+    "schema_version",
+    "steps"
+  ],
+  "additionalProperties": false,
+  "description": "A BACtwin Wizard mapping sequence",
+  "$defs": {
+    "readable_field": {
+      "type": "string",
+      "enum": [
+        "source.type",
+        "source.filename",
+        "source.duplicated_keyname",
+        "source.missing_from_source",
+        "ede.keyname",
+        "ede.device_obj_instance",
+        "ede.object_name",
+        "ede.object_type",
+        "ede.object_instance",
+        "ede.description",
+        "ede.present_value_default",
+        "ede.min_present_value",
+        "ede.max_present_value",
+        "ede.settable",
+        "ede.commandable",
+        "ede.supports_cov",
+        "ede.hi_limit",
+        "ede.low_limit",
+        "ede.state_text_reference",
+        "ede.unit_code",
+        "ede.vendor_specific_address",
+        "ede.notification_class",
+        "ede.object_tag",
+        "ede.object_tag_text",
+        "bacnet.type",
+        "bacnet.unit",
+        "bactwin.ort",
+        "bactwin.gewerk",
+        "bactwin.anlage",
+        "bactwin.anlage_number",
+        "bactwin.sub_anlage_number",
+        "bactwin.baugruppe",
+        "bactwin.baugruppe_number",
+        "bactwin.medium_position",
+        "bactwin.aggregat",
+        "bactwin.aggregat_number",
+        "bactwin.betriebsmittel",
+        "bactwin.betriebsmittel_number",
+        "bactwin.funktion",
+        "bactwin.funktion_number",
+        "bactwin.funktion_erweiterung",
+        "bactwin.bactwin_name",
+        "bactwin.bactwin_description",
+        "state.ignore",
+        "state.reminder",
+        "state.comment",
+        "state.translation_complete",
+        "state.combinations_valid",
+        "state.valid_bactwin_rules",
+        "state.duplicated_name",
+        "state.has_error",
+        "state.combinations_invalid",
+        "state.invalid_bactwin_rules"
+      ],
+      "description": "A field of a data point, as area.field"
+    }
+  }
+}

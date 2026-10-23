@@ -1,0 +1,221 @@
+{
+  "id": "filter/regex-case-sensitive",
+  "title": "case_sensitive makes the regex exact",
+  "why": "Some naming schemes encode meaning in case; the engineer must be able to opt in.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "filter",
+    "points": [
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "HZG_VTA_01_TEMP",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "HZG",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": true,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": false,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [],
+          "has_error": false
+        }
+      },
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "RLT_LTA_02_TEMP",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "RLT",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": true,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": false,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [],
+          "has_error": false
+        }
+      },
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "hzg_vta_03_druck",
+          "object_type": 2,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 53,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": false,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [],
+          "has_error": false
+        }
+      }
+    ],
+    "filter": {
+      "rules": [
+        {
+          "field": "ede.object_name",
+          "operator": "regex",
+          "value": "^hzg",
+          "case_sensitive": true
+        }
+      ]
+    }
+  },
+  "expected": {
+    "matched": [
+      2
+    ]
+  }
+}

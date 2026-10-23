@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "types": [
+      "node"
+    ],
+    "noEmit": true
+  },
+  "include": [
+    "src/main",
+    "src/preload",
+    "*.config.ts",
+    "forge.config.ts",
+    "vite.notices.ts"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "parse-ede/comment-rows-are-counted",
+  "title": "Data rows starting with # are skipped and counted",
+  "why": "Some exporters comment out rows. Skipping them is right, but without a count the points would vanish without a trace.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "parse_ede",
+    "content": "#Engineering-Data-Exchange - test\nPROJECT_NAME;Demo\nVERSION_OF_REFERENCEFILE;1\nTIMESTAMP_OF_LAST_CHANGE;01.10.2026\nAUTHOR_OF_LAST_CHANGE;test\nVERSION_OF_LAYOUT;2.3\n#mandatory;mandatory;mandatory;mandatory;mandatory;optional\n# keyname;device obj.-instance;object-name;object-type;object-instance;description\nK1;1;A;0;1;x\n#K2;1;B;0;2;y\n",
+    "filename": "test.csv"
+  },
+  "expected": {
+    "warnings": [
+      {
+        "code": "EDE_COMMENT_ROWS",
+        "params": {
+          "count": "1"
+        }
+      }
+    ]
+  }
+}

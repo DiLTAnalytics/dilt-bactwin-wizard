@@ -1,0 +1,28 @@
+packages:
+  - packages/*
+  - apps/*
+
+# Electron Forge cannot package from pnpm's default symlinked node_modules: electron-packager
+# walks the real tree to decide what to bundle, and symlinks make it either miss dependencies or
+# follow them out of the project.
+nodeLinker: hoisted
+# Hoisting gives the top-level slot to the root's own dependencies, and pnpm does not always nest
+# a workspace package's own version below it. So the root lists zod 4 and ajv 8, which the
+# workspace packages need, ahead of the zod 3 and ajv 6 that the lint tools bring.
+
+# The only dependencies allowed to run install scripts: esbuild downloads its binary, the rest are
+# installer helpers. Review before adding one. Electron 44 has no install script; the wizard's own
+# postinstall fetches its binary, as several test workers fetching it at once on first use collide.
+allowBuilds:
+  electron-winstaller: true
+  esbuild: true
+  fs-xattr: true
+  macos-alias: true
+
+# Versions younger than 7 days (in minutes) are not installed, so a hijacked release has time to be caught.
+minimumReleaseAge: 10080
+
+# plugin-vite 8.0.1 builds main in a watch subprocess that never asks forge to restart the app, so
+# hotRestart did nothing. Drop the patch once a release fixes it.
+patchedDependencies:
+  '@electron-forge/plugin-vite@8.0.1': patches/@electron-forge__plugin-vite@8.0.1.patch

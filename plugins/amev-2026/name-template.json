@@ -1,0 +1,93 @@
+{
+  "version": "AMEV_2026",
+  "separator": "_",
+  "index_default": "01",
+  "segments": [
+    {
+      "id": "ort",
+      "type": "free",
+      "required": true,
+      "placeholder": "?",
+      "optional_display": false
+    },
+    {
+      "id": "gewerk",
+      "type": "key",
+      "required": true,
+      "placeholder": "???",
+      "optional_display": false
+    },
+    {
+      "id": "anlage",
+      "type": "key_indexed",
+      "required": true,
+      "placeholder": "???",
+      "optional_display": false,
+      "index_field": "anlage_number",
+      "index_digits": 2,
+      "index_placeholder": "??"
+    },
+    {
+      "id": "sub_anlage_number",
+      "type": "key",
+      "required": false,
+      "placeholder": "???",
+      "optional_display": true,
+      "digits": 2
+    },
+    {
+      "id": "baugruppe",
+      "type": "key_indexed",
+      "required": true,
+      "placeholder": "???",
+      "optional_display": false,
+      "index_field": "baugruppe_number",
+      "index_digits": 2,
+      "index_placeholder": "??"
+    },
+    {
+      "id": "medium_position",
+      "type": "key",
+      "required": false,
+      "placeholder": "???",
+      "optional_display": false
+    },
+    {
+      "id": "aggregat",
+      "type": "key_indexed",
+      "required": false,
+      "placeholder": "???",
+      "optional_display": false,
+      "index_field": "aggregat_number",
+      "index_digits": 2,
+      "index_placeholder": "??"
+    },
+    {
+      "id": "betriebsmittel",
+      "type": "key_indexed",
+      "required": false,
+      "placeholder": "???",
+      "optional_display": false,
+      "index_field": "betriebsmittel_number",
+      "index_digits": 2,
+      "index_placeholder": "??"
+    },
+    {
+      "id": "funktion",
+      "type": "key_indexed",
+      "required": false,
+      "placeholder": "???",
+      "optional_display": false,
+      "index_field": "funktion_number",
+      "index_digits": 2,
+      "index_placeholder": "??"
+    },
+    {
+      "id": "funktion_erweiterung",
+      "type": "key",
+      "required": false,
+      "placeholder": "???",
+      "optional_display": true
+    }
+  ]
+}

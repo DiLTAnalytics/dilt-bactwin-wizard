@@ -1,0 +1,42 @@
+#Engineering-Data-Exchange - DILT Test
+PROJECT_NAME
+VERSION_OF_REFERENCEFILE
+TIMESTAMP_OF_LAST_CHANGE;28.01.2025
+AUTHOR_OF_LAST_CHANGE;BACtwin Wizard demo data
+VERSION_OF_LAYOUT;2.3
+#mandatory;mandator;mandatory;mandatory;mandatory;optional;optional;optional;optional;optional;optional;optional;optional;optional;optional;optional
+# keyname;device obj.-instance;object-name;object-type;object-instance;description;present-value-default;min-present-value;max-present-value;settable;supports COV;hi-limit;low-limit;state-text-reference;unit-code;vendor-specific-addres
+OBJECT_DEVICE:111012;111012;AS111012 XX-DILT;8;111012;AS123;;;;;;;;;
+OBJECT_ANALOG_INPUT:3;111012;XXDILT__HH4_____RLTF1__ME___;0;3;KA-HH4: RL-Temperatur;;;;;;;;;62
+OBJECT_ANALOG_OUTPUT:1;111012;XXDILT__HH4_____RLVE1__YB___;1;1;KA-HH4: Regelventil;;;;;;;;;98
+OBJECT_BINARY_INPUT:10;111012;XXDILT__HH4_____VLPU1__RMEIN;3;10;KA-HH4: Vorlaufpumpe 1 Ein;;;;;;;;13;
+OBJECT_BINARY_OUTPUT:2;111012;XXDILT__HH4_____VLPU1__SBEIN;4;2;KA-HH4: Vorlaufpumpe 1;;;;;;;;13;
+OBJECT_BINARY_INPUT:11;111012;XXDILT__HH4_____VLPU2__RMEIN;3;11;KA-HH4: Vorlaufpumpe 2 Ein;;;;;;;;13;
+OBJECT_BINARY_OUTPUT:3;111012;XXDILT__HH4_____VLPU2__SBEIN;4;3;KA-HH4: Vorlaufpumpe 2;;;;;;;;13;
+OBJECT_ANALOG_INPUT:2;111012;XXDILT__HH4_____VLTF1__ME___;0;2;KA-HH4: VL-Temperatur;;;;;;;;;62
+OBJECT_ANALOG_VALUE:32;111012;XXDILT__HH4_____VLTF1__XSC__;2;32;KA-HH4: berechneter Sollwert VL-Temperatur;;;;;;;;;62
+OBJECT_DEVICE:111408;111408;AS111408 XX-DILT;8;111408;AS456;;;;;;;;;
+OBJECT_ANALOG_INPUT:2;111408;XXDILT__L1______ABTF1__ME___;0;2;KA-L1: AB-Temperatur;;;;;;;;;62
+OBJECT_BINARY_INPUT:3;111408;XXDILT__L1______ABVR1__RMST1;3;3;KA-L1: AB-Ventilator St.1;;;;;;;;13;
+OBJECT_BINARY_INPUT:4;111408;XXDILT__L1______ABVR1__RMST2;3;4;KA-L1: AB-Ventilator St.2;;;;;;;;13;
+OBJECT_ANALOG_INPUT:0;111408;XXDILT__L1______HRTF1__ME___;0;0;KA-L1: LE RL-Temperatur;;;;;;;;;62
+OBJECT_ANALOG_OUTPUT:0;111408;XXDILT__L1______HRVE1__YB___;1;0;KA-L1: LE-Ventil;;;;;;;;;98
+OBJECT_BINARY_INPUT:0;111408;XXDILT__L1______HRPU1__RMEIN;3;0;KA-L1: LE-Pumpe Ein;;;;;;;;13;
+OBJECT_BINARY_OUTPUT:0;111408;XXDILT__L1______HRPU1__SBEIN;4;0;KA-L1: LE-Pumpe;;;;;;;;13;
+OBJECT_ANALOG_OUTPUT:1;111408;XXDILT__L1______KAWA1__YB___;1;1;KA-L1: WRG-Motor;;;;;;;;;98
+OBJECT_ANALOG_INPUT:4;111408;XXDILT__L1______ZUTF2__ME___;0;4;KA-L1: ZU-Temp. nach WRG;;;;;;;;;62
+OBJECT_ANALOG_INPUT:1;111408;XXDILT__L1______ZUTF1__ME___;0;1;KA-L1: ZU-Temperatur;;;;;;;;;62
+OBJECT_ANALOG_VALUE:17;111408;XXDILT__L1______ZUTF1__XSC__;2;17;KA-L1: berechneter Sollwert ZU-Temperatur;;;;;;;;;62
+OBJECT_BINARY_INPUT:1;111408;XXDILT__L1______ZUVR1__RMST1;3;1;KA-L1: ZU-Ventilator St.1;;;;;;;;13;
+OBJECT_BINARY_OUTPUT:4;111408;XXDILT__L1______ZUVR1__SBST1;4;4;KA-L1: ZU-Ventilator;;;;;;;;13;
+OBJECT_BINARY_INPUT:2;111408;XXDILT__L1______ZUVR1__RMST2;3;2;KA-L1: ZU-Ventilator St.2;;;;;;;;13;
+OBJECT_BINARY_OUTPUT:5;111408;XXDILT__L1______ZUVR1__SBST2;4;5;KA-L1: ZU-Ventilator;;;;;;;;13;
+OBJECT_ANALOG_VALUE:15;111408;XXDILT__L1______ZUTF1__XS___;2;15;KA-L1: Sollwert Zulufttemperatur;;;;;;;;;62
+OBJECT_ANALOG_INPUT:3;111408;XXDILT__L1______AUTF1__ME___;0;3;KA-L1: AU-Temperatur Kanal;;;;;;;;;62
+OBJECT_DEVICE:111011;111011;AS111011 XX-DILT;8;111011;AS700;;;;;;;;;
+OBJECT_PULSE_CONVERTER:0;111011;XXDILT__HV______RLZW1__ZE___;24;0;KA-HV: Waermemengenzaehler;;;;;;;;;19
+OBJECT_DEVICE:111205;111205;AS111205 XX-DILT;8;111205;VK15+Zonen,WRG;;;;;;;;;
+OBJECT_BINARY_INPUT:33;111205;XXDILT__HV______HVPU1__RMEIN;3;33;KA-HV: Hauptversorgungspumpe Ein;;;;;;;;13;
+
+
+

@@ -1,0 +1,16 @@
+{
+  "id": "parse-ede/rejects-non-ede",
+  "title": "A file without the EDE header is rejected",
+  "why": "Importing an arbitrary CSV as if it were EDE produces silent nonsense. Failing loudly is the only safe behaviour.",
+  "referenceData": "bundled",
+  "operation": {
+    "kind": "parse_ede",
+    "content": "not an EDE file at all\n",
+    "filename": "bad.csv"
+  },
+  "expected": {
+    "error": {
+      "type": "EDEFormatError"
+    }
+  }
+}

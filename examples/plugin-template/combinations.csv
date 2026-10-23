@@ -1,0 +1,5 @@
+gewerk,anlage,baugruppe,medium_position,aggregat,betriebsmittel,funktion,funktion_erweiterung,object_type,unit_code,bactwin_name
+HZG,VTA,HZK,HZ~,WMZ,TD~,MW~,,0,62,HZG_VTA_HZK_HZ~_WMZ_TD~_MW~
+HZG,VTA,HZK,HZ~,WMZ,TD~,SW~,,2,62,HZG_VTA_HZK_HZ~_WMZ_TD~_SW~
+RLT,LTA,ZUL,LU~,VEN,TD~,MW~,,0,62,RLT_LTA_ZUL_LU~_VEN_TD~_MW~
+RLT,LTA,ZUL,LU~,VEN,PD~,MW~,,0,53,RLT_LTA_ZUL_LU~_VEN_PD~_MW~

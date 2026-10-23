@@ -1,0 +1,17 @@
+{
+  "id": "parse-ede/column-header-on-line-8",
+  "title": "The column header must be on line 8",
+  "why": "The EDE layout fixes the column header on line 8. A file whose header sits elsewhere is malformed; guessing where it is imported zero points without saying so.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "parse_ede",
+    "content": "#Engineering-Data-Exchange - test\nPROJECT_NAME;Demo\nVERSION_OF_REFERENCEFILE;1\nTIMESTAMP_OF_LAST_CHANGE;01.10.2026\nAUTHOR_OF_LAST_CHANGE;test\nVERSION_OF_LAYOUT;2.3\n# keyname;device obj.-instance;object-name;object-type;object-instance;description;present-value-default;min-present-value;max-present-value;settable;supports COV;hi-limit;unit-code\nK1;1;A;0;1;x;;;;;;;\n",
+    "filename": "test.csv"
+  },
+  "expected": {
+    "error": {
+      "type": "EDEFormatError",
+      "code": "EDE_BAD_COLUMN_HEADER"
+    }
+  }
+}

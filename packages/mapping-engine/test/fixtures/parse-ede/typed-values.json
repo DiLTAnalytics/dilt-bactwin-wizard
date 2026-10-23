@@ -1,0 +1,88 @@
+{
+  "id": "parse-ede/typed-values",
+  "title": "Cells are read as integers, decimals and text",
+  "why": "Types follow the EDE model of the Haystack builder. DACH exports write decimals with a comma or a point, so both are read.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "parse_ede",
+    "content": "#Engineering-Data-Exchange - test\nPROJECT_NAME;Demo\nVERSION_OF_REFERENCEFILE;1\nTIMESTAMP_OF_LAST_CHANGE;01.10.2026\nAUTHOR_OF_LAST_CHANGE;test\nVERSION_OF_LAYOUT;2.3\n#mandatory;mandatory;mandatory;mandatory;mandatory;optional;optional;optional;optional;optional;optional;optional;optional\n# keyname;device obj.-instance;object-name;object-type;object-instance;description;present-value-default;min-present-value;max-present-value;settable;supports COV;hi-limit;unit-code\nK1;100;A;0;1;Fühler;21,5;-10;40.25;Y;n;35;62\n",
+    "filename": "test.csv"
+  },
+  "expected": {
+    "points": [
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "K1",
+          "device_obj_instance": 100,
+          "object_name": "A",
+          "object_type": 0,
+          "object_instance": 1,
+          "description": "Fühler",
+          "present_value_default": 21.5,
+          "min_present_value": -10,
+          "max_present_value": 40.25,
+          "settable": "Y",
+          "commandable": "",
+          "supports_cov": "n",
+          "hi_limit": 35,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": null,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [],
+          "has_error": false
+        }
+      }
+    ],
+    "warnings": [],
+    "meta": {
+      "PROJECT_NAME": "Demo",
+      "VERSION_OF_REFERENCEFILE": "1",
+      "TIMESTAMP_OF_LAST_CHANGE": "01.10.2026",
+      "AUTHOR_OF_LAST_CHANGE": "test",
+      "VERSION_OF_LAYOUT": "2.3"
+    }
+  }
+}

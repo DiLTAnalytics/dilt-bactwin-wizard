@@ -1,0 +1,120 @@
+name: Release
+
+# Builds are unsigned (see "Unsignierte Pakete installieren" in the README); signing would add steps here.
+# Packages end as one artifact, kept for a day, that scripts/fetch-release.sh downloads and deletes.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to build (must already exist)'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # One platform failing does not cancel the others.
+      fail-fast: false
+      matrix:
+        include:
+          - { os: macos-latest, name: macOS (Apple Silicon), arch: arm64 }
+          - { os: windows-latest, name: Windows, arch: x64 }
+          - { os: ubuntu-latest, name: Linux, arch: x64 }
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with: { node-version: 24, cache: pnpm }
+
+      - run: pnpm install --frozen-lockfile
+
+      # The tag must equal package.json's version, which the About dialog shows.
+      - name: Tag matches the package version
+        shell: bash
+        run: |
+          tag="${{ github.event.inputs.tag || github.ref_name }}"
+          pkg="v$(node -p "require('./apps/wizard/package.json').version")"
+          test "$tag" = "$pkg" || {
+            echo "::error::tag $tag does not match apps/wizard/package.json ($pkg)"
+            exit 1
+          }
+
+      - name: Build
+        run: pnpm --filter @bactwin/wizard exec electron-forge make --arch=${{ matrix.arch }}
+
+      # Per platform: Electron's licence, the third-party notices and the offline docs are in the bundle.
+      - name: Bundled resources are in the build
+        shell: bash
+        run: |
+          missing=0
+          for f in LICENSE LICENSES.chromium.html THIRD-PARTY-NOTICES.txt docs-site/index.html; do
+            find apps/wizard/out -path "*/$f" | grep -q . || { echo "::error::$f missing from the build"; missing=1; }
+          done
+          exit $missing
+
+      - name: Collect artifacts
+        shell: bash
+        run: |
+          mkdir -p dist
+          # RELEASES and .nupkg are for auto-update, which v1 does not have.
+          find apps/wizard/out/make -type f \
+            \( -name '*.dmg' -o -name '*.zip' -o -name '*.exe' -o -name '*.deb' \) \
+            -exec cp {} dist/ \;
+          ls -la dist
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 1
+
+  bundle:
+    name: Bundle
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Needed for build provenance attestation, the only verifiable origin an unsigned build has.
+      id-token: write
+      attestations: write
+
+    steps:
+      - uses: actions/download-artifact@v8
+        with: { path: staging }
+
+      - name: Gather
+        run: |
+          mkdir -p dist
+          find staging -type f -exec mv -n {} dist/ \;
+          ls -la dist
+
+      - name: Checksums
+        working-directory: dist
+        run: |
+          sha256sum * > SHA256SUMS
+          cat SHA256SUMS
+
+      # Attestations need a public repository (or a paid plan).
+      - uses: actions/attest-build-provenance@v4
+        if: ${{ !github.event.repository.private }}
+        with:
+          subject-path: 'dist/*'
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: bactwin-wizard-${{ github.event.inputs.tag || github.ref_name }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 1

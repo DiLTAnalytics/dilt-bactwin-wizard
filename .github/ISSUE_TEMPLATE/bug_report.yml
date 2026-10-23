@@ -1,0 +1,44 @@
+name: Bug report
+description: Something behaves differently from what the documentation says
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not attach real project data, EDE exports or mapping sequences from a customer
+        site. A mapping sequence encodes a customer's naming conventions. Reduce it to the
+        smallest synthetic example that still reproduces the problem.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what you got instead.
+    validations: { required: true }
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: Numbered steps. Include the smallest input file that triggers it.
+      placeholder: |
+        1. Import ...
+        2. Filter on ...
+        3. Set ... and press Setzen
+        4. Observe ...
+    validations: { required: true }
+
+  - type: textarea
+    id: version
+    attributes:
+      label: Version and environment
+      description: App version or commit, operating system, and which reference-data plugins are enabled.
+    validations: { required: true }
+
+  - type: textarea
+    id: docs
+    attributes:
+      label: Which documented behaviour does this contradict?
+      description: >
+        A link to the section of docs/ that says it should work differently, if you know of one.
+        If the documentation is what is wrong, say so - that is also a valid bug.

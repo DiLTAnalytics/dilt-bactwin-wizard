@@ -1,0 +1,79 @@
+{
+  "id": "naming/complete",
+  "title": "A complete set of required segments produces a name",
+  "why": "Index fields are zero-padded to two digits on the way in, so the assembled name is stable regardless of how the engineer typed them.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "build_name",
+    "point": {
+      "source": {
+        "type": "",
+        "filename": "",
+        "invalid": {},
+        "duplicated_keyname": false,
+        "missing_from_source": false
+      },
+      "ede": {
+        "keyname": "",
+        "device_obj_instance": null,
+        "object_name": "",
+        "object_type": null,
+        "object_instance": null,
+        "description": "",
+        "present_value_default": null,
+        "min_present_value": null,
+        "max_present_value": null,
+        "settable": "",
+        "commandable": "",
+        "supports_cov": "",
+        "hi_limit": null,
+        "low_limit": null,
+        "state_text_reference": null,
+        "unit_code": null,
+        "vendor_specific_address": null,
+        "notification_class": null,
+        "object_tag": null,
+        "object_tag_text": ""
+      },
+      "bacnet": {
+        "type": "",
+        "unit": ""
+      },
+      "bactwin": {
+        "ort": "Halle",
+        "gewerk": "HZG",
+        "anlage": "VTA",
+        "anlage_number": "1",
+        "sub_anlage_number": "",
+        "baugruppe": "HZK",
+        "baugruppe_number": "2",
+        "medium_position": "HZ~",
+        "aggregat": "WMZ",
+        "aggregat_number": "3",
+        "betriebsmittel": "TD~",
+        "betriebsmittel_number": "4",
+        "funktion": "MW~",
+        "funktion_number": "5",
+        "funktion_erweiterung": "",
+        "bactwin_name": "",
+        "bactwin_description": null
+      },
+      "state": {
+        "ignore": false,
+        "reminder": false,
+        "comment": "",
+        "translation_complete": false,
+        "combinations_valid": false,
+        "valid_bactwin_rules": false,
+        "duplicated_name": false,
+        "messages": [],
+        "has_error": false
+      }
+    }
+  },
+  "expected": {
+    "name": "Halle_HZG_VTA1_HZK2_HZ~_WMZ3_TD~4_MW~5",
+    "description": "Halle_HZG_Verteilung1_Heizkreis2_Heizwasser_Zaehler3_Temperatursensor4_Gemessener Wert5",
+    "complete": true
+  }
+}

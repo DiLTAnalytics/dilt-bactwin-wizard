@@ -1,0 +1,79 @@
+{
+  "id": "naming/description-has-placeholders",
+  "title": "The description is always produced, with placeholders for what is missing",
+  "why": "The engineer needs to see progress on a point that is not finished yet; that is what the description is for, and why it is separate from the name.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "build_name",
+    "point": {
+      "source": {
+        "type": "",
+        "filename": "",
+        "invalid": {},
+        "duplicated_keyname": false,
+        "missing_from_source": false
+      },
+      "ede": {
+        "keyname": "",
+        "device_obj_instance": null,
+        "object_name": "",
+        "object_type": null,
+        "object_instance": null,
+        "description": "",
+        "present_value_default": null,
+        "min_present_value": null,
+        "max_present_value": null,
+        "settable": "",
+        "commandable": "",
+        "supports_cov": "",
+        "hi_limit": null,
+        "low_limit": null,
+        "state_text_reference": null,
+        "unit_code": null,
+        "vendor_specific_address": null,
+        "notification_class": null,
+        "object_tag": null,
+        "object_tag_text": ""
+      },
+      "bacnet": {
+        "type": "",
+        "unit": ""
+      },
+      "bactwin": {
+        "ort": "Halle",
+        "gewerk": "HZG",
+        "anlage": "",
+        "anlage_number": "",
+        "sub_anlage_number": "",
+        "baugruppe": "",
+        "baugruppe_number": "",
+        "medium_position": "",
+        "aggregat": "",
+        "aggregat_number": "",
+        "betriebsmittel": "",
+        "betriebsmittel_number": "",
+        "funktion": "",
+        "funktion_number": "",
+        "funktion_erweiterung": "",
+        "bactwin_name": "",
+        "bactwin_description": null
+      },
+      "state": {
+        "ignore": false,
+        "reminder": false,
+        "comment": "",
+        "translation_complete": false,
+        "combinations_valid": false,
+        "valid_bactwin_rules": false,
+        "duplicated_name": false,
+        "messages": [],
+        "has_error": false
+      }
+    }
+  },
+  "expected": {
+    "name": "",
+    "description": "Halle_HZG_?????_?????_???_?????_?????_?????",
+    "complete": false
+  }
+}

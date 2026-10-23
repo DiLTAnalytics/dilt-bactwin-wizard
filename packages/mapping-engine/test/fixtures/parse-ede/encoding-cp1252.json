@@ -1,0 +1,81 @@
+{
+  "id": "parse-ede/encoding-cp1252",
+  "title": "A cp1252 file falls back to cp1252 rather than mangling umlauts",
+  "why": "Real EDE exports come in both encodings. Guessing wrong silently corrupts every description containing an umlaut, which then flows into the BACtwin name. A file with only a few such bytes is no exception: each byte that is no valid UTF-8 is read as Windows-1252.",
+  "referenceData": "bundled",
+  "operation": {
+    "kind": "parse_ede",
+    "contentHex": "23456e67696e656572696e672d446174612d45786368616e67650a50524f4a4543545f4e414d450a56455253494f4e5f4f465f5245464552454e434546494c450a54494d455354414d505f4f465f4c4153545f4348414e47453b30312e30312e323032360a415554484f525f4f465f4c4153545f4348414e47453b746573740a56455253494f4e5f4f465f4c41594f55543b322e330a236d616e6461746f72793b6d616e6461746f72793b6d616e6461746f72793b6d616e6461746f72793b6d616e6461746f72793b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c3b6f7074696f6e616c0a23206b65796e616d653b646576696365206f626a2e2d696e7374616e63653b6f626a6563742d6e616d653b6f626a6563742d747970653b6f626a6563742d696e7374616e63653b6465736372697074696f6e3b70726573656e742d76616c75652d64656661756c743b6d696e2d70726573656e742d76616c75653b6d61782d70726573656e742d76616c75653b7365747461626c653b636f6d6d616e6461626c653b737570706f72747320434f563b68692d6c696d69743b6c6f772d6c696d69743b73746174652d746578742d7265666572656e63653b756e69742d636f64653b76656e646f722d73706563696669632d616464726573733b6e6f74696669636174696f6e2d636c6173733b6f626a6563742d7461673b6f626a6563742d7461672d746578740a4b313b3130303b41555353454e54454d504552415455525f4d455353574552543b303b313b4175df656e74656d706572617475722046fc686c65723b3b3b3b3b3b3b3b3b3b36323b3b3b3b0a",
+    "filename": "enc.csv"
+  },
+  "expected": {
+    "points": [
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "K1",
+          "device_obj_instance": 100,
+          "object_name": "AUSSENTEMPERATUR_MESSWERT",
+          "object_type": 0,
+          "object_instance": 1,
+          "description": "Außentemperatur Fühler",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": null,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [],
+          "has_error": false
+        }
+      }
+    ],
+    "warnings": []
+  }
+}
