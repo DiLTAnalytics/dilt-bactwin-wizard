@@ -1,0 +1,17 @@
+{
+  "id": "parse-ede/text-after-closing-quote-fails",
+  "title": "Text after a closing quote fails the file, naming the line",
+  "why": "\"ab\"c is no cell any reader agrees on; reporting it as an unclosed quote would point at the wrong problem.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "parse_ede",
+    "content": "#Engineering-Data-Exchange - test\nPROJECT_NAME;Demo\nVERSION_OF_REFERENCEFILE;1\nTIMESTAMP_OF_LAST_CHANGE;01.10.2026\nAUTHOR_OF_LAST_CHANGE;test\nVERSION_OF_LAYOUT;2.3\n#mandatory;mandatory;mandatory;mandatory;mandatory;optional\n# keyname;device obj.-instance;object-name;object-type;object-instance;description\nK1;1;A;0;1;x\nK2;1;\"B\"x;0;2;y\n",
+    "filename": "test.csv"
+  },
+  "expected": {
+    "error": {
+      "type": "EDEFormatError",
+      "code": "EDE_UNREADABLE_ROW"
+    }
+  }
+}

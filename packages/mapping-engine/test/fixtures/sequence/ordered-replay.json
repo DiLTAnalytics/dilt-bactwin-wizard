@@ -1,0 +1,334 @@
+{
+  "id": "sequence/ordered-replay",
+  "title": "Steps are replayed strictly in order",
+  "why": "Order is the whole point of a sequence: the second step here only matches what the first one did not claim. Reordering changes the result, which is why the format is an ordered list and not a set.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "apply_sequence",
+    "points": [
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "AHU07_ZUL_TEMP",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": false,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [],
+          "has_error": false
+        }
+      },
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "HZG_VTA_01_TEMP",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": false,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [],
+          "has_error": false
+        }
+      }
+    ],
+    "sequence": {
+      "schema_version": "1.0",
+      "steps": [
+        {
+          "name": "Ventilation points",
+          "filter": [
+            {
+              "field": "ede.object_name",
+              "regex": "^AHU"
+            }
+          ],
+          "actions": [
+            {
+              "field": "bactwin.gewerk",
+              "value": "RLT"
+            },
+            {
+              "field": "bactwin.anlage_number",
+              "from": [
+                {
+                  "field": "ede.object_name",
+                  "regex": "AHU(\\d+)"
+                }
+              ],
+              "value": "$1"
+            }
+          ]
+        },
+        {
+          "name": "Everything else is heating",
+          "filter": [
+            {
+              "field": "bactwin.gewerk",
+              "regex": "^$"
+            }
+          ],
+          "actions": [
+            {
+              "field": "bactwin.gewerk",
+              "value": "HZG"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "expected": {
+    "points": [
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "AHU07_ZUL_TEMP",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "RLT",
+          "anlage": "",
+          "anlage_number": "07",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": "?_RLT_???07_?????_???_?????_?????_?????"
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": true,
+          "valid_bactwin_rules": true,
+          "duplicated_name": false,
+          "messages": [],
+          "has_error": false
+        }
+      },
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "HZG_VTA_01_TEMP",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "HZG",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": "?_HZG_?????_?????_???_?????_?????_?????"
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": true,
+          "valid_bactwin_rules": true,
+          "duplicated_name": false,
+          "messages": [],
+          "has_error": false
+        }
+      }
+    ],
+    "results": [
+      {
+        "step_index": 0,
+        "matched": 1,
+        "changed": 2,
+        "skipped": 0
+      },
+      {
+        "step_index": 1,
+        "matched": 1,
+        "changed": 1,
+        "skipped": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,287 @@
+{
+  "id": "filter/derived-invalid-combinations",
+  "title": "state.combinations_invalid is derived from combinations_valid; unchecked is not invalid",
+  "why": "Hunting errors reads more naturally as \"invalid = true\". The field is never stored; the engine derives it, so a filter or a recorded step on it must still match. A point that was never checked (combinations_valid null: no catalogue, or nothing identifying set) is not invalid.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "filter",
+    "points": [
+      {
+        "source": {
+          "type": "",
+          "filename": ""
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "HZG_A",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "HZG",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": false,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [
+            {
+              "level": "error",
+              "code": "UNKNOWN_KEY",
+              "params": {
+                "value": "XXX",
+                "block": "anlage"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "source": {
+          "type": "",
+          "filename": ""
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "HZG_B",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "HZG",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": true,
+          "valid_bactwin_rules": true,
+          "duplicated_name": false,
+          "messages": []
+        }
+      },
+      {
+        "source": {
+          "type": "",
+          "filename": ""
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "HZG_C",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "HZG",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": true,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [
+            {
+              "level": "warning",
+              "code": "DEPRECATED_KEY",
+              "params": {
+                "value": "HZG",
+                "block": "gewerk"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "source": {
+          "type": "",
+          "filename": ""
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "HZG_D",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "HZG",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": null,
+          "valid_bactwin_rules": true,
+          "duplicated_name": false,
+          "messages": []
+        }
+      }
+    ],
+    "filter": {
+      "rules": [
+        {
+          "field": "state.combinations_invalid",
+          "operator": "is_true",
+          "value": null
+        }
+      ]
+    }
+  },
+  "expected": {
+    "matched": [
+      0
+    ]
+  }
+}

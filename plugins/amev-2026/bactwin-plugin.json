@@ -1,0 +1,11 @@
+{
+  "id": "amev-2026",
+  "name": "AMEV 2026",
+  "version": "2026.0.0",
+  "sourceId": "AMEV",
+  "engineRange": "^1.0.0",
+  "license": "AGPL-3.0-only",
+  "provides": ["keys", "name-template"],
+  "description": "Namensschema der AMEV, Ausgabe 2026: Keys für alle Namensblöcke und die Vorlage, die daraus den Namen bildet.",
+  "homepage": "https://www.amev-online.de/"
+}

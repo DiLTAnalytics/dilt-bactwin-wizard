@@ -1,0 +1,22 @@
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.icns binary
+*.pdf binary
+*.xlsx binary
+*.zip binary
+
+# Reference data is byte-exact input to parsers and to the conformance corpus.
+# Several files are CRLF and one carries a UTF-8 BOM; git must not normalise them.
+data/** -text
+plugins/** -text
+
+# Generated / vendored - keep out of diffs and language statistics
+pnpm-lock.yaml -diff linguist-generated
+backend/uv.lock -diff linguist-generated
+LICENSES/** linguist-vendored

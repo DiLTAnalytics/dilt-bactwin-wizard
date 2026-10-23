@@ -1,0 +1,20 @@
+LicenseRef-DiLT-trademark
+=========================
+
+Copyright 2026 DiLT Analytics GmbH. All rights reserved.
+
+This identifier covers the DiLT Analytics name, logo, mark and application icon.
+
+These are trademarks, not code, and they are NOT covered by the open-source
+licences that apply to the rest of this repository.
+
+You may fork this software and use every line of it. You may not present your
+fork as DiLT Analytics' product, and you must replace these assets with your own
+before distributing a build. Using them unchanged in a redistributed build would
+tell users your build came from DiLT Analytics, which is the one thing a
+trademark exists to prevent.
+
+The marks may be used descriptively - to say truthfully that your work is based
+on or compatible with this project.
+
+Contact opensource@dilt.at with questions about use of the marks.

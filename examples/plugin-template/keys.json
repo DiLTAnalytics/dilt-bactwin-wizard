@@ -1,0 +1,194 @@
+[
+  {
+    "block": "gewerk",
+    "key": "HZG",
+    "name": "Heizung",
+    "description": "Heizungsanlagen",
+    "default_gewerk": [
+      "HZG"
+    ],
+    "deprecated": false,
+    "source": "DEMO",
+    "key_number": "420"
+  },
+  {
+    "block": "gewerk",
+    "key": "RLT",
+    "name": "Raumlufttechnik",
+    "description": "Lueftungsanlagen",
+    "default_gewerk": [
+      "RLT"
+    ],
+    "deprecated": false,
+    "source": "DEMO",
+    "key_number": "430"
+  },
+  {
+    "block": "gewerk",
+    "key": "ELT",
+    "name": "Elektrotechnik",
+    "description": "Elektroanlagen",
+    "default_gewerk": [
+      "ELT"
+    ],
+    "deprecated": false,
+    "source": "DEMO",
+    "key_number": "440"
+  },
+  {
+    "block": "anlage",
+    "key": "VTA",
+    "name": "Verteilanlage",
+    "description": "Verteilung",
+    "default_gewerk": [
+      "HZG"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "anlage",
+    "key": "LTA",
+    "name": "Lueftungsanlage",
+    "description": "Lueftung",
+    "default_gewerk": [
+      "RLT"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "anlage",
+    "key": "ALT",
+    "name": "Altanlage",
+    "description": "Nicht mehr verwenden",
+    "default_gewerk": [
+      "HZG"
+    ],
+    "deprecated": true,
+    "source": "DEMO"
+  },
+  {
+    "block": "baugruppe",
+    "key": "HZK",
+    "name": "Heizkreis",
+    "description": "Heizkreis",
+    "default_gewerk": [
+      "HZG"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "baugruppe",
+    "key": "ZUL",
+    "name": "Zuluft",
+    "description": "Zuluftstrecke",
+    "default_gewerk": [
+      "RLT"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "medium_position",
+    "key": "HZ~",
+    "name": "Heizmedium",
+    "description": "Heizwasser",
+    "default_gewerk": [
+      "HZG"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "medium_position",
+    "key": "LU~",
+    "name": "Luft",
+    "description": "Luft",
+    "default_gewerk": [
+      "RLT"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "aggregat",
+    "key": "WMZ",
+    "name": "Waermemengenzaehler",
+    "description": "Zaehler",
+    "default_gewerk": [
+      "HZG"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "aggregat",
+    "key": "VEN",
+    "name": "Ventilator",
+    "description": "Ventilator",
+    "default_gewerk": [
+      "RLT"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "betriebsmittel",
+    "key": "TD~",
+    "name": "Temperaturfuehler",
+    "description": "Temperatursensor",
+    "default_gewerk": [
+      "HZG",
+      "RLT"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "betriebsmittel",
+    "key": "PD~",
+    "name": "Druckfuehler",
+    "description": "Drucksensor",
+    "default_gewerk": [
+      "RLT"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "funktion",
+    "key": "MW~",
+    "name": "Messwert",
+    "description": "Gemessener Wert",
+    "default_gewerk": [
+      "HZG",
+      "RLT",
+      "ELT"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "funktion",
+    "key": "SW~",
+    "name": "Sollwert",
+    "description": "Sollwert",
+    "default_gewerk": [
+      "HZG",
+      "RLT"
+    ],
+    "deprecated": false,
+    "source": "DEMO"
+  },
+  {
+    "block": "funktion_erweiterung",
+    "key": "TL",
+    "name": "Trendlog",
+    "description": "Trendaufzeichnung",
+    "default_gewerk": [],
+    "deprecated": false,
+    "source": "DEMO"
+  }
+]

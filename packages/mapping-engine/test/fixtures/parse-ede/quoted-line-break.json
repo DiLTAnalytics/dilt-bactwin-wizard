@@ -1,0 +1,14 @@
+{
+  "id": "parse-ede/quoted-line-break",
+  "title": "A quoted cell may hold a line break",
+  "why": "pandas reads it as one cell; splitting at the line break would break the row in two.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "parse_ede",
+    "content": "#Engineering-Data-Exchange - test\nPROJECT_NAME;Demo\nVERSION_OF_REFERENCEFILE;1\nTIMESTAMP_OF_LAST_CHANGE;01.10.2026\nAUTHOR_OF_LAST_CHANGE;test\nVERSION_OF_LAYOUT;2.3\n#mandatory;mandatory;mandatory;mandatory;mandatory;optional\n# keyname;device obj.-instance;object-name;object-type;object-instance;description\nK1;1;A;0;1;\"zwei\nZeilen\"\nK2;1;B;0;2;y\n",
+    "filename": "test.csv"
+  },
+  "expected": {
+    "warnings": []
+  }
+}

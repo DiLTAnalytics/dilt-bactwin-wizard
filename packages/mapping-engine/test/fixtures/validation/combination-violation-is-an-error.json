@@ -1,0 +1,155 @@
+{
+  "id": "validation/combination-violation-is-an-error",
+  "title": "A combination absent from the catalogue is an error",
+  "why": "The write itself was allowed - guidance never refusal - so the only way the engineer learns about it is this message afterwards.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "validate",
+    "points": [
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "HZG",
+          "anlage": "LTA",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "ZUL",
+          "baugruppe_number": "",
+          "medium_position": "LU~",
+          "aggregat": "VEN",
+          "aggregat_number": "",
+          "betriebsmittel": "TD~",
+          "betriebsmittel_number": "",
+          "funktion": "MW~",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": false,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [],
+          "has_error": false
+        }
+      }
+    ]
+  },
+  "expected": {
+    "points": [
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "AI",
+          "unit": "°C"
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "HZG",
+          "anlage": "LTA",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "ZUL",
+          "baugruppe_number": "",
+          "medium_position": "LU~",
+          "aggregat": "VEN",
+          "aggregat_number": "",
+          "betriebsmittel": "TD~",
+          "betriebsmittel_number": "",
+          "funktion": "MW~",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": "?_HZG_Lueftung??_Zuluftstrecke??_Luft_Ventilator??_Temperatursensor??_Gemessener Wert??"
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": false,
+          "valid_bactwin_rules": true,
+          "duplicated_name": false,
+          "messages": [
+            {
+              "level": "error",
+              "code": "COMBINATION_VIOLATION",
+              "params": {
+                "field": "anlage",
+                "value": "LTA",
+                "with": "gewerk HZG"
+              }
+            }
+          ],
+          "has_error": true
+        }
+      }
+    ]
+  }
+}

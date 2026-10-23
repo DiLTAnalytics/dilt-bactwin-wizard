@@ -1,0 +1,27 @@
+{
+  "id": "parse-ede/repeated-meta-key-is-reported",
+  "title": "A metadata line repeated in the file header is reported",
+  "why": "The last value is kept; the warning shows the file contradicts itself.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "parse_ede",
+    "content": "#Engineering-Data-Exchange - test\nPROJECT_NAME;Demo\nVERSION_OF_REFERENCEFILE;1\nTIMESTAMP_OF_LAST_CHANGE;01.10.2026\nPROJECT_NAME;Other\nVERSION_OF_LAYOUT;2.3\n#mandatory;mandatory;mandatory;mandatory;mandatory;optional\n# keyname;device obj.-instance;object-name;object-type;object-instance;description\nK1;1;A;0;1;x\n",
+    "filename": "test.csv"
+  },
+  "expected": {
+    "warnings": [
+      {
+        "code": "EDE_META_REPEATED",
+        "params": {
+          "key": "PROJECT_NAME"
+        }
+      }
+    ],
+    "meta": {
+      "PROJECT_NAME": "Other",
+      "VERSION_OF_REFERENCEFILE": "1",
+      "TIMESTAMP_OF_LAST_CHANGE": "01.10.2026",
+      "VERSION_OF_LAYOUT": "2.3"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Editors ---
+.vscode/
+.idea/
+*.swp
+.history/
+
+# --- Node ---
+node_modules/
+*.tsbuildinfo
+.eslintcache
+
+# --- Build output ---
+# Anchored on purpose: unanchored `dist/`, `lib/` or `build/` would also match source folders
+# such as `src/lib` and drop them from git without a warning.
+/apps/*/dist/
+/apps/*/out/
+/apps/*/.vite/
+/packages/*/dist/
+
+# --- Local runtime / scratch ---
+*.local
+.env
+.env.*
+!.env.example
+
+# --- Generated reports (regenerate, don't commit) ---
+playwright-report/
+test-results/
+
+# --- Generated documentation site (build it with `pnpm docs:build`) ---
+/docs-site/

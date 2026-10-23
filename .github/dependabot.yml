@@ -1,0 +1,39 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }
+    commit-message: { prefix: "ci" }
+    cooldown: { default-days: 7 }
+    groups:
+      actions:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  # One entry for the whole pnpm workspace. Dependabot reads the root manifest and the workspace
+  # members from it; separate entries per package would open several pull requests for one
+  # version bump shared across them.
+  - package-ecosystem: npm
+    directory: /
+    schedule: { interval: weekly }
+    commit-message: { prefix: "deps" }
+    open-pull-requests-limit: 5
+    # Matches minimumReleaseAge in pnpm-workspace.yaml; a younger version would fail to install.
+    cooldown: { default-days: 7 }
+    # Node types follow the Node that Electron ships (and engines), not the newest Node.
+    ignore:
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+    # Groups bundle only minor and patch updates; each major comes as its own pull request.
+    groups:
+      dependencies:
+        dependency-type: production
+        patterns: ["*"]
+        update-types: [minor, patch]
+      dev-dependencies:
+        dependency-type: development
+        patterns: ["*"]
+        update-types: [minor, patch]
+      electron:
+        patterns: ["electron", "@electron-forge/*"]
+        update-types: [minor, patch]

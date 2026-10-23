@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-FileCopyrightText: 2026 DiLT Analytics GmbH
+  SPDX-License-Identifier: LicenseRef-DiLT-trademark
+
+  The DiLT Analytics mark: two overlapping outlined rectangles. Drawn on a 512 grid so it
+  rasterises to every icon size without half-pixel edges.
+
+  This is a trademark, not code. It is NOT covered by the repository's open-source licences -
+  see LICENSING.md. A fork may take every line of the software and must replace this.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="DiLT Analytics">
+  <title>DiLT Analytics</title>
+  <g fill="none" stroke="#5FC49C" stroke-width="16">
+    <!-- lower left: square -->
+    <rect x="56" y="248" width="208" height="208"/>
+    <!-- upper right: taller, overlapping the first -->
+    <rect x="192" y="56" width="196" height="344"/>
+  </g>
+</svg>

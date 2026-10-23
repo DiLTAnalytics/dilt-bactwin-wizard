@@ -1,0 +1,31 @@
+BACtwin Wizard
+Copyright 2026 DiLT Analytics GmbH
+
+This product includes software developed by DiLT Analytics GmbH.
+
+The software is licensed under the GNU Affero General Public License version 3
+(see LICENSES/AGPL-3.0-only.txt), together with the bundled plugins and
+reference data; the documentation under CC-BY-4.0. See LICENSING.md.
+
+--------------------------------------------------------------------------------
+Reference data
+--------------------------------------------------------------------------------
+
+The bundled reference data is licensed like the software. In particular:
+
+  - The AMEV key library encodes the naming standard published by AMEV
+    (Arbeitsgemeinschaft fuer sparsame Energie- und Wasserverwendung). AMEV is
+    not affiliated with this project and does not endorse it.
+
+  - BACnet object-type and engineering-unit enumerations are taken from the
+    BACnet standard (ASHRAE/ANSI 135). ASHRAE is not affiliated with this project.
+
+--------------------------------------------------------------------------------
+Third-party software
+--------------------------------------------------------------------------------
+
+Distributed binaries embed Electron and Chromium. Their licences and the full
+Chromium third-party notice file are included in the application bundle.
+
+The licence texts of the other bundled packages are generated at build time
+into THIRD-PARTY-NOTICES.txt, also included in the application bundle.

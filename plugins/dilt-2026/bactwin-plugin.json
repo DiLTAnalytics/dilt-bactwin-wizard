@@ -1,0 +1,12 @@
+{
+  "id": "dilt-2026",
+  "name": "DiLT 2026",
+  "version": "2026.0.0",
+  "sourceId": "dilt",
+  "engineRange": "^1.0.0",
+  "license": "AGPL-3.0-only",
+  "provides": ["keys", "combinations"],
+  "requires": ["amev-2026"],
+  "description": "Ergänzende Keys der DiLT und die Keys-Combinations, die in der Praxis zusammen vorkommen.",
+  "homepage": "https://dilt.at/"
+}

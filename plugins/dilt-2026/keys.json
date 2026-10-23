@@ -1,0 +1,22 @@
+[
+  {
+    "key": "T~V",
+    "block": "betriebsmittel",
+    "name": "Vorlauftemperatur",
+    "description": "Temperatur im Rücklauf ",
+    "default_gewerk": ["HZG", "RLT", "KAE"],
+    "deprecated": false,
+    "placeholder": false,
+    "source": "dilt"
+  },
+  {
+    "key": "T~R",
+    "block": "betriebsmittel",
+    "name": "Rücklauftemperatur",
+    "description": "Temperatur im Rücklauf",
+    "default_gewerk": ["HZG", "RLT", "KAE"],
+    "deprecated": false,
+    "placeholder": false,
+    "source": "dilt"
+  }
+]

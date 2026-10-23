@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-FileCopyrightText: 2026 DiLT Analytics GmbH
+  SPDX-License-Identifier: LicenseRef-DiLT-trademark
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1568 330" width="1568" height="330" role="img" aria-label="DiLT Analytics - building intelligence">
+  <title>DiLT Analytics</title>
+  <desc>building intelligence</desc>
+  <g fill="none" stroke="#5FC49C" stroke-width="10">
+    <rect x="20" y="158" width="148" height="148"/>
+    <rect x="118" y="24" width="142" height="248"/>
+  </g>
+  <g font-family="Lato, 'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif" fill="#f8fafc">
+    <text x="340" y="148" font-size="150" font-weight="700">DiLT<tspan font-weight="400" fill="#f8fafc"> Analytics</tspan></text>
+    <text x="344" y="260" font-size="86" font-weight="300" fill="#cbd5e1">building intelligence</text>
+  </g>
+</svg>

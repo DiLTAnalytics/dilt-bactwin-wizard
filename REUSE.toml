@@ -1,0 +1,45 @@
+version = 1
+SPDX-PackageName = "BACtwin Wizard"
+SPDX-PackageSupplier = "DiLT Analytics GmbH <opensource@dilt.at>"
+SPDX-PackageDownloadLocation = "https://github.com/DiLTAnalytics/dilt-bactwin-wizard"
+
+# --- The software: application, engine, plugin host, schemas, examples ---------------
+[[annotations]]
+path = ["apps/**", "packages/**", "examples/**", "scripts/**", "eslint.config.mjs"]
+SPDX-FileCopyrightText = "2026 DiLT Analytics GmbH"
+SPDX-License-Identifier = "AGPL-3.0-only"
+
+# --- Documentation --------------------------------------------------------------------
+[[annotations]]
+path = ["docs/**", "**/*.md", "NOTICE"]
+SPDX-FileCopyrightText = "2026 DiLT Analytics GmbH"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+# --- Reference data and the bundled plugins' data ----------------------------------------
+# The AMEV vocabulary encodes the AMEV naming standard; AMEV is not affiliated with this project.
+[[annotations]]
+path = ["data/bacnet_keys/**", "plugins/**"]
+SPDX-FileCopyrightText = "2026 DiLT Analytics GmbH"
+SPDX-License-Identifier = "AGPL-3.0-only"
+
+# --- Repository configuration ---------------------------------------------------------
+[[annotations]]
+path = [
+  ".editorconfig", ".gitattributes", ".gitignore", ".github/**",
+  "package.json", "pnpm-workspace.yaml", "tsconfig.base.json",
+  "packages/*/package.json", "packages/*/tsconfig.json", "patches/**",
+]
+SPDX-FileCopyrightText = "2026 DiLT Analytics GmbH"
+SPDX-License-Identifier = "CC0-1.0"
+
+# --- Brand assets: trademarks, deliberately outside the open-source licences -----------
+[[annotations]]
+path = ["apps/wizard/assets/**"]
+SPDX-FileCopyrightText = "2026 DiLT Analytics GmbH"
+SPDX-License-Identifier = "LicenseRef-DiLT-trademark"
+
+# --- Lockfiles and other uncopyrightable generated artefacts --------------------------
+[[annotations]]
+path = ["**/pnpm-lock.yaml", "**/uv.lock", "**/*.tsbuildinfo"]
+SPDX-FileCopyrightText = "NONE"
+SPDX-License-Identifier = "CC0-1.0"

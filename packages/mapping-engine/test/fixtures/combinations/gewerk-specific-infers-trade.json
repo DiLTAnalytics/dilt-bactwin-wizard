@@ -1,0 +1,90 @@
+{
+  "id": "combinations/gewerk-specific-infers-trade",
+  "title": "Trade-typical mode infers the trade from what is already set",
+  "why": "The middle mode is looser than the catalogue but still not a free-for-all; the inference runs in both directions.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "valid_options",
+    "points": [
+      {
+        "source": {
+          "type": "",
+          "filename": "",
+          "invalid": {},
+          "duplicated_keyname": false,
+          "missing_from_source": false
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "",
+          "object_type": null,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": null,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "",
+          "anlage": "LTA",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "ignore": false,
+          "reminder": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": false,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [],
+          "has_error": false
+        }
+      }
+    ],
+    "field": "betriebsmittel",
+    "mode": "gewerk_specific"
+  },
+  "expected": {
+    "result": {
+      "valid_for_all": [
+        "PD~",
+        "TD~"
+      ],
+      "valid_for_some": [
+        "PD~",
+        "TD~"
+      ]
+    }
+  }
+}

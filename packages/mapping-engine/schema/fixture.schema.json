@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dilt.at/schema/bactwin/conformance-fixture.json",
+  "title": "Conformance fixture",
+  "description": "One input-to-expected-output case that any mapping-engine implementation must reproduce exactly.",
+  "type": "object",
+  "required": ["id", "title", "why", "referenceData", "operation", "expected"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z-]+/[a-z0-9-]+$" },
+    "title": { "type": "string", "description": "What behaviour this pins, as a statement." },
+    "why": { "type": "string", "description": "Why it matters. A fixture without a reason is a fixture nobody dares change." },
+    "referenceData": {
+      "enum": ["demo", "bundled"],
+      "description": "Which bundle in reference/ to load. \"demo\" is synthetic and ships publicly; \"bundled\" is whatever reference data the repository ships."
+    },
+    "operation": { "$ref": "#/$defs/operation" },
+    "expected": { "type": "object", "description": "Shape depends on operation.kind." }
+  },
+  "$defs": {
+    "operation": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "parse_ede", "filter", "build_name",
+            "valid_options", "validate", "validate_and_mark_duplicates",
+            "apply_set", "apply_sequence", "load_sequence", "export"
+          ]
+        }
+      }
+    }
+  }
+}

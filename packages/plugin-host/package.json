@@ -1,0 +1,30 @@
+{
+  "name": "@bactwin/plugin-host",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "description": "Discovery, validation and merging of data-only BACtwin reference-data plugins",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@bactwin/mapping-engine": "workspace:*",
+    "csv-parse": "7.0.3",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "vitest": "^5.0.4"
+  }
+}

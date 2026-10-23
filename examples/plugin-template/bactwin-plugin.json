@@ -1,0 +1,10 @@
+{
+  "id": "demo",
+  "name": "Demo vocabulary",
+  "version": "1.0.0",
+  "sourceId": "DEMO",
+  "engineRange": "^1.0.0",
+  "license": "AGPL-3.0-only",
+  "provides": ["keys", "combinations"],
+  "description": "Ein kleines, erfundenes Vokabular mit Katalog: die Vorlage für ein eigenes Plugin."
+}

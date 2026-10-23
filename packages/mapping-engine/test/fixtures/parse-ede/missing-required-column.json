@@ -1,0 +1,17 @@
+{
+  "id": "parse-ede/missing-required-column",
+  "title": "A file without a required column fails",
+  "why": "Without object-instance no point can be identified, so importing would produce nameless or colliding points.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "parse_ede",
+    "content": "#Engineering-Data-Exchange - test\nPROJECT_NAME;Demo\nVERSION_OF_REFERENCEFILE;1\nTIMESTAMP_OF_LAST_CHANGE;01.10.2026\nAUTHOR_OF_LAST_CHANGE;test\nVERSION_OF_LAYOUT;2.3\n#mandatory;mandatory;mandatory;mandatory;mandatory;optional;optional;optional;optional;optional;optional;optional;optional\n# keyname;device obj.-instance;object-name;object-type;description\nK1;1;A;0;x\n",
+    "filename": "test.csv"
+  },
+  "expected": {
+    "error": {
+      "type": "EDEFormatError",
+      "code": "EDE_MISSING_COLUMNS"
+    }
+  }
+}

@@ -1,0 +1,53 @@
+name: Documentation
+
+# Publishes docs/user to GitHub Pages; the same build is bundled into the app's Help menu.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/user/**'
+      - 'apps/wizard/schema/**'
+      - 'packages/mapping-engine/schema/**'
+      - 'scripts/build-docs.mjs'
+      - 'scripts/check-docs-links.mjs'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with: { node-version: 24, cache: pnpm }
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm docs:build
+      - run: pnpm docs:check
+
+      - uses: actions/upload-pages-artifact@v5
+        with: { path: docs-site }
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v5

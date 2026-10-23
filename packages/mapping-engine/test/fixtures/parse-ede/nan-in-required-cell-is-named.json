@@ -1,0 +1,23 @@
+{
+  "id": "parse-ede/nan-in-required-cell-is-named",
+  "title": "A required cell holding nan names it in the skip warning",
+  "why": "Exports that went through a dataframe write nan for empty cells. Reporting it as empty would hide what the file says.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "parse_ede",
+    "content": "#Engineering-Data-Exchange - test\nPROJECT_NAME;Demo\nVERSION_OF_REFERENCEFILE;1\nTIMESTAMP_OF_LAST_CHANGE;01.10.2026\nAUTHOR_OF_LAST_CHANGE;test\nVERSION_OF_LAYOUT;2.3\n#mandatory;mandatory;mandatory;mandatory;mandatory;optional\n# keyname;device obj.-instance;object-name;object-type;object-instance;description\nK1;1;A;nan;1;x\n",
+    "filename": "test.csv"
+  },
+  "expected": {
+    "warnings": [
+      {
+        "code": "EDE_ROW_NAN",
+        "params": {
+          "line": "9",
+          "column": "object_type",
+          "value": ""
+        }
+      }
+    ]
+  }
+}

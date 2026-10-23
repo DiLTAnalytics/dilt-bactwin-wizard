@@ -1,0 +1,30 @@
+{
+  "id": "sequence/unknown-key-is-refused",
+  "title": "A key the format does not define refuses the file",
+  "why": "A typo such as \"vlaue\" or a key from a newer format would otherwise be dropped silently, and the step would replay differently from what the file says.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "load_sequence",
+    "sequence": {
+      "schema_version": "1.0",
+      "steps": [
+        {
+          "name": "x",
+          "filter": [],
+          "actions": [
+            {
+              "field": "bactwin.gewerk",
+              "value": "HZG",
+              "vlaue": "HZG"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "expected": {
+    "error": {
+      "type": "ValidationError"
+    }
+  }
+}

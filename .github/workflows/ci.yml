@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  licensing:
+    name: Licensing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: REUSE compliance
+        uses: fsfe/reuse-action@v6
+
+  engine:
+    name: Mapping engine
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with: { node-version: 24, cache: pnpm }
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck packages
+        run: pnpm --filter './packages/*' typecheck
+
+      # Architectural boundaries only (e.g. the renderer must not import Electron or Node).
+      - name: Lint
+        run: pnpm lint
+
+      # Corpus shape (schemas, index) and engine conformance. A failure means the engine and a
+      # hand-edited fixture disagree; see packages/mapping-engine/test/fixtures/README.md.
+      - name: Engine and conformance corpus
+        run: pnpm --filter @bactwin/mapping-engine test
+
+      - name: Plugin host
+        run: pnpm --filter @bactwin/plugin-host test
+
+
+  wizard:
+    name: Desktop app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with: { node-version: 24, cache: pnpm }
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm --filter @bactwin/wizard typecheck
+
+      - name: Unit tests
+        run: pnpm --filter @bactwin/wizard test
+
+      - name: Package
+        run: pnpm --filter @bactwin/wizard package
+
+      # Package built docs-site/ (forge prePackage hook); it is opened off disk, so links must resolve as files.
+      - name: Documentation works offline
+        run: pnpm docs:check
+
+      # Drives the real application over IPC: window, preload bridge, plugins, import to replay.
+      - name: End-to-end
+        run: xvfb-run -a pnpm --filter @bactwin/wizard test:e2e
+
+      # Chromium's and the bundled packages' notices must ship inside the bundle. The licence
+      # allowlist is enforced by the build itself (apps/wizard/vite.notices.ts).
+      - name: Third-party notices are in the bundle
+        run: |
+          for f in LICENSES.chromium.html THIRD-PARTY-NOTICES.txt; do
+            found=$(find apps/wizard/out -name "$f" -path '*resources*' | head -1)
+            test -n "$found" || { echo "::error::$f missing from the packaged app"; exit 1; }
+            echo "OK - $found"
+          done
