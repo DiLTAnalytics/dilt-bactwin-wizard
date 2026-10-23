@@ -55,7 +55,7 @@
     "@typescript/native": "npm:typescript@^7.0.2",
     "@vitejs/plugin-react": "^6.1.2",
     "ajv": "^8.17.1",
-    "electron": "^44.7.2",
+    "electron": "^44.8.0",
     "read-excel-file": "9.3.12",
     "rollup-plugin-license": "^3.7.1",
     "tailwindcss": "^4.3.3",
