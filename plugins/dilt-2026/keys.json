@@ -3,7 +3,7 @@
     "key": "T~V",
     "block": "betriebsmittel",
     "name": "Vorlauftemperatur",
-    "description": "Temperatur im Rücklauf ",
+    "description": "Temperatur im Vorlauf",
     "default_gewerk": ["HZG", "RLT", "KAE"],
     "deprecated": false,
     "placeholder": false,
