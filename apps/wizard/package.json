@@ -56,7 +56,7 @@
     "@vitejs/plugin-react": "^6.1.2",
     "ajv": "^8.17.1",
     "electron": "^45.0.0",
-    "read-excel-file": "9.3.12",
+    "read-excel-file": "9.3.14",
     "rollup-plugin-license": "^3.7.1",
     "tailwindcss": "^4.3.3",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
