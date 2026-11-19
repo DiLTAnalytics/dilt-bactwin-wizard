@@ -146,7 +146,7 @@
               }
             },
             {
-              "level": "error",
+              "level": "warning",
               "code": "COMBINATION_VIOLATION",
               "params": {
                 "field": "gewerk",

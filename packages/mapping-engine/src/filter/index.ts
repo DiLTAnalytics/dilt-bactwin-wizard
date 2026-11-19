@@ -1,7 +1,7 @@
 /** The filter DSL: how a mapping decides which data points it applies to. */
 
 import { z } from 'zod'
-import { BACtwinDataSchema, EdeDataSchema, hasError, StateDataSchema, STATE_FLAGS, type DataPoint } from '../types.js'
+import { BACtwinDataSchema, EdeDataSchema, hasError, hasWarning, StateDataSchema, STATE_FLAGS, type DataPoint } from '../types.js'
 
 export const FilterOperatorSchema = z.enum(['regex', 'equals', 'empty', 'is_true', 'is_false'])
 export type FilterOperator = z.infer<typeof FilterOperatorSchema>
@@ -34,6 +34,7 @@ export interface FilterCondition {
 /** Filterable `state.*` fields computed from the stored ones. */
 export const DERIVED_STATE_FIELDS: Record<string, (point: DataPoint) => boolean> = {
   has_error: hasError,
+  has_warning: hasWarning,
   // Unchecked (null) is not invalid.
   combinations_invalid: (p) => p.state.combinations_valid === false,
   invalid_bactwin_rules: (p) => !p.state.valid_bactwin_rules,

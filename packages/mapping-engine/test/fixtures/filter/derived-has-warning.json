@@ -1,0 +1,226 @@
+{
+  "id": "filter/derived-has-warning",
+  "title": "has_warning is any warning-level message, apart from errors",
+  "why": "Warnings are counted and filtered on their own, so a point with only a warning is not an error and a point with only an error has no warning.",
+  "referenceData": "demo",
+  "operation": {
+    "kind": "filter",
+    "points": [
+      {
+        "source": {
+          "type": "",
+          "filename": ""
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "HZG_A",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "HZG",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "command": "replace",
+          "review": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": false,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [
+            {
+              "level": "error",
+              "code": "UNKNOWN_KEY",
+              "params": {
+                "value": "XXX",
+                "block": "anlage"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "source": {
+          "type": "",
+          "filename": ""
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "HZG_B",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "HZG",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "command": "replace",
+          "review": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": true,
+          "valid_bactwin_rules": true,
+          "duplicated_name": false,
+          "messages": []
+        }
+      },
+      {
+        "source": {
+          "type": "",
+          "filename": ""
+        },
+        "ede": {
+          "keyname": "",
+          "device_obj_instance": null,
+          "object_name": "HZG_C",
+          "object_type": 0,
+          "object_instance": null,
+          "description": "",
+          "present_value_default": null,
+          "min_present_value": null,
+          "max_present_value": null,
+          "settable": "",
+          "commandable": "",
+          "supports_cov": "",
+          "hi_limit": null,
+          "low_limit": null,
+          "state_text_reference": null,
+          "unit_code": 62,
+          "vendor_specific_address": null,
+          "notification_class": null,
+          "object_tag": null,
+          "object_tag_text": ""
+        },
+        "bacnet": {
+          "type": "",
+          "unit": ""
+        },
+        "bactwin": {
+          "ort": "",
+          "gewerk": "HZG",
+          "anlage": "",
+          "anlage_number": "",
+          "sub_anlage_number": "",
+          "baugruppe": "",
+          "baugruppe_number": "",
+          "medium_position": "",
+          "aggregat": "",
+          "aggregat_number": "",
+          "betriebsmittel": "",
+          "betriebsmittel_number": "",
+          "funktion": "",
+          "funktion_number": "",
+          "funktion_erweiterung": "",
+          "bactwin_name": "",
+          "bactwin_description": null
+        },
+        "state": {
+          "command": "replace",
+          "review": false,
+          "comment": "",
+          "translation_complete": false,
+          "combinations_valid": true,
+          "valid_bactwin_rules": false,
+          "duplicated_name": false,
+          "messages": [
+            {
+              "level": "warning",
+              "code": "DEPRECATED_KEY",
+              "params": {
+                "value": "HZG",
+                "block": "gewerk"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "filter": {
+      "rules": [
+        {
+          "field": "state.has_warning",
+          "operator": "is_true",
+          "value": null
+        }
+      ]
+    }
+  },
+  "expected": {
+    "matched": [
+      2
+    ]
+  }
+}

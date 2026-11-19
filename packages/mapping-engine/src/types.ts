@@ -131,6 +131,11 @@ export function hasError(point: DataPoint): boolean {
   return point.state.messages.some((m) => m.level === 'error')
 }
 
+/** Derived, not stored: a point has a warning when any message is at warning level. */
+export function hasWarning(point: DataPoint): boolean {
+  return point.state.messages.some((m) => m.level === 'warning')
+}
+
 export const STATE_FLAGS = [
   'review',
   'translation_complete',

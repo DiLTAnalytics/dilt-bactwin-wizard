@@ -10,6 +10,7 @@ import {
   exportReplacementCsv,
   getFieldValue,
   hasError,
+  hasWarning,
   markDuplicateNames,
   pointKey,
   narrowForTable,
@@ -56,6 +57,7 @@ export interface Stats {
   valid_bactwin_rules: number
   duplicated_name: number
   errors: number
+  warnings: number
   fields_set: number
   fields_total: number
   field_fill_pct: Record<string, number>
@@ -134,7 +136,7 @@ export function stats(s: Session, filter?: FilterDsl): Stats {
   if (!s.project) {
     return {
       total: 0, filtered: 0, ignore: 0, doNotParse: 0, review: 0, translation_complete: 0,
-      combinations_valid: 0, valid_bactwin_rules: 0, duplicated_name: 0, errors: 0,
+      combinations_valid: 0, valid_bactwin_rules: 0, duplicated_name: 0, errors: 0, warnings: 0,
       fields_set: 0, fields_total: 0, field_fill_pct: {},
     }
   }
@@ -162,6 +164,7 @@ export function stats(s: Session, filter?: FilterDsl): Stats {
     valid_bactwin_rules: all.filter((p) => p.state.valid_bactwin_rules).length,
     duplicated_name: all.filter((p) => p.state.duplicated_name).length,
     errors: all.filter(hasError).length,
+    warnings: all.filter(hasWarning).length,
     fields_set: fieldsSet + subSet,
     fields_total: relevant.length * STATS_FIELDS.length + subSet,
     field_fill_pct: fieldFill,

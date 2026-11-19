@@ -1,14 +1,32 @@
-import { CircleAlert, Copy, Database, EyeOff, Flag, Layers } from 'lucide-react'
-import type { DataPoint } from '@bactwin/mapping-engine'
+import { CircleAlert, Copy, Database, EyeOff, Flag, Layers, TriangleAlert } from 'lucide-react'
+import type { DataPoint, ValidationMessage } from '@bactwin/mapping-engine'
 import { useI18n } from '@/i18n'
 import { fieldLabel } from '@/lib/fieldLabel'
-import { byLevel, messageText } from '@/lib/messages'
+import { messageText } from '@/lib/messages'
 import { MARK_CLASSES, markSegments, type Mark } from '@/lib/highlight'
 import { Tooltip } from '@/ui/Tooltip'
 
+/** Messages of one level as an icon, with the first few in its tooltip. */
+function MessageIcon({ messages, level }: { messages: ValidationMessage[]; level: 'error' | 'warning' }) {
+  const { t } = useI18n()
+  const texts = messages.filter((m) => m.level === level).map((m) => messageText(m, t))
+  if (texts.length === 0) return null
+  const [Icon, color] = level === 'error' ? [CircleAlert, 'text-danger-fg'] : [TriangleAlert, 'text-warning-fg']
+  return (
+    <Tooltip side="right" content={
+      <div className="space-y-0.5">
+        {texts.slice(0, 3).map((text, i) => <p key={i}>{text}</p>)}
+        {texts.length > 3 && <p className="opacity-70">{t('table.status.more', { count: texts.length - 3 })}</p>}
+      </div>
+    }>
+      <span className={`shrink-0 ${color}`} aria-label={texts.join(' ')}><Icon size={14} aria-hidden /></span>
+    </Tooltip>
+  )
+}
+
 /**
- * Computed status as a coloured bar (error, complete, in progress, empty), the hand-set flags as icons
- * beside it. Clicking the duplicate icon lists every point with that name.
+ * Computed status as a coloured bar (error, complete, in progress, empty), errors, warnings and the
+ * hand-set flags as icons beside it. Clicking the duplicate icon lists every point with that name.
  */
 export function StatusCell({ point, onDuplicateClick }: { point: DataPoint; onDuplicateClick: (name: string) => void }) {
   const { t } = useI18n()
@@ -20,23 +38,11 @@ export function StatusCell({ point, onDuplicateClick }: { point: DataPoint; onDu
     : point.bactwin.gewerk || point.bactwin.anlage ? ['bg-warning', t('table.status.inProgress')]
     : ['bg-transparent', t('table.status.empty')]
 
-  // Cut, so the tooltip stays readable.
-  const messages = byLevel(m.messages).map((msg) => messageText(msg, t))
-  const errorText = (
-    <div className="space-y-0.5">
-      {messages.slice(0, 3).map((text, i) => <p key={i}>{text}</p>)}
-      {messages.length > 3 && <p className="opacity-70">{t('table.status.more', { count: messages.length - 3 })}</p>}
-    </div>
-  )
-
   return (
     <span className="flex items-center gap-1">
       <Tooltip content={label}><span className={`h-5 w-1 shrink-0 rounded-full ${bar}`} aria-label={label} /></Tooltip>
-      {error && (
-        <Tooltip content={errorText} side="right">
-          <span className="shrink-0 text-danger-fg" aria-label={messages.join(' ')}><CircleAlert size={14} aria-hidden /></span>
-        </Tooltip>
-      )}
+      <MessageIcon messages={m.messages} level="error" />
+      <MessageIcon messages={m.messages} level="warning" />
       {m.duplicated_name && (
         <Tooltip content={t('table.status.duplicateHint')}>
           <button

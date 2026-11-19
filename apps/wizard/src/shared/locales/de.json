@@ -73,6 +73,7 @@
   "validation": {
     "UNKNOWN_KEY": "Unbekannter BACtwin-Key: {{value}} (Block: {{block}})",
     "DEPRECATED_KEY": "Veralteter Key: {{value}} (Block: {{block}})",
+    "GEWERK_MISMATCH": "Key nicht für Gewerk {{gewerk}} vorgesehen: {{value}} (Block: {{block}})",
     "COMBINATION_VIOLATION": "Diese Kombination steht nicht in den Keys-Combinations.",
     "COMBINATION_VIOLATION_WITH": "Nicht in den Keys-Combinations: {{field}} „{{value}}“ passt nicht zu {{with}}.",
     "COMBINATION_VIOLATION_ALONE": "Nicht in den Keys-Combinations: {{field}} „{{value}}“ kommt dort nicht vor.",
@@ -556,6 +557,7 @@
     "empty": "Noch keine Datenpunkte - über „EDE-Dateien“ Dateien hinzufügen.",
     "filterHint": "Klick: Tabelle darauf einschränken",
     "errors": "Fehler",
+    "warnings": "Warnungen",
     "duplicates": "Doppelt",
     "review": "Zu prüfen",
     "ignored": "ignore",
@@ -601,6 +603,7 @@
   },
   "view": {
     "errors": "Fehler",
+    "warnings": "Warnungen",
     "duplicates": "Doppelt",
     "review": "Zu prüfen",
     "search": "Objektname oder Beschreibung suchen…",
@@ -620,6 +623,7 @@
   "field": {
     "state": {
       "has_error": "Hat Fehler",
+      "has_warning": "Hat Warnung",
       "duplicated_name": "Name doppelt",
       "command": "Command",
       "translation_complete": "Vollständig",

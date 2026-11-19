@@ -1,6 +1,6 @@
 {
   "note": "Hand-maintained; see README.md.",
-  "count": 62,
+  "count": 64,
   "fixtures": [
     "apply/field-and-flag-in-one-step",
     "apply/fixed-value",
@@ -21,6 +21,7 @@
     "export/replacement-csv-commands",
     "filter/all-rules-must-hold",
     "filter/derived-has-error-and-invalid-rules",
+    "filter/derived-has-warning",
     "filter/derived-invalid-combinations",
     "filter/empty",
     "filter/empty-filter-matches-all",
@@ -58,11 +59,12 @@
     "parse-ede/unnamed-column-data-is-reported",
     "sequence/ordered-replay",
     "sequence/unknown-key-is-refused",
-    "validation/combination-violation-is-an-error",
+    "validation/combination-violation-is-a-warning",
     "validation/deprecated-key-is-a-warning",
     "validation/duplicates-only-among-complete-names",
     "validation/unit-code-zero-is-square-meters",
     "validation/unknown-key-is-an-error",
-    "validation/unknown-object-type-is-a-warning"
+    "validation/unknown-object-type-is-a-warning",
+    "validation/key-outside-gewerk-is-a-warning"
   ]
 }

@@ -42,6 +42,7 @@ const GROUPS: ColumnGroup[] = ['ede', 'bacnet', 'bactwin', 'description', 'state
 const DEFAULT_GROUPS: Record<ColumnGroup, boolean> = { ede: true, bacnet: true, bactwin: true, description: false, state: false }
 const CHIPS: { chip: StatusChip; labelKey: string }[] = [
   { chip: 'errors', labelKey: 'view.errors' },
+  { chip: 'warnings', labelKey: 'view.warnings' },
   { chip: 'duplicates', labelKey: 'view.duplicates' },
   { chip: 'review', labelKey: 'view.review' },
   { chip: 'ignored', labelKey: 'view.ignored' },

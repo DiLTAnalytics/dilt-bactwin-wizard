@@ -219,7 +219,7 @@ export function DetailPanel({ point, onClose }: { point: DataPoint | null; onClo
           </div>
           <div className="space-y-1">
             {caps.combinations && (
-              <div className={m.combinations_valid === null ? 'text-muted' : m.combinations_valid ? 'text-success-fg' : 'text-danger-fg'}>
+              <div className={m.combinations_valid === null ? 'text-muted' : m.combinations_valid ? 'text-success-fg' : 'text-warning-fg'}>
                 {t('detail.combinations', { source: caps.combinationSource ?? '' })}{' '}
                 {m.combinations_valid === null ? `– ${t('common.notChecked')}` : m.combinations_valid ? `✓ ${t('common.valid')}` : `✗ ${t('common.invalid')}`}
               </div>

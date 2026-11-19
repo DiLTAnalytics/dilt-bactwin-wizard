@@ -263,6 +263,7 @@
         "state.valid_bactwin_rules",
         "state.duplicated_name",
         "state.has_error",
+        "state.has_warning",
         "state.combinations_invalid",
         "state.invalid_bactwin_rules"
       ],

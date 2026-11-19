@@ -56,8 +56,8 @@ Status je Datei: **aktuell**, **geändert**, **nicht gefunden**, **nicht erfasst
 - **Oben:** der Schritt-Editor (§5).
 - **Mitte:** die Tabelle, mit offenem Schritt als Vorschau (§6).
 - **Rechts:** der angeklickte Datenpunkt (§7).
-- **Unten:** Anzahl, Fortschritt, gesetzte Felder und die Zähler Fehler, Doppelt, Zu prüfen, Nicht
-  relevant. Ein Klick filtert die Tabelle darauf.
+- **Unten:** Anzahl, Fortschritt, gesetzte Felder und die Zähler Fehler, Warnungen, Doppelt, Zu prüfen,
+  ignore, doNotParse. Ein Klick filtert die Tabelle darauf.
 
 ## 5. Schritte
 
@@ -110,12 +110,13 @@ Mit offenem Schritt:
 
 Ohne offenen Schritt: alle Datenpunkte nach allen Schritten.
 
-Der **Ansichtsfilter** (Suche in Objektname und Beschreibung, **Fehler**, **Doppelt**, **Zu prüfen**) ändert nur die Anzeige,
+Der **Ansichtsfilter** (Suche in Objektname und Beschreibung, **Fehler**, **Warnungen**, **Doppelt**, **Zu prüfen**) ändert nur die Anzeige,
 nie einen Schritt. Der Suchbegriff ist blau umrandet. Ein Klick auf eine Spaltenüberschrift sortiert; Rechtsklick fixiert oder setzt die
 Breite zurück.
 
 Balken vorn: rot (Fehler oder doppelt), grün (vollständig), gelb (in Arbeit).
-Symbole: durchgestrichenes Auge (ignore), Datenbank (doNotParse), Fähnchen (zu prüfen).
+Symbole: roter Kreis (Fehler), gelbes Dreieck (Warnung), durchgestrichenes Auge (ignore), Datenbank
+(doNotParse), Fähnchen (zu prüfen). Die Meldungen stehen im Tooltip.
 
 ## 7. Ein Datenpunkt
 
@@ -124,10 +125,12 @@ Feld, das sie betreffen. Oben steht der **Verlauf**:
 jeder Schritt, der ihn geändert hat; ein Klick öffnet den Schritt. Eine Korrektur hier wird mit
 **Setzen** ein eigener Schritt für nur diesen Datenpunkt, vorbelegt als „Korrektur <Objektname>“.
 
-## 8. Fehler und doppelte Namen
+## 8. Fehler, Warnungen und doppelte Namen
 
-- **Fehler:** Ansichtsfilter **Fehler**. Ursachen: unbekannter oder veralteter Key, unvollständiger
-  Name, nicht in den Keys-Combinations.
+- **Fehler:** Ansichtsfilter **Fehler**. Ursachen: unbekannter Key, ungültiger Wert in der EDE-Datei.
+- **Warnungen:** Ansichtsfilter **Warnungen**. Ursachen: nicht in den Keys-Combinations, Key nicht für
+  das Gewerk vorgesehen (laut AMEV-Bibliothek), veralteter Key,
+  unbekannter Objekttyp oder Unit-Code, Datenpunkt fehlt in der EDE-Datei.
 - **Doppelt:** Ansichtsfilter **Doppelt**, Namen eindeutig machen (meist eine fehlende Nummer). Nur
   vollständige Namen zählen.
 - **ignore:** Datenpunkte ohne BACtwin-Namen per Schritt auf Command **ignore** setzen; sie zählen dann nicht
