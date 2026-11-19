@@ -1,0 +1,43 @@
+name: Test build
+
+# An unsigned Windows installer for trying a branch, without a release tag.
+# On a PR: add the label "windows-build" (again after new commits: remove and re-add, or start it by hand).
+
+on:
+  pull_request:
+    types: [labeled]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'windows-build'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with: { node-version: 24, cache: pnpm }
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm --filter @bactwin/wizard exec electron-forge make --arch=x64
+
+      - name: Collect installer
+        shell: bash
+        run: |
+          mkdir -p dist
+          find apps/wizard/out/make -type f -name '*.exe' -exec cp {} dist/ \;
+          ls -la dist
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: bactwin-wizard-windows-${{ github.event.pull_request.number && format('pr{0}', github.event.pull_request.number) || github.ref_name }}-${{ github.sha }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 3
