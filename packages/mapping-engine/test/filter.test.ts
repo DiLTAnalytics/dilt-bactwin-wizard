@@ -32,13 +32,13 @@ describe('each filter rule is exactly one regex', () => {
   })
 
   it('flags are true or false, and read back as such only on boolean fields', () => {
-    const flag = rule({ field: 'state.ignore', operator: 'is_true', value: null })
+    const flag = rule({ field: 'state.review', operator: 'is_true', value: null })
     expect(conditionRegex(flag)).toBe('^true$')
-    expect(ruleFromCondition({ field: 'state.ignore', regex: '^false$' })).toEqual({ ...flag, operator: 'is_false' })
+    expect(ruleFromCondition({ field: 'state.review', regex: '^false$' })).toEqual({ ...flag, operator: 'is_false' })
     expect(ruleFromCondition({ field: 'bactwin.gewerk', regex: '^true$' })).toEqual(rule({ value: 'true' }))
-    const ignored = emptyDataPoint()
-    ignored.state.ignore = true
-    expect(selectPoints([ignored, emptyDataPoint()], [toCondition(flag)])).toEqual([ignored])
+    const marked = emptyDataPoint()
+    marked.state.review = true
+    expect(selectPoints([marked, emptyDataPoint()], [toCondition(flag)])).toEqual([marked])
   })
 
   it('reads any regex back as a rule that writes the same regex', () => {

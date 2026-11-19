@@ -5,14 +5,17 @@
  */
 
 import { z } from 'zod'
-import { FLAG_FIELDS, WRITABLE_FIELDS } from '../apply/index.js'
+import { COMMAND_FIELD, FLAG_FIELDS, WRITABLE_FIELDS } from '../apply/index.js'
 import type { CombinationMode } from '../combinations/index.js'
 import { READABLE_FIELDS } from '../filter/index.js'
+import { upgradeLegacySequence } from '../legacy/sequence.js'
+import { COMMANDS } from '../types.js'
 import { SequenceFormatError, SequenceTooNewError } from './error.js'
+import { isNewer } from './version.js'
 
-export { SequenceFormatError, SequenceTooNewError }
+export { isNewer, SequenceFormatError, SequenceTooNewError }
 
-export const SEQUENCE_FORMAT_VERSION = '1.0'
+export const SEQUENCE_FORMAT_VERSION = '1.1'
 export const SEQUENCE_SCHEMA_URL = 'https://diltanalytics.github.io/dilt-bactwin-wizard/schema/mapping-sequence.schema.json'
 
 const compiles = (regex: string) => {
@@ -27,7 +30,7 @@ const compiles = (regex: string) => {
 const Regex = z.string().refine(compiles, 'not a valid regular expression')
 const ReadableField = z.enum(READABLE_FIELDS as [string, ...string[]]).meta({ id: 'readable_field', description: 'A field of a data point, as area.field' })
 const COMMENT_FIELD = 'state.comment'
-const TEMPLATE_FIELDS = WRITABLE_FIELDS.filter((f) => !FLAG_FIELDS.includes(f) && f !== COMMENT_FIELD)
+const TEMPLATE_FIELDS = WRITABLE_FIELDS.filter((f) => !FLAG_FIELDS.includes(f) && f !== COMMENT_FIELD && f !== COMMAND_FIELD)
 
 /** Whether a template refers to `$0`, which is not a capture group. */
 const usesWholeMatch = (template: string) => [...template.matchAll(/\$(\$|\d)/g)].some((m) => m[1] === '0')
@@ -44,6 +47,11 @@ export const ConditionSchema = z
 const FlagActionSchema = z.strictObject({
   field: z.enum(FLAG_FIELDS as [string, ...string[]]).describe('The flag switched'),
   value: z.boolean(),
+})
+
+const CommandActionSchema = z.strictObject({
+  field: z.literal(COMMAND_FIELD).describe('What the replacement table does with the point'),
+  value: z.enum(COMMANDS).describe('replace: rename it; ignore: leave it out of Haystack; doNotParse: keep it for logging only'),
 })
 
 const CommentActionSchema = z.strictObject({
@@ -68,7 +76,7 @@ const FieldActionSchema = z
   })
   .refine((a) => a.from === undefined || !usesWholeMatch(a.value), { message: "$0 is not a group; capture the whole match as (...) and use its number", path: ['value'] })
 
-export const SetActionSchema = z.discriminatedUnion('field', [FlagActionSchema, CommentActionSchema, FieldActionSchema]).describe('One write onto every selected point')
+export const SetActionSchema = z.discriminatedUnion('field', [FlagActionSchema, CommandActionSchema, CommentActionSchema, FieldActionSchema]).describe('One write onto every selected point')
 
 /** Which keys the step editor offers. */
 export const CombinationModeSchema = z.enum(['combination', 'gewerk_specific', 'free'] as const satisfies readonly CombinationMode[])
@@ -115,14 +123,7 @@ function issuePath(path: PropertyKey[]): string {
   return parts.join(', ') || '/'
 }
 
-/** Whether format version `a` ("major.minor") is newer than `b`. */
-export function isNewer(a: string, b: string): boolean {
-  const [am = 0, an = 0] = a.split('.').map(Number)
-  const [bm = 0, bn = 0] = b.split('.').map(Number)
-  return am > bm || (am === bm && an > bn)
-}
-
-/** A sequence file's content; a file of a newer format is refused. */
+/** A sequence file's content; a file of a newer format is refused, an older one upgraded. */
 export function readSequence(data: unknown): Sequence {
   const isObject = typeof data === 'object' && data !== null && !Array.isArray(data)
   if (isObject && !('schema_version' in data) && !('steps' in data)) {
@@ -130,7 +131,7 @@ export function readSequence(data: unknown): Sequence {
   }
   const version = isObject && 'schema_version' in data ? data.schema_version : null
   if (typeof version === 'string' && isNewer(version, SEQUENCE_FORMAT_VERSION)) throw new SequenceTooNewError(version)
-  const parsed = SequenceSchema.safeParse(data)
+  const parsed = SequenceSchema.safeParse(upgradeLegacySequence(data))
   if (!parsed.success) {
     throw new SequenceFormatError(parsed.error.issues.map((i) => {
       const keys = i.code === 'unrecognized_keys' ? ` (${i.keys.join(', ')})` : ''

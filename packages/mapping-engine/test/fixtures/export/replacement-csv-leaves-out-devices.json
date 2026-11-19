@@ -6,7 +6,6 @@
   "operation": {
     "kind": "export",
     "format": "replacement",
-    "scope": "all",
     "points": [
       {
         "source": {
@@ -62,8 +61,8 @@
           "bactwin_description": "Halle_HZG_Verteilung1_Heizkreis2_Heizwasser_Zaehler3_Temperatursensor4_Gemessener Wert5"
         },
         "state": {
-          "ignore": false,
-          "reminder": false,
+          "command": "replace",
+          "review": false,
           "comment": "needs a second look",
           "translation_complete": true,
           "combinations_valid": true,
@@ -127,8 +126,8 @@
           "bactwin_description": "?_???_?????_?????_???_?????_?????_?????"
         },
         "state": {
-          "ignore": false,
-          "reminder": false,
+          "command": "replace",
+          "review": false,
           "comment": "",
           "translation_complete": false,
           "combinations_valid": true,
@@ -192,8 +191,8 @@
           "bactwin_description": "?_???_?????_?????_???_?????_?????_?????"
         },
         "state": {
-          "ignore": true,
-          "reminder": false,
+          "command": "ignore",
+          "review": false,
           "comment": "",
           "translation_complete": false,
           "combinations_valid": true,
@@ -257,8 +256,8 @@
           "bactwin_description": "Halle_HZG_Verteilung1_Heizkreis2_Heizwasser_Zaehler3_Temperatursensor4_Gemessener Wert5"
         },
         "state": {
-          "ignore": false,
-          "reminder": false,
+          "command": "replace",
+          "review": false,
           "comment": "needs a second look",
           "translation_complete": true,
           "combinations_valid": true,
@@ -268,11 +267,13 @@
           "has_error": false
         }
       }
-    ]
+    ],
+    "ignore": false
   },
   "expected": {
-    "content": "Key,Command,Replacement,Comment\r\nAHU07_ZUL_TEMP,replace,Halle_HZG_VTA1_HZK2_HZ~_WMZ3_TD~4_MW~5,needs a second look\r\n\"quoted,\"\"name\"\"\",replace,Q_NAME,\r\n",
+    "content": "Key,Command,Replacement,Comment\r\nAHU07_ZUL_TEMP,replace,Halle_HZG_VTA1_HZK2_HZ~_WMZ3_TD~4_MW~5,needs a second look\r\n",
     "leftOut": 1,
-    "devices": 1
+    "devices": 1,
+    "ignored": 1
   }
 }

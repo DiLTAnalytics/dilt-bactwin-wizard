@@ -1,12 +1,11 @@
 {
-  "id": "export/replacement-csv-filtered",
-  "title": "Replacement CSV, scope \"filtered\"",
-  "why": "The partner system reads this file. Its column set, its quoting and which points each scope includes are all contract, not presentation.",
+  "id": "export/replacement-csv-replace",
+  "title": "Replacement CSV, replace rows need a complete name",
+  "why": "The partner system reads this file. Its column set, its quoting and which points it writes with which command are all contract, not presentation. A replace point is written only with a complete BACtwin name; one with a filled required part but an empty other segment is left out and counted. ignore rows are left out unless asked for.",
   "referenceData": "demo",
   "operation": {
     "kind": "export",
     "format": "replacement",
-    "scope": "filtered",
     "points": [
       {
         "source": {
@@ -62,8 +61,8 @@
           "bactwin_description": "Halle_HZG_Verteilung1_Heizkreis2_Heizwasser_Zaehler3_Temperatursensor4_Gemessener Wert5"
         },
         "state": {
-          "ignore": false,
-          "reminder": false,
+          "command": "replace",
+          "review": false,
           "comment": "needs a second look",
           "translation_complete": true,
           "combinations_valid": true,
@@ -127,8 +126,8 @@
           "bactwin_description": "?_???_?????_?????_???_?????_?????_?????"
         },
         "state": {
-          "ignore": false,
-          "reminder": false,
+          "command": "replace",
+          "review": false,
           "comment": "",
           "translation_complete": false,
           "combinations_valid": true,
@@ -192,8 +191,8 @@
           "bactwin_description": "?_???_?????_?????_???_?????_?????_?????"
         },
         "state": {
-          "ignore": true,
-          "reminder": false,
+          "command": "ignore",
+          "review": false,
           "comment": "",
           "translation_complete": false,
           "combinations_valid": true,
@@ -203,11 +202,13 @@
           "has_error": false
         }
       }
-    ]
+    ],
+    "ignore": false
   },
   "expected": {
-    "content": "Key,Command,Replacement,Comment\r\nAHU07_ZUL_TEMP,replace,Halle_HZG_VTA1_HZK2_HZ~_WMZ3_TD~4_MW~5,needs a second look\r\n\"quoted,\"\"name\"\"\",replace,Q_NAME,\r\n",
+    "content": "Key,Command,Replacement,Comment\r\nAHU07_ZUL_TEMP,replace,Halle_HZG_VTA1_HZK2_HZ~_WMZ3_TD~4_MW~5,needs a second look\r\n",
     "leftOut": 1,
-    "devices": 0
+    "devices": 0,
+    "ignored": 1
   }
 }

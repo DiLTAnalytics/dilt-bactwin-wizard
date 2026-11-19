@@ -145,7 +145,7 @@ export function buildColumns({ show, template, label, t, onDuplicateClick, writt
       cell: ({ row }) => <ValueCell value={row.original.point.bactwin[id]} before={row.original.before?.[field]} collision={row.original.collisions?.[field]} />,
     })
   }
-  for (const flag of ['state.ignore', 'state.reminder', 'state.comment'] as const) {
+  for (const flag of ['state.command', 'state.review', 'state.comment'] as const) {
     if (!written.has(flag)) continue
     cols.push({
       id: flag, header: fieldLabel(flag, t), size: 110,

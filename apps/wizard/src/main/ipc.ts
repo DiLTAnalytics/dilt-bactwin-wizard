@@ -314,7 +314,12 @@ const ValidOptionsRequest = z.object({
   overrides: z.record(z.string(), z.string()).optional(),
 })
 const ExportFormat = z.enum(['replacement', 'xlsx', 'json'])
-const ExportScope = z.enum(['all', 'filtered', 'complete'])
+const ExportRequest = z.object({
+  scope: z.enum(['all', 'view', 'step']),
+  filter: Filter.optional(),
+  step: z.number().int().min(0).optional(),
+  options: z.object({ complete: z.boolean(), ignore: z.boolean() }),
+})
 
 type Args = z.ZodTuple<[] | [z.ZodType, ...z.ZodType[]], null>
 
@@ -493,11 +498,11 @@ const handlers = {
   'files:confirm': checked(z.tuple([z.string(), z.string(), z.string()]), (message, detail, label) => dialogs.confirm(message, detail, label)),
   'files:showError': checked(z.tuple([z.string(), z.string()]), (message, detail) => dialogs.showError(message, detail)),
 
-  'export:counts': checked(z.tuple([Filter.optional()]), (filter) => queries.exportCounts(session, filter)),
+  'export:counts': checked(z.tuple([ExportRequest]), (req) => queries.exportCounts(session, req)),
   // The dialog names the points left out before export, so nothing is reported after.
-  'export:save': checked(z.tuple([ExportFormat, ExportScope, Filter.optional()]), async (format, scope, filter) => {
+  'export:save': checked(z.tuple([ExportFormat, ExportRequest]), async (format, req) => {
     const { name, ext, ...spec } = EXPORT_FILES[format]
-    const { bytes } = await queries.exportFile(session, format, scope, filter)
+    const bytes = await queries.exportFile(session, format, req)
     return dialogs.saveBytes(bytes, { ...spec, suggestedName: `${name || t('files.datapointTable')}.${ext}` })
   }),
 

@@ -1,4 +1,4 @@
-import { CircleAlert, Copy, EyeOff, Flag, Layers } from 'lucide-react'
+import { CircleAlert, Copy, Database, EyeOff, Flag, Layers } from 'lucide-react'
 import type { DataPoint } from '@bactwin/mapping-engine'
 import { useI18n } from '@/i18n'
 import { fieldLabel } from '@/lib/fieldLabel'
@@ -49,8 +49,9 @@ export function StatusCell({ point, onDuplicateClick }: { point: DataPoint; onDu
           </button>
         </Tooltip>
       )}
-      {m.ignore && <EyeOff size={14} className="shrink-0 text-muted" aria-label={fieldLabel('state.ignore', t)} />}
-      {m.reminder && <Flag size={14} className="shrink-0 text-warning-fg" aria-label={fieldLabel('state.reminder', t)} />}
+      {m.command === 'ignore' && <EyeOff size={14} className="shrink-0 text-muted" aria-label={t('command.ignore')} />}
+      {m.command === 'doNotParse' && <Database size={14} className="shrink-0 text-muted" aria-label={t('command.doNotParse')} />}
+      {m.review && <Flag size={14} className="shrink-0 text-warning-fg" aria-label={fieldLabel('state.review', t)} />}
     </span>
   )
 }

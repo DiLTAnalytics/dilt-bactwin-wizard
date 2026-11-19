@@ -10,16 +10,16 @@ import {
   exportReplacementCsv,
   getFieldValue,
   hasError,
-  isDeviceObject,
   markDuplicateNames,
   pointKey,
-  selectForExport,
+  narrowForTable,
+  replacementRows,
   serializeDataPoint,
   validOptionsBulk,
   validOptionsFree,
   validOptionsGewerkSpecific,
   type DataPoint,
-  type ExportScope,
+  type ExportOptions,
   type FilterDsl,
   type SerializedDataPoint,
 } from '@bactwin/mapping-engine'
@@ -49,7 +49,8 @@ export interface Stats {
   total: number
   filtered: number
   ignore: number
-  reminder: number
+  doNotParse: number
+  review: number
   translation_complete: number
   combinations_valid: number
   valid_bactwin_rules: number
@@ -128,18 +129,18 @@ export function count(s: Session, filter: FilterDsl): { total: number; filtered:
   return { total: s.project.points.length, filtered: countFilter(s.project.points, filter) }
 }
 
-/** Points marked ignore count towards the flags but not towards the progress and quality ratios. */
+/** Points marked ignore count towards the status counts but not towards the progress and quality ratios. */
 export function stats(s: Session, filter?: FilterDsl): Stats {
   if (!s.project) {
     return {
-      total: 0, filtered: 0, ignore: 0, reminder: 0, translation_complete: 0,
+      total: 0, filtered: 0, ignore: 0, doNotParse: 0, review: 0, translation_complete: 0,
       combinations_valid: 0, valid_bactwin_rules: 0, duplicated_name: 0, errors: 0,
       fields_set: 0, fields_total: 0, field_fill_pct: {},
     }
   }
   const all = s.project.points
   markDuplicateNames(all)
-  const relevant = all.filter((p) => !p.state.ignore)
+  const relevant = all.filter((p) => p.state.command !== 'ignore')
   const bt = (p: DataPoint) => p.bactwin as unknown as Record<string, unknown>
 
   const fieldsSet = relevant.reduce((sum, p) => sum + STATS_FIELDS.filter((f) => isSet(bt(p)[f])).length, 0)
@@ -153,8 +154,9 @@ export function stats(s: Session, filter?: FilterDsl): Stats {
   return {
     total: all.length,
     filtered: filter ? countFilter(all, filter) : all.length,
-    ignore: all.filter((p) => p.state.ignore).length,
-    reminder: all.filter((p) => p.state.reminder).length,
+    ignore: all.length - relevant.length,
+    doNotParse: all.filter((p) => p.state.command === 'doNotParse').length,
+    review: all.filter((p) => p.state.review).length,
     translation_complete: relevant.filter((p) => p.state.translation_complete).length,
     combinations_valid: all.filter((p) => p.state.combinations_valid === true).length,
     valid_bactwin_rules: all.filter((p) => p.state.valid_bactwin_rules).length,
@@ -182,26 +184,41 @@ export function validOptions(s: Session, req: {
   return { ...result, all_options: all }
 }
 
-/** Per scope: its points, those without a name, and the device objects among them (both left out of the replacement CSV). */
-export function exportCounts(s: Session, filter?: FilterDsl): Record<ExportScope, { points: number; unnamed: number; devices: number }> {
-  const project = s.requireProject()
-  const count = (scope: ExportScope) => {
-    const selected = selectForExport(project.points, scope, filter ?? emptyFilter())
-    const devices = selected.filter(isDeviceObject).length
-    return { points: selected.length, unnamed: selected.filter((p) => !isDeviceObject(p) && !p.bactwin.bactwin_name).length, devices }
-  }
-  return { complete: count('complete'), all: count('all'), filtered: count('filtered') }
+/** Which points an export starts from: all, what the view filter lists, or what a step's Wenn selected. */
+export interface ExportRequest {
+  scope: 'all' | 'view' | 'step'
+  /** The view filter, for 'view'. */
+  filter?: FilterDsl
+  /** The step, for 'step'. */
+  step?: number
+  options: ExportOptions
 }
 
-/** The export's content, and how many selected points it left out (replacement CSV: points without a name). */
-export async function exportFile(s: Session, format: ExportFormat, scope: ExportScope, filter?: FilterDsl): Promise<{ bytes: Uint8Array; leftOut: number }> {
-  const project = s.requireProject()
-  const selected = selectForExport(project.points, scope, filter ?? emptyFilter())
-  if (format === 'replacement') {
-    const { content, leftOut, devices } = exportReplacementCsv(selected)
-    return { bytes: new TextEncoder().encode(content), leftOut: leftOut + devices }
+function scopePoints(s: Session, scope: ExportRequest['scope'], req: ExportRequest): DataPoint[] {
+  const points = s.requireProject().points
+  if (scope === 'view') return applyFilter(points, req.filter ?? emptyFilter())
+  if (scope === 'step') return Array.from(s.replay?.outcome(req.step ?? -1)?.hits ?? [], (i) => points[i]!)
+  return points
+}
+
+/** Per scope its points; for the chosen one, what the table would write and the replacement table's rows. */
+export function exportCounts(s: Session, req: ExportRequest) {
+  const chosen = scopePoints(s, req.scope, req)
+  const { rows, ...replacement } = replacementRows(chosen, req.options.ignore)
+  return {
+    scopes: { all: scopePoints(s, 'all', req).length, view: scopePoints(s, 'view', req).length, step: scopePoints(s, 'step', req).length },
+    table: narrowForTable(chosen, req.options.complete).length,
+    replacement: { rows: rows.length, ...replacement },
   }
-  if (format === 'json') return { bytes: new TextEncoder().encode(datapointsJson(project.points, selected)), leftOut: 0 }
+}
+
+/** The export's content; what it leaves out the dialog names before. */
+export async function exportFile(s: Session, format: ExportFormat, req: ExportRequest): Promise<Uint8Array> {
+  const project = s.requireProject()
+  const chosen = scopePoints(s, req.scope, req)
+  if (format === 'replacement') return new TextEncoder().encode(exportReplacementCsv(chosen, req.options.ignore).content)
+  const selected = narrowForTable(chosen, req.options.complete)
+  if (format === 'json') return new TextEncoder().encode(datapointsJson(project.points, selected))
   const { columns, rows } = datapointsTable(project.points, selected)
-  return { bytes: await tableToXlsx(s.t('files.datapointSheet'), columns, rows), leftOut: 0 }
+  return tableToXlsx(s.t('files.datapointSheet'), columns, rows)
 }

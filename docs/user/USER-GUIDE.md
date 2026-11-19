@@ -81,7 +81,9 @@ die Bedingungen um; das ändert nur die Anzeige.
 - **+ Quelle** setzt einen Wert aus mehreren Feldern zusammen; die Gruppen werden über alle Quellen
   durchgezählt (`$1$2$3`).
 - Passt ein Muster nicht, wird der Datenpunkt übersprungen.
-- **Nicht relevant**, **Prüfen** und **Kommentar** kommen ebenfalls über **+ Feld**.
+- **Command**, **Zu prüfen** und **Kommentar** kommen ebenfalls über **+ Feld**. **Command** ist
+  genau einer von **replace** (Standard), **ignore** (nicht relevant) und **doNotParse** (nur fürs
+  Datenlogging); der letzte Schritt gewinnt.
 
 **Angebotene Keys** (oben in **Dann**) bestimmt nur, was die Liste anbietet:
 - **Facilimind** - nur Werte, die die Keys-Combinations für die ganze Gruppe erlauben (Standard).
@@ -113,7 +115,7 @@ nie einen Schritt. Der Suchbegriff ist blau umrandet. Ein Klick auf eine Spalten
 Breite zurück.
 
 Balken vorn: rot (Fehler oder doppelt), grün (vollständig), gelb (in Arbeit).
-Symbole: durchgestrichenes Auge (nicht relevant), Fähnchen (zu prüfen).
+Symbole: durchgestrichenes Auge (ignore), Datenbank (doNotParse), Fähnchen (zu prüfen).
 
 ## 7. Ein Datenpunkt
 
@@ -128,7 +130,7 @@ jeder Schritt, der ihn geändert hat; ein Klick öffnet den Schritt. Eine Korrek
   Name, nicht in den Keys-Combinations.
 - **Doppelt:** Ansichtsfilter **Doppelt**, Namen eindeutig machen (meist eine fehlende Nummer). Nur
   vollständige Namen zählen.
-- **Nicht relevant:** Datenpunkte ohne BACtwin-Namen per Schritt so markieren; sie zählen dann nicht
+- **ignore:** Datenpunkte ohne BACtwin-Namen per Schritt auf Command **ignore** setzen; sie zählen dann nicht
   mehr zum Fortschritt.
 
 ## 9. Die Mapping-Sequenz
@@ -172,8 +174,18 @@ Dann die neueste Version installieren.
 - **Format:** **Replacement-Tabelle (CSV)** (alter Name → BACtwin-Name, mit Kommentar) oder
   **Datenpunkttabelle** (alle Felder), als **XLSX** (flach, eine Spalte je Feld) oder **JSON**
   (verschachtelt, ein Objekt je Datenpunkt, Zahlen und Ja/Nein typisiert).
-- **Datenpunkte:** **Alle** oder **Gefilterte** (was der Ansichtsfilter zeigt), bei der Datenpunkttabelle
-  auch **Vollständige** (mit vollständigem BACtwin-Namen), jeweils mit Anzahl. Die CSV lässt Punkte ohne BACtwin-Namen und Device-Objekte (Objekttyp 8, ohne Zeitreihe) aus; der Dialog sagt vorher, wie viele.
+- **Umfang:** **Alle**, **Aktueller Tabellenfilter** (was die Tabelle mit Suche und Status-Filtern
+  zeigt) oder **Wenn-Filter eines Schritts** (was die Wenn-Bedingungen des gewählten Schritts auswählen, mit
+  den Werten nach allen Schritten), jeweils mit Anzahl. Der geöffnete Schritt ändert den Export nicht.
+  „Zu prüfen“ ausschließen: ein letzter Schritt mit Wenn **Zu prüfen ist nein** und Dann
+  **Zu prüfen = nein** (ändert nichts), dann **Wenn-Filter eines Schritts** mit diesem Schritt.
+- **Vollständig** heißt: jedes Segment der Namensvorlage ist gesetzt, außer den optionalen (bei AMEV
+  Sub-Anlage-Nummer und Funktionserweiterung).
+- **CSV:** `Command` ist der Command des Datenpunkts. replace-Zeilen stehen nur mit vollständigem
+  BACtwin-Namen drin. doNotParse-Zeilen stehen immer drin, ignore-Zeilen nur mit **ignore exportieren**;
+  beide mit BACtwin-Namen nur wenn er vollständig ist. Device-Objekte (Objekttyp 8, ohne Zeitreihe)
+  bleiben draußen. Der Dialog sagt vorher, wie viele ausgelassen werden.
+- **Datenpunkttabelle:** **Nur Vollständige exportieren** schreibt nur Datenpunkte mit vollständigem Namen.
 
 ## 11. Speichern
 

@@ -1,4 +1,4 @@
-export type Flag = 'ignore' | 'reminder'
+export type Flag = 'review'
 /** Only the flags a step sets, true or false; a flag not in here is left alone. */
 export type FlagDrafts = Partial<Record<Flag, boolean>>
 

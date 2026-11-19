@@ -72,10 +72,14 @@ export const ValidationMessageSchema = z.object({
 })
 export type ValidationMessage = z.infer<typeof ValidationMessageSchema>
 
+/** What the replacement table does with a point: rename it, leave it out of Haystack, or keep it for logging only. */
+export const COMMANDS = ['replace', 'ignore', 'doNotParse'] as const
+export type Command = (typeof COMMANDS)[number]
+
 /** The engineer's working status and the computed validation results. */
 export const StateDataSchema = z.object({
-  ignore: z.boolean().default(false),
-  reminder: z.boolean().default(false),
+  command: z.enum(COMMANDS).default('replace'),
+  review: z.boolean().default(false),
   comment: str,
   translation_complete: z.boolean().default(false),
   /** Null when not checked: no catalogue is loaded, or nothing identifying is set yet. */
@@ -128,8 +132,7 @@ export function hasError(point: DataPoint): boolean {
 }
 
 export const STATE_FLAGS = [
-  'ignore',
-  'reminder',
+  'review',
   'translation_complete',
   'combinations_valid',
   'valid_bactwin_rules',
@@ -155,8 +158,8 @@ export function serializeDataPoint(p: DataPoint): SerializedDataPoint {
     bacnet: { type: p.bacnet.type, unit: p.bacnet.unit },
     bactwin: { ...p.bactwin },
     state: {
-      ignore: p.state.ignore,
-      reminder: p.state.reminder,
+      command: p.state.command,
+      review: p.state.review,
       comment: p.state.comment,
       translation_complete: p.state.translation_complete,
       combinations_valid: p.state.combinations_valid,

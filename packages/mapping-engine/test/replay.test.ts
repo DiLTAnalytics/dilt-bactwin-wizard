@@ -36,11 +36,11 @@ const STEPS: SequenceStep[] = [
   step('^HH', [{ field: 'bactwin.gewerk', value: 'HZG' }]),
   step('HH4', [{ field: 'bactwin.gewerk', value: 'LUE' }, { field: 'bactwin.anlage_number', from: [{ field: 'ede.object_name', regex: 'HH(\\d)' }], value: '0$1' }]),
   // Reads what step 2 wrote.
-  step('', [{ field: 'state.reminder', value: true }], { filter: [{ field: 'bactwin.gewerk', regex: '^LUE$' }] }),
+  step('', [{ field: 'state.review', value: true }], { filter: [{ field: 'bactwin.gewerk', regex: '^LUE$' }] }),
 ]
 
 /** The writable values of every point, for comparing two ways of getting there. */
-const values = (points: DataPoint[]) => points.map((p) => ({ ...p.bactwin, comment: p.state.comment, ignore: p.state.ignore, reminder: p.state.reminder }))
+const values = (points: DataPoint[]) => points.map((p) => ({ ...p.bactwin, comment: p.state.comment, command: p.state.command, review: p.state.review }))
 
 function replayFromScratch(steps: SequenceStep[]): DataPoint[] {
   const points = validated(importedPoints())
@@ -64,8 +64,8 @@ describe('the replay', () => {
     replay.rewind(1)
     await replay.run(edited)
     expect(values(replay.points)).toEqual(values(replayFromScratch(edited)))
-    expect(replay.points[0]!.state.reminder).toBe(false)
-    expect(replay.points[2]!.state.reminder).toBe(true)
+    expect(replay.points[0]!.state.review).toBe(false)
+    expect(replay.points[2]!.state.review).toBe(true)
   })
 
   it('rewinding to 0 restores the imported values, names included', async () => {
@@ -88,7 +88,7 @@ describe('the replay', () => {
   it('tells the values before a step, and a point as it was then', async () => {
     const replay = new Replay(validated(importedPoints()), ref)
     await replay.run(STEPS)
-    expect(replay.valuesBefore(1).get(0)).toEqual({ 'bactwin.gewerk': 'HZG', 'bactwin.anlage_number': '', 'state.reminder': false })
+    expect(replay.valuesBefore(1).get(0)).toEqual({ 'bactwin.gewerk': 'HZG', 'bactwin.anlage_number': '', 'state.review': false })
     expect(replay.pointBefore(0, 1).bactwin.gewerk).toBe('HZG')
     expect(replay.points[0]!.bactwin.gewerk).toBe('LUE')
   })

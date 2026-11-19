@@ -1,6 +1,6 @@
 import { ChevronRight, Info, Plus, RotateCcw, X } from 'lucide-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { BACTWIN_FIELDS, pointKey, toCondition, type DataPoint, type SequenceStep } from '@bactwin/mapping-engine'
+import { BACTWIN_FIELDS, COMMAND_FIELD, COMMANDS, pointKey, toCondition, type Command, type DataPoint, type SequenceStep } from '@bactwin/mapping-engine'
 import { useState } from 'react'
 import { useCapabilities } from '@/hooks/useCapabilities'
 import { useNameTemplate } from '@/hooks/useNameTemplate'
@@ -28,7 +28,7 @@ import { emptyRow, fieldById, overridesBefore, rowReady, sourceCheckOf, type Set
 import { markColor } from '@/lib/highlight'
 import { usePreviewCounts } from '@/hooks/usePreview'
 
-const FLAGS: Flag[] = ['ignore', 'reminder']
+const FLAGS: Flag[] = ['review']
 
 /**
  * The open step: "Wenn" (conditions, each with how many points it selects) next to "Dann" (what it
@@ -67,6 +67,7 @@ export function StepEditor({ selected }: { selected: DataPoint | null }) {
   const usedFlags = new Set(Object.keys(draft.flags))
   // The status rows a step can add, from "+ Feld" or in place of a field row; `rows` are the field rows kept.
   const statusItems = [
+    { key: COMMAND_FIELD, label: fieldLabel(COMMAND_FIELD, t), group: t('common.status'), disabled: draft.command !== null, onSelect: (rows: SetRow[]) => edit({ rows, command: 'ignore' }) },
     ...FLAGS.map((flag) => ({ key: `state.${flag}`, label: fieldLabel(`state.${flag}`, t), group: t('common.status'), disabled: usedFlags.has(flag), onSelect: (rows: SetRow[]) => edit({ rows, flags: { ...draft.flags, [flag]: true } }) })),
     { key: 'state.comment', label: fieldLabel('state.comment', t), group: t('common.status'), disabled: draft.comment !== null, onSelect: (rows: SetRow[]) => edit({ rows, comment: '' }) },
   ]
@@ -202,6 +203,19 @@ export function StepEditor({ selected }: { selected: DataPoint | null }) {
                 check={actionOf[i] === null || !preview ? undefined : sourceCheckOf(preview.sources, actionOf[i]!, row.sources.length)}
               />
             ))}
+            {draft.command !== null && (
+              <div className="flex items-center gap-2">
+                <span className="w-44 shrink-0 pl-5 text-xs text-fg-2">{fieldLabel(COMMAND_FIELD, t)}</span>
+                <SegmentedControl<Command>
+                  size="sm"
+                  label={fieldLabel(COMMAND_FIELD, t)}
+                  value={draft.command}
+                  onChange={(command) => edit({ command })}
+                  options={COMMANDS.map((c) => ({ value: c, label: t(`command.${c}`) }))}
+                />
+                <IconButton size="sm" className="ml-auto" icon={X} tone="danger" label={t('set.removeField')} onClick={() => edit({ command: null })} />
+              </div>
+            )}
             {FLAGS.filter((flag) => usedFlags.has(flag)).map((flag) => (
               <div key={flag} className="flex items-center gap-2">
                 <span className="w-44 shrink-0 pl-5 text-xs text-fg-2">{fieldLabel(`state.${flag}`, t)}</span>

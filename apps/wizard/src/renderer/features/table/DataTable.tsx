@@ -45,6 +45,7 @@ const CHIPS: { chip: StatusChip; labelKey: string }[] = [
   { chip: 'duplicates', labelKey: 'view.duplicates' },
   { chip: 'review', labelKey: 'view.review' },
   { chip: 'ignored', labelKey: 'view.ignored' },
+  { chip: 'doNotParse', labelKey: 'view.doNotParse' },
 ]
 
 const isTyping = (target: EventTarget | null) =>

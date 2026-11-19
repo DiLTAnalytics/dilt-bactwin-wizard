@@ -64,11 +64,11 @@
     "close": "Schließen"
   },
   "reference": {
-    "changedTitle": "Dieses Projekt wurde mit anderen Referenzdaten gespeichert",
-    "changedDetail": "Namen und Gültigkeit werden mit den jetzt geladenen Referenzdaten neu berechnet und können daher vom Stand beim Speichern abweichen.",
-    "template": "Namens-Vorlage: gespeichert mit {{saved}}, jetzt {{now}}",
-    "pluginMissing": "Plugin {{id}} {{version}} ist hier nicht installiert; das Projekt behält es",
-    "pluginVersion": "Plugin {{id}}: gespeichert mit {{saved}}, jetzt {{now}}"
+    "changedTitle": "Referenzdaten geändert",
+    "changedDetail": "Namen und Gültigkeit werden neu berechnet.",
+    "template": "Vorlage: {{saved}} → {{now}}",
+    "pluginMissing": "{{id}} {{version}} fehlt hier",
+    "pluginVersion": "{{id}}: {{saved}} → {{now}}"
   },
   "validation": {
     "UNKNOWN_KEY": "Unbekannter BACtwin-Key: {{value}} (Block: {{block}})",
@@ -267,21 +267,28 @@
     "fileType": "Dateityp",
     "xlsxHint": "Excel, flach: eine Spalte je Feld",
     "jsonHint": "Verschachtelt: ein Objekt je Datenpunkt, Werte typisiert",
-    "scope": "Datenpunkte",
+    "scope": "Umfang",
     "all": "Alle",
     "allHint": "Jeder importierte Datenpunkt",
-    "complete": "Vollständige",
-    "completeHint": "Mit vollständigem BACtwin-Namen",
-    "filtered": "Gefilterte",
-    "filteredHint": "Was die Tabelle mit dem Ansichtsfilter zeigt",
-    "filteredNone": "Kein Ansichtsfilter aktiv",
-    "leftOut": "{{count}} davon ohne BACtwin-Namen werden ausgelassen.",
+    "view": "Aktueller Tabellenfilter",
+    "viewSearch": "Suche „{{search}}“",
+    "viewNone": "In der Tabelle ist kein Filter gesetzt",
+    "step": "Wenn-Filter eines Schritts",
+    "stepHint": "Was die Wenn-Bedingungen des gewählten Schritts auswählen, mit den Werten nach allen Schritten",
+    "stepNone": "Noch keine Schritte",
+    "stepOption": "{{step}} {{name}}",
+    "options": "Optionen",
+    "complete": "Nur Vollständige exportieren",
+    "completeHint": "Datenpunkte ohne vollständigen BACtwin-Namen",
+    "ignore": "ignore exportieren",
+    "ignoreHint": "ignore-Zeilen mitschreiben, wie doNotParse",
     "devices": "{{count}} Device-Objekt(e) bleiben draußen: Sie haben keine Zeitreihe, die umbenannt würde.",
     "nothing": "In dieser Auswahl ist nichts zu exportieren.",
-    "allUnnamed": "Keiner davon hat einen vollständigen BACtwin-Namen; die Replacement-Tabelle wäre leer.",
     "submit": "Exportieren…",
     "cancel": "Abbrechen",
-    "done": "{{count}} Datenpunkte exportiert: {{file}}"
+    "done": "{{count}} Datenpunkte exportiert: {{file}}",
+    "leftOut": "{{count}} replace-Datenpunkt(e) ohne vollständigen BACtwin-Namen werden ausgelassen.",
+    "allUnnamed": "Keiner davon hat einen vollständigen BACtwin-Namen; die Replacement-Tabelle wäre leer."
   },
   "common": {
     "dragHint": "Ziehen oder Alt+↑/↓, um die Reihenfolge zu ändern",
@@ -551,7 +558,8 @@
     "errors": "Fehler",
     "duplicates": "Doppelt",
     "review": "Zu prüfen",
-    "ignored": "Nicht relevant"
+    "ignored": "ignore",
+    "doNotParse": "doNotParse"
   },
   "start": {
     "title": "Kein Projekt geöffnet",
@@ -600,7 +608,8 @@
     "device": "Gerät: {{device}}",
     "clear": "Entfernen",
     "note": "Ansichtsfilter ändern keinen Schritt",
-    "ignored": "Nicht relevant"
+    "ignored": "ignore",
+    "doNotParse": "doNotParse"
   },
   "keySelect": {
     "search": "Suchen…",
@@ -612,9 +621,9 @@
     "state": {
       "has_error": "Hat Fehler",
       "duplicated_name": "Name doppelt",
-      "ignore": "Nicht relevant",
+      "command": "Command",
       "translation_complete": "Vollständig",
-      "reminder": "Zu prüfen",
+      "review": "Zu prüfen",
       "comment": "Kommentar",
       "combinations_invalid": "Keys-Combination ungültig",
       "invalid_bactwin_rules": "Regeln ungültig"
@@ -623,5 +632,10 @@
       "duplicated_keyname": "Zeile doppelt",
       "missing_from_source": "Nicht mehr in der Datei"
     }
+  },
+  "command": {
+    "replace": "replace",
+    "ignore": "ignore",
+    "doNotParse": "doNotParse"
   }
 }

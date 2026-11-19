@@ -181,18 +181,24 @@ test('create a project, record a step with a preview, inspect a point and switch
   await steps.first().getByRole('switch').click()
   await expect(hh4).toContainText('HZG')
 
-  // Export: a dialog with format and scope, the points per scope, and those the CSV leaves out named first.
+  // Export: a dialog with format, scope and options, the points per scope, and those the CSV leaves out named first.
   await page.getByRole('button', { name: 'Exportieren…' }).click()
   const exportDialog = page.getByRole('dialog')
   await exportDialog.getByRole('radio', { name: /Replacement-Tabelle/ }).click()
   await exportDialog.getByRole('radio', { name: /^Alle/ }).click()
   await expect(exportDialog.getByRole('radio', { name: /^Alle/ })).toContainText(/\d+/)
-  await expect(exportDialog.getByText(/ohne BACtwin-Namen werden ausgelassen|Keiner davon hat einen vollständigen BACtwin-Namen/)).toBeVisible()
-  await expect(exportDialog.getByRole('radio', { name: /^Gefilterte/ })).toBeDisabled()
-  await expect(exportDialog.getByRole('radio', { name: /^Vollständige/ })).toHaveCount(0)
+  await expect(exportDialog.getByText(/ohne vollständigen BACtwin-Namen werden ausgelassen|Keiner davon hat einen vollständigen BACtwin-Namen/)).toBeVisible()
+  await expect(exportDialog.getByRole('radio', { name: /^Aktueller Tabellenfilter/ })).toBeDisabled()
+  await expect(exportDialog.getByRole('radio', { name: /^Wenn-Filter eines Schritts/ })).toBeEnabled()
+  await expect(exportDialog.getByRole('switch', { name: 'ignore exportieren' })).toBeVisible()
+  await expect(exportDialog.getByRole('switch', { name: 'Nur Vollständige exportieren' })).toHaveCount(0)
   await exportDialog.getByRole('radio', { name: /Datenpunkttabelle/ }).click()
-  await expect(exportDialog.getByRole('radio', { name: /^Vollständige/ })).toBeVisible()
+  await expect(exportDialog.getByRole('switch', { name: 'Nur Vollständige exportieren' })).toBeVisible()
+  await expect(exportDialog.getByRole('switch', { name: 'ignore exportieren' })).toHaveCount(0)
   await expect(exportDialog.getByText(/ausgelassen|wäre leer/)).toHaveCount(0)
+  // The whole table, not only the complete points, so the file below is never empty.
+  const onlyComplete = exportDialog.getByRole('switch', { name: 'Nur Vollständige exportieren' })
+  if ((await onlyComplete.getAttribute('aria-checked')) === 'true') await onlyComplete.click()
   const xlsx = join(userData, 'export.xlsx')
   await answerDialogs({ save: xlsx })
   await exportDialog.getByRole('button', { name: 'Exportieren…' }).click()
@@ -206,10 +212,10 @@ test('create a project, record a step with a preview, inspect a point and switch
   await answerDialogs({ save: json })
   await exportDialog.getByRole('button', { name: 'Exportieren…' }).click()
   await expect(page.getByText(/Datenpunkte exportiert: export\.json/)).toBeVisible()
-  const exported = JSON.parse(readFileSync(json, 'utf8')) as { ede: { object_name: string }; state: { ignore: boolean } }[]
+  const exported = JSON.parse(readFileSync(json, 'utf8')) as { ede: { object_name: string }; state: { command: string } }[]
   expect(exported.length).toBeGreaterThan(0)
   expect(typeof exported[0]!.ede.object_name).toBe('string')
-  expect(typeof exported[0]!.state.ignore).toBe('boolean')
+  expect(exported[0]!.state.command).toBe('replace')
 
   // Settings opens and closes.
   const dialog = page.getByRole('dialog')

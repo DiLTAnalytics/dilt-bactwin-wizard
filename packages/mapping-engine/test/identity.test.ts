@@ -27,7 +27,7 @@ describe('identity', () => {
     const points = [target, point('ahu|01.temp (rl)'), point('AHU'), point('01.TEMP (RL)'), point('AHU|01.TEMP (RL)', '2')]
     const filter = identityFilter(target.ede)
     expect(applyFilter(points, filter)).toEqual([target])
-    const saved = readSequence(sequenceToFile({ schema_version: '1.0', steps: [{ name: 'x', filter: filter.rules.map(toCondition), actions: [{ field: 'state.reminder', value: true }] }] }))
+    const saved = readSequence(sequenceToFile({ schema_version: '1.0', steps: [{ name: 'x', filter: filter.rules.map(toCondition), actions: [{ field: 'state.review', value: true }] }] }))
     expect(applyFilter(points, toDsl(saved.steps[0]!.filter))).toEqual([target])
   })
 })

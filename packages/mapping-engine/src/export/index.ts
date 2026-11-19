@@ -1,15 +1,18 @@
 /** The export formats, as strings or bytes; writing them is the caller's job. */
 
-import { applyFilter, type FilterDsl } from '../filter/index.js'
 import { emptyDataPoint, serializeDataPoint, type DataPoint, type SerializedDataPoint } from '../types.js'
 import { markDuplicateNames } from '../validate/index.js'
 
-export type ExportScope = 'all' | 'filtered' | 'complete'
+export interface ExportOptions {
+  /** Data-point table: only points with a complete BACtwin name. */
+  complete: boolean
+  /** Replacement table: also write ignore rows. */
+  ignore: boolean
+}
 
-export function selectForExport(points: DataPoint[], scope: ExportScope, filter: FilterDsl): DataPoint[] {
-  if (scope === 'filtered') return applyFilter(points, filter)
-  if (scope === 'complete') return points.filter((p) => p.state.translation_complete)
-  return points
+/** The points the data-point table writes, out of the chosen ones. */
+export function narrowForTable(points: DataPoint[], complete: boolean): DataPoint[] {
+  return complete ? points.filter((p) => p.state.translation_complete) : points
 }
 
 function csvCell(value: string): string {
@@ -20,27 +23,41 @@ function csvCell(value: string): string {
 /** The device object (BACnet object type 8): the controller itself, which carries no time series. */
 export const isDeviceObject = (p: DataPoint) => p.ede.object_type === 8
 
+export interface ReplacementRows {
+  rows: string[][]
+  /** Replace points without a complete name: nothing to replace with. */
+  leftOut: number
+  devices: number
+  /** Ignore points not written. */
+  ignored: number
+}
+
 /**
- * The replacement table the partner system imports to rename points. `Command` is always "replace".
- * Points without a BACtwin name have nothing to replace with, and device objects are no data
- * points to rename; both are left out and counted.
+ * The replacement table's rows: Key, Command, Replacement, Comment. Device objects are no data points
+ * to rename and are left out. replace rows need a complete name; doNotParse rows are always written,
+ * ignore rows only with `ignore`; the name is filled only when complete.
  */
-export function exportReplacementCsv(points: DataPoint[]): { content: string; leftOut: number; devices: number } {
-  const lines = [['Key', 'Command', 'Replacement', 'Comment'].join(',')]
+export function replacementRows(points: DataPoint[], ignore: boolean): ReplacementRows {
+  const rows: string[][] = []
   let leftOut = 0
   let devices = 0
+  let ignored = 0
   for (const p of points) {
-    if (isDeviceObject(p)) {
-      devices++
-      continue
-    }
-    if (!p.bactwin.bactwin_name) {
-      leftOut++
-      continue
-    }
-    lines.push([p.ede.object_name || '', 'replace', p.bactwin.bactwin_name, p.state.comment || ''].map(csvCell).join(','))
+    const { command } = p.state
+    const name = p.state.translation_complete ? p.bactwin.bactwin_name : ''
+    if (isDeviceObject(p)) devices++
+    else if (command === 'ignore' && !ignore) ignored++
+    else if (command === 'replace' && !name) leftOut++
+    else rows.push([p.ede.object_name || '', command, name, p.state.comment || ''])
   }
-  return { content: lines.join('\r\n') + '\r\n', leftOut, devices }
+  return { rows, leftOut, devices, ignored }
+}
+
+/** The replacement table the partner system imports, as CSV. */
+export function exportReplacementCsv(points: DataPoint[], ignore: boolean): { content: string } & ReplacementRows {
+  const result = replacementRows(points, ignore)
+  const lines = [['Key', 'Command', 'Replacement', 'Comment'], ...result.rows].map((r) => r.map(csvCell).join(','))
+  return { content: lines.join('\r\n') + '\r\n', ...result }
 }
 
 /** A table cell: the field's value as it is typed, null when empty. */

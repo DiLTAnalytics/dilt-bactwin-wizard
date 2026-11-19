@@ -1,6 +1,6 @@
 {
   "note": "Hand-maintained; see README.md.",
-  "count": 63,
+  "count": 62,
   "fixtures": [
     "apply/field-and-flag-in-one-step",
     "apply/fixed-value",
@@ -16,10 +16,9 @@
     "combinations/free-mode-ignores-combination",
     "combinations/gewerk-specific-infers-trade",
     "export/datapoints-columns",
-    "export/replacement-csv-all",
-    "export/replacement-csv-complete",
-    "export/replacement-csv-filtered",
+    "export/replacement-csv-replace",
     "export/replacement-csv-leaves-out-devices",
+    "export/replacement-csv-commands",
     "filter/all-rules-must-hold",
     "filter/derived-has-error-and-invalid-rules",
     "filter/derived-invalid-combinations",

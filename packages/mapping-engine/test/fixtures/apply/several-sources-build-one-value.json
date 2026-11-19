@@ -60,8 +60,8 @@
           "bactwin_description": null
         },
         "state": {
-          "ignore": false,
-          "reminder": false,
+          "command": "replace",
+          "review": false,
           "comment": "",
           "translation_complete": false,
           "combinations_valid": false,
@@ -152,8 +152,8 @@
           "bactwin_description": "GS_140_010A1914_001_???_?????_?????_???_?????_?????_?????"
         },
         "state": {
-          "ignore": false,
-          "reminder": false,
+          "command": "replace",
+          "review": false,
           "comment": "",
           "translation_complete": false,
           "combinations_valid": null,
