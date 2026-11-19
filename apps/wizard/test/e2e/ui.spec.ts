@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, 
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { _electron as electron, expect, test, type ElectronApplication, type Page } from '@playwright/test'
+import { _electron as electron, expect, test, type ElectronApplication, type Locator, type Page } from '@playwright/test'
 
 const APP = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
 const DEMO_EDE = join(APP, '..', '..', 'examples', 'ede', 'demo_devices_ede.csv')
@@ -19,6 +19,12 @@ async function answerDialogs(answer: { open?: string[]; save?: string; button?: 
     if (save) dialog.showSaveDialog = (async () => ({ canceled: false, filePath: save })) as never
     if (button !== undefined) dialog.showMessageBox = (async () => ({ response: button, checkboxChecked: false })) as never
   }, answer)
+}
+
+/** Choose `option` in a PickList. */
+async function pick(combo: Locator, option: string) {
+  await combo.click()
+  await page.getByRole('menuitem', { name: option, exact: true }).click()
 }
 
 test.beforeAll(async () => {
@@ -37,7 +43,7 @@ test.afterAll(async () => {
 })
 
 const table = () => page.locator('table.border-collapse')
-const fieldRow = () => page.locator('div.flex.min-w-0.items-center').filter({ has: page.locator('select[aria-label="BACtwin-Feld"]') }).first()
+const fieldRow = () => page.locator('div.flex.min-w-0.items-center').filter({ has: page.getByRole('combobox', { name: 'BACtwin-Feld' }) }).first()
 
 test('create a project, record a step with a preview, inspect a point and switch the step off', async () => {
   // Without a project the start screen shows instead of the workspace.
@@ -66,11 +72,11 @@ test('create a project, record a step with a preview, inspect a point and switch
 
   // A new step: one condition, gewerk HZG picked by searching the key list; the table previews the hits.
   await page.getByRole('button', { name: 'Neuer Schritt' }).last().click()
-  await page.getByRole('button', { name: 'Bedingung hinzufügen' }).click()
+  await pick(page.getByRole('button', { name: 'Bedingung hinzufügen' }), 'object-name')
   await page.getByPlaceholder('Wert', { exact: true }).fill('HH4')
   await page.getByRole('radio', { name: 'alle' }).click()
-  await fieldRow().locator('select[aria-label="BACtwin-Feld"]').selectOption('gewerk')
-  await fieldRow().locator('button[role="combobox"]').click()
+  await pick(fieldRow().getByRole('combobox', { name: 'BACtwin-Feld' }), 'gewerk')
+  await fieldRow().getByRole('combobox', { name: 'gewerk' }).click()
   await page.getByPlaceholder('Suchen…', { exact: true }).fill('HZG')
   await expect(page.getByRole('option', { name: /^HZG \[.+\]/ })).toBeVisible()
   await page.keyboard.press('Enter')
@@ -81,8 +87,7 @@ test('create a project, record a step with a preview, inspect a point and switch
   await expect(page.getByRole('button', { name: /^Übernehmen · \d+$/ })).toBeVisible()
 
   // Each condition marks its matches in its own colour, in the name and the description.
-  await page.getByRole('button', { name: 'Bedingung hinzufügen' }).click()
-  await page.getByRole('combobox', { name: 'Feld', exact: true }).nth(1).selectOption('ede.description')
+  await pick(page.getByRole('button', { name: 'Bedingung hinzufügen' }), 'description')
   await page.getByPlaceholder('Wert', { exact: true }).nth(1).fill('Temperatur')
   await expect(table().locator('mark.bg-mark-1').first()).toHaveText('HH4')
   await expect(table().locator('mark.bg-mark-2').first()).toHaveText('Temperatur')
@@ -248,7 +253,7 @@ test('the inspector, the view filter and the menu follow the project', async () 
   await expect(detail.getByLabel('ort', { exact: true })).toHaveValue('')
   await page.getByRole('button', { name: 'Neuer Schritt' }).first().click()
   await page.getByLabel('Name des Schritts').fill('Ort für alle')
-  await page.getByRole('combobox', { name: 'BACtwin-Feld' }).first().selectOption('ort')
+  await pick(page.getByRole('combobox', { name: 'BACtwin-Feld' }).first(), 'ort')
   await page.getByPlaceholder('Wert').last().fill('HALLE')
   await page.getByRole('button', { name: /^Übernehmen/ }).click()
   await expect(detail.getByLabel('ort', { exact: true })).toHaveValue('HALLE')

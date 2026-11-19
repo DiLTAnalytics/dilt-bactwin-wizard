@@ -13,6 +13,7 @@ import { SegmentedControl } from '@/ui/SegmentedControl'
 import { KeySelect } from '@/ui/KeySelect'
 import { fieldLabel } from '@/lib/fieldLabel'
 import { Tooltip } from '@/ui/Tooltip'
+import { PickList, type PickOption } from '@/ui/PickList'
 import {
   TRANSFER_SOURCE_FIELDS, canTransfer, emptySource, moveSource, removeSource, sourceGroups, usedGroups, type RowCheck, type SetMode, type SetRow, type SourceRow,
 } from '@/lib/stepRows'
@@ -24,11 +25,13 @@ const inputClass = 'h-7 min-w-0 rounded border border-line bg-surface px-2 text-
  * regex ("aus Feld") has the template as its value and one indented line per source below, so a row
  * never grows wider than its column.
  */
-export function FieldRow({ row, combinationMode, dsl, overrides, onChange, onFieldChange, onRemove, drag, check }: {
+export function FieldRow({ row, combinationMode, dsl, overrides, statusOptions = [], onChange, onFieldChange, onRemove, drag, check }: {
   row: SetRow
   combinationMode: CombinationMode
   dsl: FilterDsl
   overrides: Record<string, string>
+  /** Status entries the field menu also offers; picking one replaces the row with it. */
+  statusOptions?: PickOption<string>[]
   onChange: (patch: Partial<SetRow>) => void
   onFieldChange: (id: string) => void
   onRemove: () => void
@@ -88,9 +91,8 @@ export function FieldRow({ row, combinationMode, dsl, overrides, onChange, onFie
     <div {...drag.rowProps} className={`flex min-w-0 flex-col gap-1 border-y-2 border-transparent ${dropLineClass(drag.dropTarget)} ${drag.dragged ? 'opacity-40' : ''}`}>
       <div className="flex min-w-0 items-center gap-1.5">
         <DragHandle drag={drag} title={t('common.dragHint')} />
-        <select className={`${inputClass} w-36 shrink-0`} value={field.id} aria-label={t('set.field')} onChange={(e) => onFieldChange(e.target.value)}>
-          {BACTWIN_FIELDS.map((f) => <option key={f.id} value={f.id}>{fieldLabel(`bactwin.${f.id}`, t)}</option>)}
-        </select>
+        <PickList className="w-36 shrink-0" label={t('set.field')} value={field.id} onChange={onFieldChange}
+          options={[...BACTWIN_FIELDS.map((f) => ({ value: f.id, label: fieldLabel(`bactwin.${f.id}`, t), group: t('step.bactwinFields') })), ...statusOptions]} />
         {transferable && (
           <SegmentedControl<SetMode>
             size="sm"
@@ -139,12 +141,12 @@ function Sources({ row, check, onChange }: { row: SetRow; check: RowCheck | unde
             <Tooltip content={!g ? t('set.groupsUnknown') : g.last < g.first ? t('set.noGroup') : unused ? t('set.unusedGroupHint') : t('set.groupsHint')}>
               <span className={`w-16 shrink-0 truncate text-right font-mono text-xs ${!g ? 'font-semibold text-danger-fg' : unused ? 'text-faint' : 'text-fg-2'}`}>{label} ←</span>
             </Tooltip>
-            <select className={`${inputClass} w-48 shrink-0`} aria-label={t('set.sourceLabel')} value={source.field} onChange={(e) => setSource(i, { field: e.target.value })}>
-              <option value={self}>{t('set.sourceSelf')}</option>
-              {TRANSFER_SOURCE_FIELDS.map((field) => <option key={field} value={field}>EDE: {fieldName(field)}</option>)}
-              {/* A field from the file the editor does not offer stays shown as it is. */}
-              {!offered.includes(source.field) && <option value={source.field}>{fieldLabel(source.field, t)}</option>}
-            </select>
+            <PickList className="w-48 shrink-0" label={t('set.sourceLabel')} value={source.field} onChange={(field) => setSource(i, { field })} options={[
+              { value: self, label: t('set.sourceSelf') },
+              ...TRANSFER_SOURCE_FIELDS.map((field) => ({ value: field, label: fieldName(field), group: 'EDE' })),
+              // A field from the file the editor does not offer stays shown as it is.
+              ...(offered.includes(source.field) ? [] : [{ value: source.field, label: fieldLabel(source.field, t) }]),
+            ]} />
             <input type="text" className={`${inputClass} min-w-0 flex-1 font-mono`} placeholder={t('set.regexPlaceholder')} aria-label={t('set.regexPlaceholder')}
               value={source.pattern} onChange={(e) => setSource(i, { pattern: e.target.value })} />
             {misses > 0 && (
