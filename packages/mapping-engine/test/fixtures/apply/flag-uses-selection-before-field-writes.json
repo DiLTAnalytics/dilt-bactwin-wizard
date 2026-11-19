@@ -1,7 +1,7 @@
 {
   "id": "apply/flag-uses-selection-before-field-writes",
   "title": "Flags go to the points the filter selected before the fields were written",
-  "why": "The filter looks at the field the step sets (\"gewerk empty\" -> set gewerk + flag reminder). Selecting again after the field writes would find no points and leave the flag unset while reporting success.",
+  "why": "The filter looks at the field the step sets (\"gewerk empty\" -> set gewerk + flag review). Selecting again after the field writes would find no points and leave the flag unset while reporting success.",
   "referenceData": "demo",
   "operation": {
     "kind": "apply_set",
@@ -60,8 +60,8 @@
           "bactwin_description": null
         },
         "state": {
-          "ignore": false,
-          "reminder": false,
+          "command": "replace",
+          "review": false,
           "comment": "",
           "translation_complete": false,
           "combinations_valid": false,
@@ -125,8 +125,8 @@
           "bactwin_description": null
         },
         "state": {
-          "ignore": false,
-          "reminder": false,
+          "command": "replace",
+          "review": false,
           "comment": "",
           "translation_complete": false,
           "combinations_valid": false,
@@ -152,7 +152,7 @@
         "value": "RLT"
       },
       {
-        "field": "state.reminder",
+        "field": "state.review",
         "value": true
       }
     ]
@@ -213,8 +213,8 @@
           "bactwin_description": "?_RLT_?????_?????_???_?????_?????_?????"
         },
         "state": {
-          "ignore": false,
-          "reminder": true,
+          "command": "replace",
+          "review": true,
           "comment": "",
           "translation_complete": false,
           "combinations_valid": true,
@@ -278,8 +278,8 @@
           "bactwin_description": "?_RLT_?????_?????_???_?????_?????_?????"
         },
         "state": {
-          "ignore": false,
-          "reminder": true,
+          "command": "replace",
+          "review": true,
           "comment": "",
           "translation_complete": false,
           "combinations_valid": true,

@@ -1,7 +1,7 @@
 import { useEffect, useId, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { X } from 'lucide-react'
-import { BACNET_FIELDS, BACTWIN_FIELDS, EDE_FIELDS, fieldName, identityFilter, pointKey, type BACtwinData, type DataPoint, type ValidationMessage } from '@bactwin/mapping-engine'
+import { BACNET_FIELDS, BACTWIN_FIELDS, COMMAND_FIELD, COMMANDS, EDE_FIELDS, fieldName, identityFilter, pointKey, type BACtwinData, type Command, type DataPoint, type ValidationMessage } from '@bactwin/mapping-engine'
 import { useCapabilities, useCombinationMode } from '@/hooks/useCapabilities'
 import { useNameTemplate } from '@/hooks/useNameTemplate'
 import { useI18n } from '@/i18n'
@@ -71,6 +71,8 @@ export function DetailPanel({ point, onClose }: { point: DataPoint | null; onClo
   }
 
   const toggleFlagDraft = (flag: Flag, value: boolean) => setFlagDrafts((d) => draftFlag(d, flag, value, localPoint.state[flag]))
+  // The stored command again needs no draft.
+  const draftCommand = (command: Command) => setDraft(({ [COMMAND_FIELD]: _, ...d }) => (command === localPoint.state.command ? d : { ...d, [COMMAND_FIELD]: command }))
 
   async function handleApplyDraft() {
     if (!localPoint) return
@@ -182,7 +184,17 @@ export function DetailPanel({ point, onClose }: { point: DataPoint | null; onClo
         <section>
           <h3 className="font-semibold text-muted mb-1 uppercase text-xs tracking-wide">{t('common.status')}</h3>
           <div className="mb-2 flex flex-col gap-1.5">
-            {(['ignore', 'reminder'] as const).map((field) => (
+            <div className="flex items-center gap-2">
+              <span className="w-32 shrink-0 text-muted">{fieldLabel(COMMAND_FIELD, t)}</span>
+              <SegmentedControl<Command>
+                size="sm"
+                label={fieldLabel(COMMAND_FIELD, t)}
+                value={(draft[COMMAND_FIELD] as Command | undefined) ?? m.command}
+                onChange={draftCommand}
+                options={COMMANDS.map((c) => ({ value: c, label: t(`command.${c}`) }))}
+              />
+            </div>
+            {(['review'] as const).map((field) => (
               <div key={field} className="flex items-center gap-2">
                 <span className="w-32 shrink-0 text-muted">{fieldLabel(`state.${field}`, t)}</span>
                 <SegmentedControl<'yes' | 'no'>

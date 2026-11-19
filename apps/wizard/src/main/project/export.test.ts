@@ -2,15 +2,18 @@ import readExcelFile from 'read-excel-file/node'
 import { describe, expect, it } from 'vitest'
 
 import { importEde } from './importing.js'
-import { exportFile } from './queries.js'
+import { exportCounts, exportFile, type ExportRequest } from './queries.js'
+import { insertStep } from './sequence.js'
 import { DEMO_EDE, testSession } from './testing.js'
+
+const ALL: ExportRequest = { scope: 'all', options: { complete: false, ignore: false } }
 
 describe('the data-point table export', () => {
   it('writes one sheet with a header row and typed cells, read back as written', async () => {
     const s = testSession()
     await importEde(s, [DEMO_EDE], { mode: 'new' })
     s.requireProject().points[1]!.state.comment = 'a\u0001b <&>'
-    const { bytes } = await exportFile(s, 'xlsx', 'all')
+    const bytes = await exportFile(s, 'xlsx', ALL)
 
     const [sheet, ...others] = await readExcelFile(Buffer.from(bytes))
     expect(others).toEqual([])
@@ -31,13 +34,34 @@ describe('the data-point JSON export', () => {
   it('writes one nested object per selected point, with typed values', async () => {
     const s = testSession()
     await importEde(s, [DEMO_EDE], { mode: 'new' })
-    const { bytes } = await exportFile(s, 'json', 'all')
+    const bytes = await exportFile(s, 'json', ALL)
 
     const points = JSON.parse(new TextDecoder().decode(bytes)) as Record<string, Record<string, unknown>>[]
     expect(points).toHaveLength(s.requireProject().points.length)
     expect(Object.keys(points[1]!)).toEqual(['source', 'ede', 'bacnet', 'bactwin', 'state'])
     expect(points[1]!.ede!['object_name']).toBe('XXDILT__HH4_____RLTF1__ME___')
     expect(points[1]!.ede!['unit_code']).toBe(62)
-    expect(points[1]!.state!['ignore']).toBe(false)
+    expect(points[1]!.state!['command']).toBe('replace')
+  })
+})
+
+describe('the export scope', () => {
+  it('takes a step\'s hits regardless of the step open, and writes their command', async () => {
+    const s = testSession()
+    await importEde(s, [DEMO_EDE], { mode: 'new' })
+    await insertStep(s, { name: 'Logging', filter: [{ field: 'ede.object_name', regex: 'HH4' }], actions: [{ field: 'state.command', value: 'doNotParse' }] })
+    await insertStep(s, { name: 'Prüfen', filter: [], actions: [{ field: 'state.review', value: true }] })
+    const hits = s.replay!.outcome(0)!.hits.length
+    expect(hits).toBeGreaterThan(0)
+
+    const step: ExportRequest = { scope: 'step', step: 0, options: { complete: false, ignore: false } }
+    const counts = exportCounts(s, step)
+    expect(counts.scopes.step).toBe(hits)
+    expect(counts.replacement.rows).toBe(hits)
+    const csv = new TextDecoder().decode(await exportFile(s, 'replacement', step))
+    expect(csv.split('\r\n').slice(1, -1).every((line) => line.split(',')[1] === 'doNotParse')).toBe(true)
+
+    const complete = exportCounts(s, { ...step, options: { complete: true, ignore: false } })
+    expect(complete.table).toBe(s.replay!.outcome(0)!.hits.filter((i) => s.requireProject().points[i]!.state.translation_complete).length)
   })
 })

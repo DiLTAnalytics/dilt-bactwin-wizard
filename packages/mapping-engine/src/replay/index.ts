@@ -16,8 +16,8 @@ import { markDuplicateNames, validateAndUpdate } from '../validate/index.js'
 const JOURNALED: readonly (readonly [string, string])[] = [
   ...BACTWIN_FIELDS.map((f) => ['bactwin', f.id] as const),
   ['state', 'comment'],
-  ['state', 'ignore'],
-  ['state', 'reminder'],
+  ['state', 'command'],
+  ['state', 'review'],
 ]
 
 const FIELD_INDEX = new Map(JOURNALED.map(([a, f], i) => [`${a}.${f}`, i]))

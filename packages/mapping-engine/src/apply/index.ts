@@ -8,10 +8,13 @@ import type { DataPoint } from '../types.js'
 import { validateAndUpdate } from '../validate/index.js'
 
 /** Flags an action can switch; their value is true or false. */
-export const FLAG_FIELDS: readonly string[] = ['state.ignore', 'state.reminder']
+export const FLAG_FIELDS: readonly string[] = ['state.review']
+
+/** The replacement-table command; its value is one of COMMANDS. */
+export const COMMAND_FIELD = 'state.command'
 
 /** Every field an action may write. Everything else is imported or derived. */
-export const WRITABLE_FIELDS: readonly string[] = [...BACTWIN_FIELDS.map((f) => `bactwin.${f.id}`), 'state.comment', ...FLAG_FIELDS]
+export const WRITABLE_FIELDS: readonly string[] = [...BACTWIN_FIELDS.map((f) => `bactwin.${f.id}`), 'state.comment', COMMAND_FIELD, ...FLAG_FIELDS]
 
 /** A field a write reads, and the regex that must match its value as text (absent is ""). */
 export interface ActionSource {
@@ -88,7 +91,8 @@ export function applyActions(
 
   for (const [index, action] of actions.entries()) {
     beforeEach?.(action, index)
-    const flag = FLAG_FIELDS.includes(action.field)
+    // Status values neither touch the name nor need validating.
+    const flag = FLAG_FIELDS.includes(action.field) || action.field === COMMAND_FIELD
     let sources: RegExp[] | null = null
     try {
       if (action.from) sources = action.from.map((source) => new RegExp(source.regex, 'i'))
@@ -98,7 +102,7 @@ export function applyActions(
     }
     for (const point of targets) {
       const value = actionValue(point, action, sources)
-      // A flag already at the value, or a source that does not match, leaves the point alone.
+      // A status already at the value, or a source that does not match, leaves the point alone.
       if (value === null || (flag && getFieldValue(point, action.field) === value)) {
         result.skipped += 1
         continue

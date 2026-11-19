@@ -10,7 +10,6 @@ import {
   ReferenceData,
   applyActions,
   exportReplacementCsv,
-  selectForExport,
   xlsxColumns,
   emptyFilter,
   markDuplicateNames,
@@ -238,8 +237,10 @@ function run(fixture: Fixture): Record<string, unknown> {
 
     case 'export': {
       const points = parsePoints(op['points'])
-      const selected = selectForExport(points, op['scope'], emptyFilter())
-      if (op['format'] === 'replacement') return exportReplacementCsv(selected)
+      if (op['format'] === 'replacement') {
+        const { content, leftOut, devices, ignored } = exportReplacementCsv(points, op['ignore'] === true)
+        return { content, leftOut, devices, ignored }
+      }
       // The column set is pinned, not the XLSX bytes.
       return { columns: xlsxColumns() }
     }

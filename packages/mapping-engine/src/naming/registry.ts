@@ -62,9 +62,9 @@ export const BACTWIN_DERIVED = {
 export const STATE_FIELDS = {
   has_error: 'bool',
   duplicated_name: 'bool',
-  ignore: 'bool',
+  command: 'text',
   translation_complete: 'bool',
-  reminder: 'bool',
+  review: 'bool',
   comment: 'text',
   combinations_invalid: 'bool',
   invalid_bactwin_rules: 'bool',

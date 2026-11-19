@@ -76,8 +76,9 @@ export function StatusBar() {
       <span className="ml-auto flex items-center gap-1">
         <CountButton chip="errors" label={t('status.errors')} value={n(s.errors)} tone="danger" />
         <CountButton chip="duplicates" label={t('status.duplicates')} value={n(s.duplicated_name)} tone="danger" />
-        <CountButton chip="review" label={t('status.review')} value={n(s.reminder)} tone="warning" />
+        <CountButton chip="review" label={t('status.review')} value={n(s.review)} tone="warning" />
         <CountButton chip="ignored" label={t('status.ignored')} value={n(s.ignore)} tone="muted" />
+        <CountButton chip="doNotParse" label={t('status.doNotParse')} value={n(s.doNotParse)} tone="muted" />
       </span>
     </footer>
   )

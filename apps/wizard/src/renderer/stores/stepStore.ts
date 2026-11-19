@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { BACTWIN_FIELDS, toDsl, type FilterRule, type SequenceStep, type SetAction } from '@bactwin/mapping-engine'
+import { BACTWIN_FIELDS, COMMAND_FIELD, toDsl, type Command, type FilterRule, type SequenceStep, type SetAction } from '@bactwin/mapping-engine'
 import type { Flag, FlagDrafts } from '@/lib/flags'
 import { emptyRow, fromAction, rowReady, toAction, type SetRow } from '@/lib/stepRows'
 
@@ -17,10 +17,12 @@ export interface Draft {
   flags: FlagDrafts
   /** "Dann": the comment written, or null when the step leaves it alone. */
   comment: string | null
+  /** "Dann": the replacement-table command set, or null when the step leaves it alone. */
+  command: Command | null
   mode: CombinationMode
 }
 
-export const emptyDraft = (): Draft => ({ name: '', rules: [], rows: [], flags: {}, comment: null, mode: 'combination' })
+export const emptyDraft = (): Draft => ({ name: '', rules: [], rows: [], flags: {}, comment: null, command: null, mode: 'combination' })
 
 /** A new step as the editor opens it. */
 const freshStep = (): Draft => ({ ...emptyDraft(), rows: [emptyRow(BACTWIN_FIELDS[1]!)] })
@@ -28,8 +30,10 @@ const freshStep = (): Draft => ({ ...emptyDraft(), rows: [emptyRow(BACTWIN_FIELD
 export function draftFromStep(step: SequenceStep): Draft {
   const flags: FlagDrafts = {}
   let comment: string | null = null
+  let command: Command | null = null
   for (const a of step.actions) {
     if (a.field === 'state.comment') comment = String(a.value)
+    else if (a.field === COMMAND_FIELD) command = a.value as Command
     else if (typeof a.value === 'boolean') flags[a.field.slice('state.'.length) as Flag] = a.value
   }
   return {
@@ -38,14 +42,16 @@ export function draftFromStep(step: SequenceStep): Draft {
     rows: step.actions.map(fromAction).filter((r): r is SetRow => r !== null),
     flags,
     comment,
+    command,
     mode: step.combination_mode ?? 'combination',
   }
 }
 
-/** What the draft writes, in order: fields, then the comment, then flags. */
+/** What the draft writes, in order: fields, then the comment, the command, then flags. */
 export function actionsOf(d: Draft): SetAction[] {
   const actions: SetAction[] = d.rows.filter(rowReady).map(toAction)
   if (d.comment !== null) actions.push({ field: 'state.comment', value: d.comment })
+  if (d.command !== null) actions.push({ field: COMMAND_FIELD, value: d.command })
   for (const [flag, value] of Object.entries(d.flags) as [Flag, boolean][]) actions.push({ field: `state.${flag}`, value })
   return actions
 }
