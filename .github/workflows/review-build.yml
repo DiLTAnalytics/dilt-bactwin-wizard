@@ -1,6 +1,6 @@
-name: Test build
+name: Review build
 
-# An unsigned Windows installer for trying a branch, without a release tag.
+# An unsigned Windows installer for reviewing a branch, without a release tag.
 # On a PR: add the label "windows-build" (again after new commits: remove and re-add, or start it by hand).
 
 on:
