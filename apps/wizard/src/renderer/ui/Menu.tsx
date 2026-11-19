@@ -2,14 +2,35 @@
 
 import * as DM from '@radix-ui/react-dropdown-menu'
 import { Check, type LucideIcon } from 'lucide-react'
-import type { ReactElement, ReactNode } from 'react'
+import type { KeyboardEvent, ReactElement, ReactNode } from 'react'
+
+const WIDTH = {
+  menu: 'min-w-[220px]',
+  /** At least as wide as the trigger, wider for a longer item. */
+  trigger: 'min-w-[var(--radix-dropdown-menu-trigger-width)]',
+  /** One width for every list of fields, so they all open alike; longer labels are cut. */
+  field: 'w-60',
+}
+
+/** A visible scrollbar takes from the fixed width; the menu grows by it instead. Overlay scrollbars take none. */
+function roomForScrollbar(el: HTMLDivElement | null) {
+  if (!el || el.style.width) return
+  requestAnimationFrame(() => {
+    const css = getComputedStyle(el)
+    const bar = el.offsetWidth - el.clientWidth - parseFloat(css.borderLeftWidth) - parseFloat(css.borderRightWidth)
+    if (bar > 0) el.style.width = `${el.offsetWidth + bar}px`
+  })
+}
 
 /** Opens from its trigger; `open` and `onOpenChange` also let something else open it. */
-export function Menu({ trigger, align = 'start', open, onOpenChange, children }: {
+export function Menu({ trigger, align = 'start', open, onOpenChange, width = 'menu', onKeyDown, children }: {
   trigger: ReactElement
   align?: 'start' | 'end'
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  width?: keyof typeof WIDTH
+  /** Runs before the menu's own keys; preventDefault keeps the menu from handling the key. */
+  onKeyDown?: (e: KeyboardEvent<HTMLDivElement>) => void
   children: ReactNode
 }) {
   return (
@@ -20,7 +41,9 @@ export function Menu({ trigger, align = 'start', open, onOpenChange, children }:
           align={align}
           sideOffset={4}
           collisionPadding={8}
-          className="z-50 min-w-[220px] rounded-md border border-line bg-surface p-1 text-sm text-fg shadow-lg"
+          onKeyDown={onKeyDown}
+          ref={width === 'field' ? roomForScrollbar : undefined}
+          className={`z-50 max-h-[var(--radix-dropdown-menu-content-available-height)] ${WIDTH[width]} overflow-y-auto rounded-md border border-line bg-surface p-1 text-sm text-fg shadow-lg`}
         >
           {children}
         </DM.Content>
@@ -37,7 +60,7 @@ export function AnchoredMenu({ at, onClose, children }: { at: { x: number; y: nu
         <span aria-hidden style={{ position: 'fixed', left: at?.x ?? 0, top: at?.y ?? 0, width: 0, height: 0 }} />
       </DM.Trigger>
       <DM.Portal>
-        <DM.Content align="start" collisionPadding={8} className="z-50 min-w-[220px] rounded-md border border-line bg-surface p-1 text-sm text-fg shadow-lg">
+        <DM.Content align="start" collisionPadding={8} className="z-50 max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[220px] overflow-y-auto rounded-md border border-line bg-surface p-1 text-sm text-fg shadow-lg">
           {children}
         </DM.Content>
       </DM.Portal>
@@ -51,7 +74,7 @@ export function MenuItem({ icon: Icon, onSelect, disabled, hint, children }: { i
   return (
     <DM.Item className={ITEM} onSelect={onSelect} disabled={disabled}>
       {Icon ? <Icon size={15} className="text-muted" aria-hidden /> : <span className="w-[15px]" />}
-      <span className="flex-1">{children}</span>
+      <span className="min-w-0 flex-1 truncate">{children}</span>
       {hint && <span className="text-xs text-muted">{hint}</span>}
     </DM.Item>
   )

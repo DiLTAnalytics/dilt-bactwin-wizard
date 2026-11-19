@@ -5,7 +5,8 @@ import { dropLineClass, type RowDrag } from '@/hooks/useRowDrag'
 import { useI18n } from '@/i18n'
 import { IconButton } from '@/ui/Button'
 import { DragHandle } from '@/ui/DragHandle'
-import { Input, Select } from '@/ui/Field'
+import { Input } from '@/ui/Field'
+import { PickList, type PickOption } from '@/ui/PickList'
 import { Tooltip } from '@/ui/Tooltip'
 import { areaOf, fieldLabel } from '@/lib/fieldLabel'
 import { MARK_DOT_CLASSES } from '@/lib/highlight'
@@ -31,8 +32,17 @@ function ToggleChip({ pressed, onChange, hint, children, className = '' }: { pre
   )
 }
 
-export function newRule(): FilterRule {
-  return { field: 'ede.object_name', operator: 'regex', value: '', case_sensitive: false, negated: false }
+/** A new condition on `field`, with the first operator its type offers. */
+export function newRule(field = 'ede.object_name'): FilterRule {
+  const type = FILTERABLE_FIELDS.find((f) => f.field === field)?.type ?? 'text'
+  return { field, operator: operatorsFor(type)[0]!.value, value: type === 'bool' ? null : '', case_sensitive: false, negated: false }
+}
+
+/** The fields a condition can read, grouped by area; those of a switched-off capability left out. */
+export function conditionFields(caps: ReturnType<typeof useCapabilities>, t: (key: string) => string): PickOption<string>[] {
+  return FIELD_GROUPS.flatMap((group) => FILTERABLE_FIELDS
+    .filter((f) => areaOf(f.field) === group && (!f.requires || caps[f.requires]))
+    .map((f) => ({ value: f.field, label: fieldLabel(f.field, t), group: t(`filter.group.${group}`) })))
 }
 
 /** One "Wenn" condition, with how many points it selects on its own. Their order changes nothing but the look. */
@@ -50,10 +60,9 @@ export function ConditionRow({ rule, count, color, drag, onChange, onRemove }: {
   const caps = useCapabilities()
   const meta = FILTERABLE_FIELDS.find((f) => f.field === rule.field) ?? FILTERABLE_FIELDS[0]!
   const isBool = meta.type === 'bool'
-  const ops = operatorsFor(meta.type).map((o) => ({ value: o.value, label: t(o.labelKey) }))
+  const ops: PickOption<FilterOperator>[] = operatorsFor(meta.type).map((o) => ({ value: o.value, label: t(o.labelKey), group: t('filter.operatorLabel') }))
   // Keep an operator the field does not offer visible, so it is not changed unseen.
-  if (!ops.some((o) => o.value === rule.operator)) ops.unshift({ value: rule.operator, label: rule.operator })
-  const offered = FILTERABLE_FIELDS.filter((f) => !f.requires || caps[f.requires])
+  if (!ops.some((o) => o.value === rule.operator)) ops.unshift({ value: rule.operator, label: rule.operator, group: t('filter.operatorLabel') })
 
   return (
     <div {...drag.rowProps} className={`flex items-center gap-1.5 border-y-2 border-transparent ${dropLineClass(drag.dropTarget)} ${drag.dragged ? 'opacity-40' : ''}`}>
@@ -63,30 +72,20 @@ export function ConditionRow({ rule, count, color, drag, onChange, onRemove }: {
           <span role="img" aria-label={t('step.markHint')} className={`size-2 shrink-0 rounded-full ${MARK_DOT_CLASSES[color]}`} />
         </Tooltip>
       )}
-      <Select
-        size="sm"
+      <PickList
         className="w-36 shrink-0"
-        aria-label={t('filter.fieldLabel')}
+        label={t('filter.fieldLabel')}
         value={rule.field}
-        onChange={(e) => {
-          const next = operatorsFor(FILTERABLE_FIELDS.find((f) => f.field === e.target.value)?.type ?? 'text')
+        options={conditionFields(caps, t)}
+        onChange={(field) => {
+          const next = operatorsFor(FILTERABLE_FIELDS.find((f) => f.field === field)?.type ?? 'text')
           // Operator and value stay when the new field offers the same operator; a change of type resets them.
           const keep = next.some((o) => o.value === rule.operator)
-          onChange({ ...rule, field: e.target.value, operator: keep ? rule.operator : next[0]!.value, value: keep ? rule.value : null, negated: keep ? rule.negated : false })
+          onChange({ ...rule, field, operator: keep ? rule.operator : next[0]!.value, value: keep ? rule.value : null, negated: keep ? rule.negated : false })
         }}
-      >
-        {FIELD_GROUPS.map((group) => (
-          <optgroup key={group} label={t(`filter.group.${group}`)}>
-            {offered.filter((f) => areaOf(f.field) === group).map((f) => (
-              <option key={f.field} value={f.field}>{fieldLabel(f.field, t)}</option>
-            ))}
-          </optgroup>
-        ))}
-      </Select>
-      <Select size="sm" className="w-20 shrink-0" aria-label={t('filter.operatorLabel')} value={rule.operator}
-        onChange={(e) => onChange({ ...rule, operator: e.target.value as FilterOperator })}>
-        {ops.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-      </Select>
+      />
+      <PickList<FilterOperator> compact className="w-20 shrink-0" label={t('filter.operatorLabel')} value={rule.operator} options={ops}
+        onChange={(operator) => onChange({ ...rule, operator })} />
       {/* A yes/no field has nothing to invert; the slot keeps the value column aligned. */}
       {isBool ? <span className="w-10 shrink-0" /> : (
         <ToggleChip pressed={!!rule.negated} onChange={(negated) => onChange({ ...rule, negated })} hint={t('filter.negateHint')} className="w-10">{t('filter.negate')}</ToggleChip>

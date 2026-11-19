@@ -15,13 +15,13 @@ import { queryKeys, useRefresh } from '@/queries'
 import { actionsOf, draftFromStep, isDirty, useStepStore, type CombinationMode } from '@/stores/stepStore'
 import { Button, IconButton } from '@/ui/Button'
 import { Input } from '@/ui/Field'
-import { Menu, MenuItem, MenuLabel, MenuSeparator } from '@/ui/Menu'
+import { SearchMenu } from '@/ui/SearchMenu'
 import { reportError } from '@/ui/reportError'
 import { SegmentedControl } from '@/ui/SegmentedControl'
 import { toast } from '@/ui/Toast'
 import { Tooltip } from '@/ui/Tooltip'
 import { actionsVerbose, filterSummary } from '@/lib/describeStep'
-import { ConditionRow, newRule } from './ConditionRow'
+import { ConditionRow, conditionFields, newRule } from './ConditionRow'
 import { fieldLabel } from '@/lib/fieldLabel'
 import { FieldRow } from './FieldRow'
 import { emptyRow, fieldById, overridesBefore, rowReady, sourceCheckOf, type SetRow } from '@/lib/stepRows'
@@ -65,6 +65,11 @@ export function StepEditor({ selected }: { selected: DataPoint | null }) {
   const mode: CombinationMode = draft.mode === 'combination' && !caps.combinations ? 'gewerk_specific' : draft.mode
   const counts = preview?.counts
   const usedFlags = new Set(Object.keys(draft.flags))
+  // The status rows a step can add, from "+ Feld" or in place of a field row; `rows` are the field rows kept.
+  const statusItems = [
+    ...FLAGS.map((flag) => ({ key: `state.${flag}`, label: fieldLabel(`state.${flag}`, t), group: t('common.status'), disabled: usedFlags.has(flag), onSelect: (rows: SetRow[]) => edit({ rows, flags: { ...draft.flags, [flag]: true } }) })),
+    { key: 'state.comment', label: fieldLabel('state.comment', t), group: t('common.status'), disabled: draft.comment !== null, onSelect: (rows: SetRow[]) => edit({ rows, comment: '' }) },
+  ]
 
   // The action each ready row becomes, for what the preview says about its sources.
   let next = 0
@@ -151,7 +156,8 @@ export function StepEditor({ selected }: { selected: DataPoint | null }) {
               />
             ))}
             <div className="flex items-center gap-2">
-              <Button size="sm" variant="ghost" icon={Plus} onClick={() => edit({ rules: [...draft.rules, newRule()] })}>{t('filter.addCondition')}</Button>
+              <SearchMenu trigger={<Button size="sm" variant="ghost" icon={Plus}>{t('filter.addCondition')}</Button>}
+                items={conditionFields(caps, t).map((f) => ({ key: f.value, label: f.label, group: f.group, onSelect: () => edit({ rules: [...draft.rules, newRule(f.value)] }) }))} />
               <span className="ml-auto text-xs text-fg-2 tabular-nums">
                 {counts && (draft.rules.length ? t('step.allHold', { count: n(counts.hits) }) : t('step.allPoints', { count: n(counts.hits) }))}
               </span>
@@ -185,7 +191,12 @@ export function StepEditor({ selected }: { selected: DataPoint | null }) {
                 dsl={{ rules: draft.rules }}
                 overrides={overridesBefore(draft.rows, i)}
                 onChange={(patch) => setRow(i, patch)}
-                onFieldChange={(id) => setRow(i, { ...emptyRow(fieldById(id)!), key: row.key })}
+                statusOptions={statusItems.map((s) => ({ value: s.key, label: s.label, group: s.group, disabled: s.disabled }))}
+                onFieldChange={(id) => {
+                  const status = statusItems.find((s) => s.key === id)
+                  if (status) status.onSelect(draft.rows.filter((_, j) => j !== i))
+                  else setRow(i, { ...emptyRow(fieldById(id)!), key: row.key })
+                }}
                 onRemove={() => edit({ rows: draft.rows.filter((_, j) => j !== i) })}
                 drag={rowDrag(i)}
                 check={actionOf[i] === null || !preview ? undefined : sourceCheckOf(preview.sources, actionOf[i]!, row.sources.length)}
@@ -214,18 +225,10 @@ export function StepEditor({ selected }: { selected: DataPoint | null }) {
               </div>
             )}
             <div>
-              <Menu trigger={<Button size="sm" variant="ghost" icon={Plus}>{t('step.addField')}</Button>}>
-                <MenuLabel>{t('step.bactwinFields')}</MenuLabel>
-                {BACTWIN_FIELDS.map((f) => (
-                  <MenuItem key={f.id} onSelect={() => edit({ rows: [...draft.rows, emptyRow(f)] })}>{fieldLabel(`bactwin.${f.id}`, t)}</MenuItem>
-                ))}
-                <MenuSeparator />
-                <MenuLabel>{t('common.status')}</MenuLabel>
-                {FLAGS.map((flag) => (
-                  <MenuItem key={flag} disabled={usedFlags.has(flag)} onSelect={() => edit({ flags: { ...draft.flags, [flag]: true } })}>{fieldLabel(`state.${flag}`, t)}</MenuItem>
-                ))}
-                <MenuItem disabled={draft.comment !== null} onSelect={() => edit({ comment: '' })}>{fieldLabel('state.comment', t)}</MenuItem>
-              </Menu>
+              <SearchMenu trigger={<Button size="sm" variant="ghost" icon={Plus}>{t('step.addField')}</Button>} items={[
+                ...BACTWIN_FIELDS.map((f) => ({ key: f.id, label: fieldLabel(`bactwin.${f.id}`, t), group: t('step.bactwinFields'), onSelect: () => edit({ rows: [...draft.rows, emptyRow(f)] }) })),
+                ...statusItems.map((s) => ({ ...s, onSelect: () => s.onSelect(draft.rows) })),
+              ]} />
             </div>
           </div>
 
