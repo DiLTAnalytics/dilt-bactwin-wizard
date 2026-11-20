@@ -81,9 +81,11 @@ export function StepEditor({ selected }: { selected: DataPoint | null }) {
   const place = resolvePlace(blocks, newPlace, stepCount)
   const later = target === 'new' ? stepCount - place.index : stepCount - target - 1
   const name = draft.name.trim()
+  // A step needs a condition or a value to set; one with only conditions selects, e.g. for the export.
+  const saveable = actions.length > 0 || draft.rules.length > 0
 
   async function handleSave() {
-    if (!draft || actions.length === 0 || !name) return
+    if (!draft || !saveable || !name) return
     setSaving(true)
     try {
       const res = await applySet({
@@ -117,11 +119,11 @@ export function StepEditor({ selected }: { selected: DataPoint | null }) {
         <span className="shrink-0 font-mono text-xs text-muted">{title}</span>
         {dirty && <Tooltip content={t('step.unsavedHint')}><span className="shrink-0 cursor-default text-warning-fg" aria-label={t('step.unsaved')}>●</span></Tooltip>}
         <Input size="sm" className="min-w-48 flex-1" aria-label={t('step.name')} placeholder={t('step.namePlaceholder')} required
-          invalid={!name && actions.length > 0} value={draft.name} onChange={(e) => edit({ name: e.target.value })} />
+          invalid={!name && saveable} value={draft.name} onChange={(e) => edit({ name: e.target.value })} />
         <div className="ml-auto flex shrink-0 items-center gap-2">
           <Button size="sm" icon={RotateCcw} onClick={discard} disabled={!dirty}>{t('step.discard')}</Button>
           <Tooltip content={!name ? t('step.nameMissing') : later > 0 ? t('step.saveHintLater', { count: later }) : t('step.saveHint')}>
-            <Button size="sm" variant="primary" busy={saving} disabled={actions.length === 0 || !name || (!dirty && target !== 'new')} onClick={() => void handleSave()}>
+            <Button size="sm" variant="primary" busy={saving} disabled={!saveable || !name || (!dirty && target !== 'new')} onClick={() => void handleSave()}>
               {t('step.save')}
               {/* How many points the step hits, so the effect is visible before applying. */}
               {counts && <span className="tabular-nums opacity-80">· {n(counts.hits)}</span>}
@@ -135,7 +137,7 @@ export function StepEditor({ selected }: { selected: DataPoint | null }) {
         <p className="truncate px-4 pb-2 text-xs text-muted">
           <span className="font-medium text-fg-2">{t('sequence.when')}</span> {filterSummary(asStep, t)}
           {' → '}
-          <span className="font-medium text-fg-2">{t('sequence.then')}</span> {actionsVerbose(asStep, template, t) || '–'}
+          <span className="font-medium text-fg-2">{t('sequence.then')}</span> {actionsVerbose(asStep, template, t) || t('sequence.filterOnly')}
         </p>
       ) : (
         // Side by side when there is room, stacked when the inspector makes it narrow.
