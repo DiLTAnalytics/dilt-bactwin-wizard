@@ -107,10 +107,6 @@ describe('the sequence file', () => {
     expect(errorOf(sequence(steps))).toContain(where)
   })
 
-  it('accepts a step with conditions only, which selects and sets nothing', () => {
-    expect(errorOf(sequence([{ name: 'x', filter: [{ field: 'state.review', regex: '^false$' }], actions: [] }]))).toBeNull()
-  })
-
   it('accepts $$ followed by 0 as a dollar sign and a zero', () => {
     expect(errorOf(sequence([{ name: 'x', actions: [{ field: 'bactwin.gewerk', from: [{ field: 'ede.object_name', regex: '(x)' }], value: '$$0$1' }] }]))).toBeNull()
   })

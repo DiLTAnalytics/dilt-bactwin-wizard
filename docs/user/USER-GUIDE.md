@@ -71,8 +71,7 @@ steht, wie viele Datenpunkte sie allein trifft. Was eine Bedingung auf Objektnam
 trifft, ist in der Tabelle in ihrer Farbe markiert (Punkt links). Der Ziehgriff oder Alt+↑/↓ ordnet
 die Bedingungen um; das ändert nur die Anzeige.
 
-**Dann** - eine Zeile pro Feld (**+ Feld**), in dieser Reihenfolge geschrieben. Ein Schritt ohne Dann ist
-nur ein Filter (z. B. für den Export). Eine Zeile ist:
+**Dann** - eine Zeile pro Feld (**+ Feld**), in dieser Reihenfolge geschrieben:
 - **Wert aus der Liste** (Key oder Bezeichnung tippen, Enter), eine **Nummer**, oder
   **### nicht vorhanden**, wenn der Baustein hier nicht zutrifft.
 - **Aus Feld übernehmen** (Nummern und Ort): ein Regex-Muster holt den Wert aus dem Objektnamen oder
@@ -185,8 +184,8 @@ Dann die neueste Version installieren.
 - **Umfang:** **Alle**, **Aktueller Tabellenfilter** (was die Tabelle mit Suche und Status-Filtern
   zeigt) oder **Wenn-Filter eines Schritts** (was die Wenn-Bedingungen des gewählten Schritts auswählen, mit
   den Werten nach allen Schritten), jeweils mit Anzahl. Der geöffnete Schritt ändert den Export nicht.
-  „Zu prüfen“ ausschließen: ein letzter Schritt nur mit Wenn **Zu prüfen ist nein** (ohne Dann), dann
-  **Wenn-Filter eines Schritts** mit diesem Schritt.
+  „Zu prüfen“ ausschließen: ein letzter Schritt mit Wenn **Zu prüfen ist nein** und Dann
+  **Zu prüfen = nein** (ändert nichts), dann **Wenn-Filter eines Schritts** mit diesem Schritt.
 - **Vollständig** heißt: jedes Segment der Namensvorlage ist gesetzt, außer den optionalen (bei AMEV
   Sub-Anlage-Nummer und Funktionserweiterung).
 - **CSV:** `Command` ist das Replacement-Command des Datenpunkts. replace-Zeilen stehen nur mit vollständigem
