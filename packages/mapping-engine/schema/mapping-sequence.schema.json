@@ -47,7 +47,6 @@
             }
           },
           "actions": {
-            "minItems": 1,
             "type": "array",
             "items": {
               "oneOf": [
@@ -176,7 +175,7 @@
               ],
               "description": "One write onto every selected point"
             },
-            "description": "Applied in order to the points the filter selected before any of them"
+            "description": "Applied in order to the points the filter selected before any of them; none: the step only selects, e.g. for the export"
           },
           "disabled": {
             "description": "Kept in the sequence but passed over when it is replayed",

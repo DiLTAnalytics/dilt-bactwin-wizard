@@ -68,7 +68,7 @@ export function NewStepRow({ step, selected, onSelect, onDrop }: {
           <Tooltip content={t('sequence.newStepHint')}><span className="shrink-0 text-warning-fg" aria-label={t('step.unsaved')}>●</span></Tooltip>
         </div>
         <div className="truncate text-xs text-muted"><span className="font-medium text-fg-2">{t('sequence.when')}</span> {filterSummary(step, t)}</div>
-        <div className="truncate text-xs text-muted"><span className="font-medium text-fg-2">{t('sequence.then')}</span> {actions || '–'}</div>
+        <div className="truncate text-xs text-muted"><span className="font-medium text-fg-2">{t('sequence.then')}</span> {actions || t('sequence.filterOnly')}</div>
       </div>
       <IconButton size="sm" icon={X} label={t('sequence.dropNewStep')} onClick={(e) => { e.stopPropagation(); onDrop() }} />
     </li>
@@ -80,7 +80,7 @@ export function StepRow({ step, index, outcome, selected, hasDraft, busy, onSele
   const { t, n } = useI18n()
   const template = useNameTemplate()
   const filter = filterSummary(step, t)
-  const actions = actionsVerbose(step, template, t)
+  const actions = actionsVerbose(step, template, t) || t('sequence.filterOnly')
   const tone = selected ? 'bg-accent-soft shadow-[inset_3px_0_0_var(--color-accent)]' : 'hover:bg-subtle'
 
   return (
