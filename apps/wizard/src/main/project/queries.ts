@@ -40,6 +40,8 @@ export interface PointsResponse {
   items: SerializedDataPoint[]
   /** Per item, the fields more than one step changed, with those steps in order; null when none did. */
   collisions: (Record<string, number[]> | null)[]
+  /** Per item, the last step that changed each status field; a field no step changed is absent. */
+  setBy: Record<string, number>[]
   total: number
   filtered: number
   page: number
@@ -83,11 +85,13 @@ export function sortPoints<T>(items: T[], field: string, desc: boolean, point: (
   })
 }
 
+const STATUS_FIELDS = ['state.replacement_command', 'state.review', 'state.comment']
+
 // The sorted list, kept while the same blocks of a list are fetched one after another.
 const sortCache = new WeakMap<Session, { key: string; points: DataPoint[] }>()
 
 export function points(s: Session, req: PointsRequest): PointsResponse {
-  if (!s.project) return { items: [], collisions: [], total: 0, filtered: 0, page: 1, page_count: 1 }
+  if (!s.project) return { items: [], collisions: [], setBy: [], total: 0, filtered: 0, page: 1, page_count: 1 }
   const all = s.project.points
   markDuplicateNames(all)
 
@@ -111,6 +115,16 @@ export function points(s: Session, req: PointsRequest): PointsResponse {
       const index = replay?.indexOfPoint(p)
       const cells = index === undefined ? {} : replay!.collidedCells(index)
       return Object.keys(cells).length ? cells : null
+    }),
+    setBy: shown.map((p) => {
+      const index = replay?.indexOfPoint(p)
+      const out: Record<string, number> = {}
+      if (index === undefined) return out
+      for (const field of STATUS_FIELDS) {
+        const step = replay!.cellWriters(index, field).at(-1)
+        if (step !== undefined) out[field] = step
+      }
+      return out
     }),
     total: all.length,
     filtered: filtered.length,
@@ -142,7 +156,7 @@ export function stats(s: Session, filter?: FilterDsl): Stats {
   }
   const all = s.project.points
   markDuplicateNames(all)
-  const relevant = all.filter((p) => p.state.command !== 'ignore')
+  const relevant = all.filter((p) => p.state.replacement_command !== 'ignore')
   const bt = (p: DataPoint) => p.bactwin as unknown as Record<string, unknown>
 
   const fieldsSet = relevant.reduce((sum, p) => sum + STATS_FIELDS.filter((f) => isSet(bt(p)[f])).length, 0)
@@ -157,7 +171,7 @@ export function stats(s: Session, filter?: FilterDsl): Stats {
     total: all.length,
     filtered: filter ? countFilter(all, filter) : all.length,
     ignore: all.length - relevant.length,
-    doNotParse: all.filter((p) => p.state.command === 'doNotParse').length,
+    doNotParse: all.filter((p) => p.state.replacement_command === 'doNotParse').length,
     review: all.filter((p) => p.state.review).length,
     translation_complete: relevant.filter((p) => p.state.translation_complete).length,
     combinations_valid: all.filter((p) => p.state.combinations_valid === true).length,

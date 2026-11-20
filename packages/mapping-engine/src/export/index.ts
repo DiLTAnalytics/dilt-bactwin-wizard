@@ -43,7 +43,7 @@ export function replacementRows(points: DataPoint[], ignore: boolean): Replaceme
   let devices = 0
   let ignored = 0
   for (const p of points) {
-    const { command } = p.state
+    const command = p.state.replacement_command
     const name = p.state.translation_complete ? p.bactwin.bactwin_name : ''
     if (isDeviceObject(p)) devices++
     else if (command === 'ignore' && !ignore) ignored++

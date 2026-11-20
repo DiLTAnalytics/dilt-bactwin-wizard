@@ -97,6 +97,7 @@ export function DataTable({ selected, onSelect }: { selected: DataPoint | null; 
       // A cell more than one step changed holds the last one's value.
       const rows = res.items.map((point, i) => ({
         point,
+        setBy: res.setBy[i],
         collisions: Object.fromEntries(Object.entries(res.collisions[i] ?? {}).map(([field, steps]) =>
           [field, { writer: steps.at(-1)!, overwrites: steps.slice(0, -1), overwrittenBy: null }])),
       }))

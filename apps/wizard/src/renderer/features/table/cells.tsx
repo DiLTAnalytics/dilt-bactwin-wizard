@@ -28,8 +28,11 @@ function MessageIcon({ messages, level }: { messages: ValidationMessage[]; level
  * Computed status as a coloured bar (error, complete, in progress, empty), errors, warnings and the
  * hand-set flags as icons beside it. Clicking the duplicate icon lists every point with that name.
  */
-export function StatusCell({ point, onDuplicateClick }: { point: DataPoint; onDuplicateClick: (name: string) => void }) {
+export function StatusCell({ point, setBy, onDuplicateClick }: { point: DataPoint; setBy?: Record<string, number>; onDuplicateClick: (name: string) => void }) {
   const { t } = useI18n()
+  // "ignore · Schritt 003" when a step set it.
+  const origin = (label: string, field: string) =>
+    setBy?.[field] === undefined ? label : `${label} · ${t('common.step', { step: String(setBy[field] + 1).padStart(3, '0') })}`
   const m = point.state
   const error = m.messages.some((msg) => msg.level === 'error')
   const [bar, label] = error ? ['bg-danger', t('table.status.error')]
@@ -55,9 +58,18 @@ export function StatusCell({ point, onDuplicateClick }: { point: DataPoint; onDu
           </button>
         </Tooltip>
       )}
-      {m.command === 'ignore' && <EyeOff size={14} className="shrink-0 text-muted" aria-label={t('command.ignore')} />}
-      {m.command === 'doNotParse' && <Database size={14} className="shrink-0 text-muted" aria-label={t('command.doNotParse')} />}
-      {m.review && <Flag size={14} className="shrink-0 text-warning-fg" aria-label={fieldLabel('state.review', t)} />}
+      {m.replacement_command !== 'replace' && (
+        <Tooltip content={origin(t(`command.${m.replacement_command}`), 'state.replacement_command')}>
+          {m.replacement_command === 'ignore'
+            ? <EyeOff size={14} className="shrink-0 text-muted" aria-label={origin(t('command.ignore'), 'state.replacement_command')} />
+            : <Database size={14} className="shrink-0 text-muted" aria-label={origin(t('command.doNotParse'), 'state.replacement_command')} />}
+        </Tooltip>
+      )}
+      {m.review && (
+        <Tooltip content={origin(fieldLabel('state.review', t), 'state.review')}>
+          <Flag size={14} className="shrink-0 text-warning-fg" aria-label={origin(fieldLabel('state.review', t), 'state.review')} />
+        </Tooltip>
+      )}
     </span>
   )
 }
@@ -102,10 +114,16 @@ export function ValueCell({ value, before, collision, mono = true }: { value: un
   )
 }
 
-export function CommentCell({ point }: { point: DataPoint }) {
-  const comment = point.state.comment
-  if (!comment) return <Empty />
-  return <Tooltip content={comment}><span className="block truncate text-xs text-fg-2">{comment}</span></Tooltip>
+/** A status value, grey when no step changed it; the tooltip says which step did. `step` undefined: not known (step preview). */
+export function StatusValueCell({ text, step }: { text: string; step: number | null | undefined }) {
+  const { t } = useI18n()
+  if (!text) return <Empty />
+  const origin = step === null ? t('common.default') : step === undefined ? null : t('common.step', { step: String(step + 1).padStart(3, '0') })
+  return (
+    <Tooltip content={origin && <span className="whitespace-pre-line">{text.length > 24 ? `${text}\n${origin}` : origin}</span>}>
+      <span className={`block truncate text-xs ${step === null ? 'text-faint' : 'text-fg-2'}`}>{text}</span>
+    </Tooltip>
+  )
 }
 
 /** A short value, or a dash when empty. */

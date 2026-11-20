@@ -11,7 +11,7 @@ import { validateAndUpdate } from '../validate/index.js'
 export const FLAG_FIELDS: readonly string[] = ['state.review']
 
 /** The replacement-table command; its value is one of COMMANDS. */
-export const COMMAND_FIELD = 'state.command'
+export const COMMAND_FIELD = 'state.replacement_command'
 
 /** Every field an action may write. Everything else is imported or derived. */
 export const WRITABLE_FIELDS: readonly string[] = [...BACTWIN_FIELDS.map((f) => `bactwin.${f.id}`), 'state.comment', COMMAND_FIELD, ...FLAG_FIELDS]

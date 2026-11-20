@@ -1,11 +1,12 @@
 import { useEffect, useId, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { X } from 'lucide-react'
-import { BACNET_FIELDS, BACTWIN_FIELDS, COMMAND_FIELD, COMMANDS, EDE_FIELDS, fieldName, identityFilter, pointKey, type BACtwinData, type Command, type DataPoint, type ValidationMessage } from '@bactwin/mapping-engine'
+import { BACNET_FIELDS, BACTWIN_FIELDS, COMMAND_FIELD, EDE_FIELDS, fieldName, identityFilter, pointKey, type BACtwinData, type Command, type DataPoint, type ValidationMessage } from '@bactwin/mapping-engine'
 import { useCapabilities, useCombinationMode } from '@/hooks/useCapabilities'
 import { useNameTemplate } from '@/hooks/useNameTemplate'
 import { useI18n } from '@/i18n'
 import { applySet } from '@/ipc/bulk'
+import { invoke } from '@/ipc/client'
 import { fetchPointsByKeys } from '@/ipc/points'
 import { draftFlag, type Flag, type FlagDrafts } from '@/lib/flags'
 import { queryKeys, useRefresh } from '@/queries'
@@ -14,11 +15,13 @@ import { Button, IconButton } from '@/ui/Button'
 import { Input } from '@/ui/Field'
 import { SegmentedControl } from '@/ui/SegmentedControl'
 import { toast } from '@/ui/Toast'
+import { commandOptions } from '@/lib/command'
 import { fieldLabel } from '@/lib/fieldLabel'
 import { messageField } from '@/lib/messages'
 import { DetailFieldRow } from './DetailFieldRow'
 import { FieldMessages, hasError } from './FieldMessages'
 import { PointHistory } from './PointHistory'
+import { StatusOrigin } from './StatusOrigin'
 
 /** The point's BACtwin values with the unapplied draft laid over them. */
 function draftBACtwin(point: DataPoint, draft: Record<string, string | null>): BACtwinData {
@@ -72,7 +75,10 @@ export function DetailPanel({ point, onClose }: { point: DataPoint | null; onClo
 
   const toggleFlagDraft = (flag: Flag, value: boolean) => setFlagDrafts((d) => draftFlag(d, flag, value, localPoint.state[flag]))
   // The stored command again needs no draft.
-  const draftCommand = (command: Command) => setDraft(({ [COMMAND_FIELD]: _, ...d }) => (command === localPoint.state.command ? d : { ...d, [COMMAND_FIELD]: command }))
+  // The last step that changed each status field; the same query as the history below.
+  const { data: history = [] } = useQuery({ queryKey: [...queryKeys.history, pointKey(localPoint.ede)], queryFn: () => invoke('point:history', pointKey(localPoint.ede)) })
+  const setBy = (field: string) => [...history].reverse().find((e) => e.changes.some((c) => c.field === field))?.step ?? null
+  const draftCommand = (command: Command) => setDraft(({ [COMMAND_FIELD]: _, ...d }) => (command === localPoint.state.replacement_command ? d : { ...d, [COMMAND_FIELD]: command }))
 
   async function handleApplyDraft() {
     if (!localPoint) return
@@ -185,18 +191,19 @@ export function DetailPanel({ point, onClose }: { point: DataPoint | null; onClo
           <h3 className="font-semibold text-muted mb-1 uppercase text-xs tracking-wide">{t('common.status')}</h3>
           <div className="mb-2 flex flex-col gap-1.5">
             <div className="flex items-center gap-2">
-              <span className="w-32 shrink-0 text-muted">{fieldLabel(COMMAND_FIELD, t)}</span>
+              <span className="w-36 shrink-0 text-muted">{fieldLabel(COMMAND_FIELD, t)}</span>
               <SegmentedControl<Command>
                 size="sm"
                 label={fieldLabel(COMMAND_FIELD, t)}
-                value={(draft[COMMAND_FIELD] as Command | undefined) ?? m.command}
+                value={(draft[COMMAND_FIELD] as Command | undefined) ?? m.replacement_command}
                 onChange={draftCommand}
-                options={COMMANDS.map((c) => ({ value: c, label: t(`command.${c}`) }))}
+                options={commandOptions(t)}
               />
+              <StatusOrigin step={setBy(COMMAND_FIELD)} />
             </div>
             {(['review'] as const).map((field) => (
               <div key={field} className="flex items-center gap-2">
-                <span className="w-32 shrink-0 text-muted">{fieldLabel(`state.${field}`, t)}</span>
+                <span className="w-36 shrink-0 text-muted">{fieldLabel(`state.${field}`, t)}</span>
                 <SegmentedControl<'yes' | 'no'>
                   size="sm"
                   label={fieldLabel(`state.${field}`, t)}
@@ -204,10 +211,11 @@ export function DetailPanel({ point, onClose }: { point: DataPoint | null; onClo
                   onChange={(v) => toggleFlagDraft(field, v === 'yes')}
                   options={[{ value: 'yes', label: t('step.yes') }, { value: 'no', label: t('step.no') }]}
                 />
+                <StatusOrigin step={setBy(`state.${field}`)} />
               </div>
             ))}
             <div className="flex items-center gap-2">
-              <label htmlFor={commentId} className="w-32 shrink-0 text-muted">{fieldLabel('state.comment', t)}</label>
+              <label htmlFor={commentId} className="w-36 shrink-0 text-muted">{fieldLabel('state.comment', t)}</label>
               <Input
                 id={commentId}
                 size="sm"
@@ -215,6 +223,7 @@ export function DetailPanel({ point, onClose }: { point: DataPoint | null; onClo
                 value={draft['state.comment'] ?? m.comment ?? ''}
                 onChange={(e) => updateDraft('state.comment', e.target.value || null)}
               />
+              <StatusOrigin step={setBy('state.comment')} />
             </div>
           </div>
           <div className="space-y-1">

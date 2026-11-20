@@ -63,7 +63,7 @@ export const STATE_FIELDS = {
   has_error: 'bool',
   has_warning: 'bool',
   duplicated_name: 'bool',
-  command: 'text',
+  replacement_command: 'text',
   translation_complete: 'bool',
   review: 'bool',
   comment: 'text',

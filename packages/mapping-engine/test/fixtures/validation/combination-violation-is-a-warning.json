@@ -60,7 +60,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -129,7 +129,7 @@
           "bactwin_description": "?_HZG_Lueftung??_Zuluftstrecke??_Luft_Ventilator??_Temperatursensor??_Gemessener Wert??"
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,

@@ -1,6 +1,6 @@
 import { ChevronRight, Info, Plus, RotateCcw, X } from 'lucide-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { BACTWIN_FIELDS, COMMAND_FIELD, COMMANDS, pointKey, toCondition, type Command, type DataPoint, type SequenceStep } from '@bactwin/mapping-engine'
+import { BACTWIN_FIELDS, COMMAND_FIELD, pointKey, toCondition, type Command, type DataPoint, type SequenceStep } from '@bactwin/mapping-engine'
 import { useState } from 'react'
 import { useCapabilities } from '@/hooks/useCapabilities'
 import { useNameTemplate } from '@/hooks/useNameTemplate'
@@ -9,6 +9,7 @@ import { useStoredState } from '@/hooks/useStoredState'
 import { useI18n } from '@/i18n'
 import { applySet } from '@/ipc/bulk'
 import { getSequence } from '@/ipc/sequence'
+import { commandOptions } from '@/lib/command'
 import type { Flag } from '@/lib/flags'
 import { resolvePlace } from '@/lib/stepPositions'
 import { queryKeys, useRefresh } from '@/queries'
@@ -204,15 +205,18 @@ export function StepEditor({ selected }: { selected: DataPoint | null }) {
               />
             ))}
             {draft.command !== null && (
-              <div className="flex items-center gap-2">
-                <span className="w-44 shrink-0 pl-5 text-xs text-fg-2">{fieldLabel(COMMAND_FIELD, t)}</span>
-                <SegmentedControl<Command>
-                  size="sm"
-                  label={fieldLabel(COMMAND_FIELD, t)}
-                  value={draft.command}
-                  onChange={(command) => edit({ command })}
-                  options={COMMANDS.map((c) => ({ value: c, label: t(`command.${c}`) }))}
-                />
+              <div className="flex items-start gap-2">
+                <span className="mt-1.5 w-44 shrink-0 pl-5 text-xs text-fg-2">{fieldLabel(COMMAND_FIELD, t)}</span>
+                <div className="flex flex-col gap-1">
+                  <SegmentedControl<Command>
+                    size="sm"
+                    label={fieldLabel(COMMAND_FIELD, t)}
+                    value={draft.command}
+                    onChange={(command) => edit({ command })}
+                    options={commandOptions(t)}
+                  />
+                  <span className="text-2xs text-muted">{t('step.commandDefault')}</span>
+                </div>
                 <IconButton size="sm" className="ml-auto" icon={X} tone="danger" label={t('set.removeField')} onClick={() => edit({ command: null })} />
               </div>
             )}

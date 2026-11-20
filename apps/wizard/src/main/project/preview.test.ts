@@ -144,6 +144,16 @@ describe('collisions between steps', () => {
     expect(getSequence(s).outcomes[0]).toMatchObject({ noEffect: true })
   })
 
+  it('names the last step that changed a status field; a default value has none', async () => {
+    const s = await session()
+    await applySet(s, { filter: { rules: [] }, actions: [{ field: 'state.replacement_command', value: 'ignore' }], note: 'raus' })
+    await applySet(s, { filter: { rules: [{ field: 'ede.object_name', operator: 'regex', value: 'HH4', case_sensitive: false, negated: false }] }, actions: [{ field: 'state.replacement_command', value: 'replace' }], note: 'doch rein' })
+    const listed = points(s, { page_size: 10 })
+    expect(listed.items.map((p) => p.state.replacement_command)).toEqual(['replace', 'replace', 'ignore', 'ignore'])
+    expect(listed.setBy.map((b) => b['state.replacement_command'])).toEqual([1, 1, 0, 0])
+    expect(listed.setBy.every((b) => b['state.review'] === undefined)).toBe(true)
+  })
+
   it('marks the cells of the table, the preview and the history', async () => {
     const s = await overlapping()
     const listed = points(s, { page_size: 10 })
