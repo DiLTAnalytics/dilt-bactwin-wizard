@@ -85,7 +85,7 @@ export const StepSchema = z
   .strictObject({
     name: z.string().trim().min(1).describe('What the step does, shown in the sequence list'),
     filter: z.array(ConditionSchema).default([]).describe('No conditions selects every point'),
-    actions: z.array(SetActionSchema).min(1).describe('Applied in order to the points the filter selected before any of them'),
+    actions: z.array(SetActionSchema).describe('Applied in order to the points the filter selected before any of them; none: the step only selects, e.g. for the export'),
     disabled: z.boolean().optional().describe('Kept in the sequence but passed over when it is replayed'),
     combination_mode: CombinationModeSchema
       .optional()
