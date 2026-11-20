@@ -3,7 +3,7 @@ import { escapeRegex, type FilterDsl, type FilterRule } from '@bactwin/mapping-e
 
 /** With a step open: what the step hits, nearly hits or misses, or the data after all applied steps ('final'). */
 export type PreviewMode = 'hits' | 'near' | 'missed' | 'final'
-export type StatusChip = 'errors' | 'duplicates' | 'review' | 'ignored' | 'doNotParse'
+export type StatusChip = 'errors' | 'warnings' | 'duplicates' | 'review' | 'ignored' | 'doNotParse'
 
 interface ViewStore {
   /** Finds points by object name or description; only narrows what the table lists. */
@@ -52,10 +52,11 @@ const rule = (field: string, operator: FilterRule['operator'], value: string | n
 
 const CHIP_RULES: Record<StatusChip, FilterRule> = {
   errors: rule('state.has_error', 'is_true'),
+  warnings: rule('state.has_warning', 'is_true'),
   duplicates: rule('state.duplicated_name', 'is_true'),
   review: rule('state.review', 'is_true'),
-  ignored: rule('state.command', 'equals', 'ignore'),
-  doNotParse: rule('state.command', 'equals', 'doNotParse'),
+  ignored: rule('state.replacement_command', 'equals', 'ignore'),
+  doNotParse: rule('state.replacement_command', 'equals', 'doNotParse'),
 }
 
 /** The view filter as a filter: search, status chips, an exact name and a device, all of which must hold. */

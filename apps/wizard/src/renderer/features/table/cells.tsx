@@ -1,17 +1,38 @@
-import { CircleAlert, Copy, Database, EyeOff, Flag, Layers } from 'lucide-react'
-import type { DataPoint } from '@bactwin/mapping-engine'
+import { CircleAlert, Copy, Database, EyeOff, Flag, Layers, TriangleAlert } from 'lucide-react'
+import type { DataPoint, ValidationMessage } from '@bactwin/mapping-engine'
 import { useI18n } from '@/i18n'
 import { fieldLabel } from '@/lib/fieldLabel'
-import { byLevel, messageText } from '@/lib/messages'
+import { messageText } from '@/lib/messages'
 import { MARK_CLASSES, markSegments, type Mark } from '@/lib/highlight'
 import { Tooltip } from '@/ui/Tooltip'
 
-/**
- * Computed status as a coloured bar (error, complete, in progress, empty), the hand-set flags as icons
- * beside it. Clicking the duplicate icon lists every point with that name.
- */
-export function StatusCell({ point, onDuplicateClick }: { point: DataPoint; onDuplicateClick: (name: string) => void }) {
+/** Messages of one level as an icon, with the first few in its tooltip. */
+function MessageIcon({ messages, level }: { messages: ValidationMessage[]; level: 'error' | 'warning' }) {
   const { t } = useI18n()
+  const texts = messages.filter((m) => m.level === level).map((m) => messageText(m, t))
+  if (texts.length === 0) return null
+  const [Icon, color] = level === 'error' ? [CircleAlert, 'text-danger-fg'] : [TriangleAlert, 'text-warning-fg']
+  return (
+    <Tooltip side="right" content={
+      <div className="space-y-0.5">
+        {texts.slice(0, 3).map((text, i) => <p key={i}>{text}</p>)}
+        {texts.length > 3 && <p className="opacity-70">{t('table.status.more', { count: texts.length - 3 })}</p>}
+      </div>
+    }>
+      <span className={`shrink-0 ${color}`} aria-label={texts.join(' ')}><Icon size={14} aria-hidden /></span>
+    </Tooltip>
+  )
+}
+
+/**
+ * Computed status as a coloured bar (error, complete, in progress, empty), errors, warnings and the
+ * hand-set flags as icons beside it. Clicking the duplicate icon lists every point with that name.
+ */
+export function StatusCell({ point, setBy, onDuplicateClick }: { point: DataPoint; setBy?: Record<string, number>; onDuplicateClick: (name: string) => void }) {
+  const { t } = useI18n()
+  // "ignore · Schritt 003" when a step set it.
+  const origin = (label: string, field: string) =>
+    setBy?.[field] === undefined ? label : `${label} · ${t('common.step', { step: String(setBy[field] + 1).padStart(3, '0') })}`
   const m = point.state
   const error = m.messages.some((msg) => msg.level === 'error')
   const [bar, label] = error ? ['bg-danger', t('table.status.error')]
@@ -20,23 +41,11 @@ export function StatusCell({ point, onDuplicateClick }: { point: DataPoint; onDu
     : point.bactwin.gewerk || point.bactwin.anlage ? ['bg-warning', t('table.status.inProgress')]
     : ['bg-transparent', t('table.status.empty')]
 
-  // Cut, so the tooltip stays readable.
-  const messages = byLevel(m.messages).map((msg) => messageText(msg, t))
-  const errorText = (
-    <div className="space-y-0.5">
-      {messages.slice(0, 3).map((text, i) => <p key={i}>{text}</p>)}
-      {messages.length > 3 && <p className="opacity-70">{t('table.status.more', { count: messages.length - 3 })}</p>}
-    </div>
-  )
-
   return (
     <span className="flex items-center gap-1">
       <Tooltip content={label}><span className={`h-5 w-1 shrink-0 rounded-full ${bar}`} aria-label={label} /></Tooltip>
-      {error && (
-        <Tooltip content={errorText} side="right">
-          <span className="shrink-0 text-danger-fg" aria-label={messages.join(' ')}><CircleAlert size={14} aria-hidden /></span>
-        </Tooltip>
-      )}
+      <MessageIcon messages={m.messages} level="error" />
+      <MessageIcon messages={m.messages} level="warning" />
       {m.duplicated_name && (
         <Tooltip content={t('table.status.duplicateHint')}>
           <button
@@ -49,9 +58,18 @@ export function StatusCell({ point, onDuplicateClick }: { point: DataPoint; onDu
           </button>
         </Tooltip>
       )}
-      {m.command === 'ignore' && <EyeOff size={14} className="shrink-0 text-muted" aria-label={t('command.ignore')} />}
-      {m.command === 'doNotParse' && <Database size={14} className="shrink-0 text-muted" aria-label={t('command.doNotParse')} />}
-      {m.review && <Flag size={14} className="shrink-0 text-warning-fg" aria-label={fieldLabel('state.review', t)} />}
+      {m.replacement_command !== 'replace' && (
+        <Tooltip content={origin(t(`command.${m.replacement_command}`), 'state.replacement_command')}>
+          {m.replacement_command === 'ignore'
+            ? <EyeOff size={14} className="shrink-0 text-muted" aria-label={origin(t('command.ignore'), 'state.replacement_command')} />
+            : <Database size={14} className="shrink-0 text-muted" aria-label={origin(t('command.doNotParse'), 'state.replacement_command')} />}
+        </Tooltip>
+      )}
+      {m.review && (
+        <Tooltip content={origin(fieldLabel('state.review', t), 'state.review')}>
+          <Flag size={14} className="shrink-0 text-warning-fg" aria-label={origin(fieldLabel('state.review', t), 'state.review')} />
+        </Tooltip>
+      )}
     </span>
   )
 }
@@ -96,10 +114,16 @@ export function ValueCell({ value, before, collision, mono = true }: { value: un
   )
 }
 
-export function CommentCell({ point }: { point: DataPoint }) {
-  const comment = point.state.comment
-  if (!comment) return <Empty />
-  return <Tooltip content={comment}><span className="block truncate text-xs text-fg-2">{comment}</span></Tooltip>
+/** A status value, grey when no step changed it; the tooltip says which step did. `step` undefined: not known (step preview). */
+export function StatusValueCell({ text, step }: { text: string; step: number | null | undefined }) {
+  const { t } = useI18n()
+  if (!text) return <Empty />
+  const origin = step === null ? t('common.default') : step === undefined ? null : t('common.step', { step: String(step + 1).padStart(3, '0') })
+  return (
+    <Tooltip content={origin && <span className="whitespace-pre-line">{text.length > 24 ? `${text}\n${origin}` : origin}</span>}>
+      <span className={`block truncate text-xs ${step === null ? 'text-faint' : 'text-fg-2'}`}>{text}</span>
+    </Tooltip>
+  )
 }
 
 /** A short value, or a dash when empty. */

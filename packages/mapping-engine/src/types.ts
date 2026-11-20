@@ -78,7 +78,7 @@ export type Command = (typeof COMMANDS)[number]
 
 /** The engineer's working status and the computed validation results. */
 export const StateDataSchema = z.object({
-  command: z.enum(COMMANDS).default('replace'),
+  replacement_command: z.enum(COMMANDS).default('replace'),
   review: z.boolean().default(false),
   comment: str,
   translation_complete: z.boolean().default(false),
@@ -131,6 +131,11 @@ export function hasError(point: DataPoint): boolean {
   return point.state.messages.some((m) => m.level === 'error')
 }
 
+/** Derived, not stored: a point has a warning when any message is at warning level. */
+export function hasWarning(point: DataPoint): boolean {
+  return point.state.messages.some((m) => m.level === 'warning')
+}
+
 export const STATE_FLAGS = [
   'review',
   'translation_complete',
@@ -158,7 +163,7 @@ export function serializeDataPoint(p: DataPoint): SerializedDataPoint {
     bacnet: { type: p.bacnet.type, unit: p.bacnet.unit },
     bactwin: { ...p.bactwin },
     state: {
-      command: p.state.command,
+      replacement_command: p.state.replacement_command,
       review: p.state.review,
       comment: p.state.comment,
       translation_complete: p.state.translation_complete,

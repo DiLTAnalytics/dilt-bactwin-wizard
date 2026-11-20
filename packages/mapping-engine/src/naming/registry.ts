@@ -57,12 +57,13 @@ export const BACTWIN_DERIVED = {
 
 /**
  * Flags and notes on a point, by value type. Shown by a translated label rather than their name;
- * has_error, combinations_invalid and invalid_bactwin_rules are computed for filtering (DERIVED_STATE_FIELDS).
+ * has_error, has_warning, combinations_invalid and invalid_bactwin_rules are computed for filtering (DERIVED_STATE_FIELDS).
  */
 export const STATE_FIELDS = {
   has_error: 'bool',
+  has_warning: 'bool',
   duplicated_name: 'bool',
-  command: 'text',
+  replacement_command: 'text',
   translation_complete: 'bool',
   review: 'bool',
   comment: 'text',

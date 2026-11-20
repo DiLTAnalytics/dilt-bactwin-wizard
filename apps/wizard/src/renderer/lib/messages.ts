@@ -22,7 +22,8 @@ export function messageField(msg: ValidationMessage): string | null {
   const p = msg.params
   switch (msg.code) {
     case 'UNKNOWN_KEY':
-    case 'DEPRECATED_KEY': return p['block'] ? `bactwin.${p['block']}` : null
+    case 'DEPRECATED_KEY':
+    case 'GEWERK_MISMATCH': return p['block'] ? `bactwin.${p['block']}` : null
     case 'COMBINATION_VIOLATION': return p['field'] ? `${EDE_COLUMNS.has(p['field']) ? 'ede' : 'bactwin'}.${p['field']}` : null
     case 'UNKNOWN_OBJECT_TYPE': return 'ede.object_type'
     case 'UNKNOWN_UNIT_CODE': return 'ede.unit_code'

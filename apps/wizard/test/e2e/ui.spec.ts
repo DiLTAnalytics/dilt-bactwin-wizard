@@ -69,6 +69,7 @@ test('create a project, record a step with a preview, inspect a point and switch
   await page.getByRole('menuitemcheckbox', { name: 'Status und Kommentar' }).click()
   await page.keyboard.press('Escape')
   await expect(table().locator('thead th', { hasText: 'Kommentar' })).toBeVisible()
+  await expect(table().locator('thead th', { hasText: 'Replacement-Command' })).toBeVisible()
 
   // A new step: one condition, gewerk HZG picked by searching the key list; the table previews the hits.
   await page.getByRole('button', { name: 'Neuer Schritt' }).last().click()
@@ -215,7 +216,7 @@ test('create a project, record a step with a preview, inspect a point and switch
   const exported = JSON.parse(readFileSync(json, 'utf8')) as { ede: { object_name: string }; state: { command: string } }[]
   expect(exported.length).toBeGreaterThan(0)
   expect(typeof exported[0]!.ede.object_name).toBe('string')
-  expect(exported[0]!.state.command).toBe('replace')
+  expect(exported[0]!.state.replacement_command).toBe('replace')
 
   // Settings opens and closes.
   const dialog = page.getByRole('dialog')

@@ -42,13 +42,26 @@ export function validatePoint(
     }
   }
 
+  // Keys whose library entry names the trades they belong to, checked against the point's Gewerk.
+  const gewerk = bt['gewerk']
+  if (gewerk && !isStructuralMarker(gewerk)) {
+    for (const field of COMBINATION_COLUMNS) {
+      const value = bt[field]
+      if (field === 'gewerk' || !value || isStructuralMarker(value)) continue
+      const trades = ref.entry(field, value)?.default_gewerk ?? []
+      if (trades.length > 0 && !trades.includes(gewerk)) {
+        messages.push({ level: 'warning', code: 'GEWERK_MISMATCH', params: { value, block: field, gewerk } })
+      }
+    }
+  }
+
   if (combinationsCheckable(point, ref)) {
     const state = bactwinToState(point, ref)
     if (combinationViolated(state, ref, combinationCache)) {
-      // Only failing points pay for finding the culprit.
+      // Only failing points pay for finding the culprit. A warning: the catalogue guides, it does not forbid.
       const conflict = combinationConflict(state, ref)
       messages.push({
-        level: 'error',
+        level: 'warning',
         code: 'COMBINATION_VIOLATION',
         params: conflict
           ? { field: fieldName(conflict.field), value: conflict.value, with: conflict.with.map(([f, v]) => `${fieldName(f)} ${v}`).join(', ') }

@@ -40,7 +40,7 @@ const STEPS: SequenceStep[] = [
 ]
 
 /** The writable values of every point, for comparing two ways of getting there. */
-const values = (points: DataPoint[]) => points.map((p) => ({ ...p.bactwin, comment: p.state.comment, command: p.state.command, review: p.state.review }))
+const values = (points: DataPoint[]) => points.map((p) => ({ ...p.bactwin, comment: p.state.comment, replacement_command: p.state.replacement_command, review: p.state.review }))
 
 function replayFromScratch(steps: SequenceStep[]): DataPoint[] {
   const points = validated(importedPoints())

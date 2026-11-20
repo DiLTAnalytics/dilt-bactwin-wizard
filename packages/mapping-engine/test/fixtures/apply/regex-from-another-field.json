@@ -60,7 +60,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -125,7 +125,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -209,7 +209,7 @@
           "bactwin_description": "?_???_???07_?????_???_?????_?????_?????"
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -274,7 +274,7 @@
           "bactwin_description": "?_???_???12_?????_???_?????_?????_?????"
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,

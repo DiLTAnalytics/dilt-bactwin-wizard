@@ -2,7 +2,7 @@ import { columnSizingFeature, tableFeatures, type ColumnDef } from '@tanstack/re
 import { BACNET_FIELDS, BACTWIN_FIELDS, EDE_FIELDS, buildNameParts, fieldAbbr, fieldName, type DataPoint, type FilterRule, type NameTemplate } from '@bactwin/mapping-engine'
 import { BACtwinName } from '@/ui/BACtwinName'
 import { fieldLabel } from '@/lib/fieldLabel'
-import { CommentCell, Highlighted, StatusCell, TextCell, ValueCell, type CellCollision } from './cells'
+import { Highlighted, StatusCell, StatusValueCell, TextCell, ValueCell, type CellCollision } from './cells'
 import type { Mark } from '@/lib/highlight'
 import type { ColumnFit, FitLine } from './columnWidths'
 
@@ -17,6 +17,8 @@ export interface Row {
   conditions?: boolean[]
   /** Per field, the other steps changing that cell. */
   collisions?: Record<string, CellCollision>
+  /** Per status field, the last step that changed it; absent when none did or unknown (step preview). */
+  setBy?: Record<string, number>
 }
 
 /** EDE and BACnet column widths; object-name and description share the first column. */
@@ -83,7 +85,7 @@ export function buildColumns({ show, template, label, t, onDuplicateClick, writt
   highlight: Mark[]
 }): Column[] {
   const cols: Column[] = [
-    { id: 'status', header: '', size: 64, cell: ({ row }) => <StatusCell point={row.original.point} onDuplicateClick={onDuplicateClick} /> },
+    { id: 'status', header: '', size: 64, cell: ({ row }) => <StatusCell point={row.original.point} setBy={row.original.setBy} onDuplicateClick={onDuplicateClick} /> },
   ]
   cols.push({
     id: 'object_name', header: `${fieldAbbr('ede.object_name')} / ${fieldAbbr('ede.description')}`, size: 240,
@@ -145,8 +147,18 @@ export function buildColumns({ show, template, label, t, onDuplicateClick, writt
       cell: ({ row }) => <ValueCell value={row.original.point.bactwin[id]} before={row.original.before?.[field]} collision={row.original.collisions?.[field]} />,
     })
   }
-  for (const flag of ['state.command', 'state.review', 'state.comment'] as const) {
-    if (!written.has(flag)) continue
+  // The status fields: as a step writes them in its preview, else on request with where each value comes from.
+  for (const flag of ['state.replacement_command', 'state.review', 'state.comment'] as const) {
+    if (!written.has(flag)) {
+      if (!show.state || onlyWritten) continue
+      const text = (p: DataPoint) => { const v = read(p, flag); return v === true ? '✓' : typeof v === 'string' ? v : '' }
+      cols.push({
+        id: flag, header: fieldLabel(flag, t), size: flag === 'state.comment' ? 220 : 90,
+        meta: { sortField: flag, fit: { max: flag === 'state.comment' ? 320 : 120, lines: (row) => [[{ text: text(row.point), font: 'sans' }]] } },
+        cell: ({ row }) => <StatusValueCell text={text(row.original.point)} step={row.original.setBy ? row.original.setBy[flag] ?? null : undefined} />,
+      })
+      continue
+    }
     cols.push({
       id: flag, header: fieldLabel(flag, t), size: 110,
       meta: { written: true, sortField: flag, fit: { lines: (row) => [valueLine(read(row.point, flag) === true ? '✓' : read(row.point, flag), row.before?.[flag], 'sans', !!row.collisions?.[flag])] } },
@@ -173,12 +185,6 @@ export function buildColumns({ show, template, label, t, onDuplicateClick, writt
       id: 'bt_bactwin_description', header: fieldAbbr('bactwin.bactwin_description'), size: 480,
       meta: { group: 'bactwin', title: fieldName('bactwin.bactwin_description'), sortField: 'bactwin.bactwin_description', fit: { max: 640, lines: (row) => [[{ text: nameText(template, row, label), font: 'mono' }]] } },
       cell: ({ row }) => <BACtwinName bt={row.original.point.bactwin} template={template} label={label} />,
-    })
-  }
-  if (show.state && !onlyWritten && !written.has('state.comment')) {
-    cols.push({
-      id: 'state_comment', header: fieldLabel('state.comment', t), size: 220, meta: { sortField: 'state.comment', fit: { max: 320, lines: (row) => [[{ text: row.point.state.comment, font: 'sans' }]] } },
-      cell: ({ row }) => <CommentCell point={row.original.point} />,
     })
   }
   cols.push(name)

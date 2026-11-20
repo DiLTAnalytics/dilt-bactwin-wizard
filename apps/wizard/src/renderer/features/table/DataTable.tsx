@@ -42,6 +42,7 @@ const GROUPS: ColumnGroup[] = ['ede', 'bacnet', 'bactwin', 'description', 'state
 const DEFAULT_GROUPS: Record<ColumnGroup, boolean> = { ede: true, bacnet: true, bactwin: true, description: false, state: false }
 const CHIPS: { chip: StatusChip; labelKey: string }[] = [
   { chip: 'errors', labelKey: 'view.errors' },
+  { chip: 'warnings', labelKey: 'view.warnings' },
   { chip: 'duplicates', labelKey: 'view.duplicates' },
   { chip: 'review', labelKey: 'view.review' },
   { chip: 'ignored', labelKey: 'view.ignored' },
@@ -96,6 +97,7 @@ export function DataTable({ selected, onSelect }: { selected: DataPoint | null; 
       // A cell more than one step changed holds the last one's value.
       const rows = res.items.map((point, i) => ({
         point,
+        setBy: res.setBy[i],
         collisions: Object.fromEntries(Object.entries(res.collisions[i] ?? {}).map(([field, steps]) =>
           [field, { writer: steps.at(-1)!, overwrites: steps.slice(0, -1), overwrittenBy: null }])),
       }))

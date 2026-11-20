@@ -73,6 +73,7 @@
   "validation": {
     "UNKNOWN_KEY": "Unbekannter BACtwin-Key: {{value}} (Block: {{block}})",
     "DEPRECATED_KEY": "Veralteter Key: {{value}} (Block: {{block}})",
+    "GEWERK_MISMATCH": "Key nicht für Gewerk {{gewerk}} vorgesehen: {{value}} (Block: {{block}})",
     "COMBINATION_VIOLATION": "Diese Kombination steht nicht in den Keys-Combinations.",
     "COMBINATION_VIOLATION_WITH": "Nicht in den Keys-Combinations: {{field}} „{{value}}“ passt nicht zu {{with}}.",
     "COMBINATION_VIOLATION_ALONE": "Nicht in den Keys-Combinations: {{field}} „{{value}}“ kommt dort nicht vor.",
@@ -305,6 +306,7 @@
     "step": "Schritt {{step}}",
     "applyResult": "{{changed}} gesetzt, {{skipped}} übersprungen",
     "status": "Status",
+    "default": "Standard",
     "close": "Schließen",
     "expand": "Aufklappen",
     "collapse": "Zuklappen"
@@ -556,6 +558,7 @@
     "empty": "Noch keine Datenpunkte - über „EDE-Dateien“ Dateien hinzufügen.",
     "filterHint": "Klick: Tabelle darauf einschränken",
     "errors": "Fehler",
+    "warnings": "Warnungen",
     "duplicates": "Doppelt",
     "review": "Zu prüfen",
     "ignored": "ignore",
@@ -588,6 +591,7 @@
     "no": "nein",
     "addField": "Feld",
     "bactwinFields": "BACtwin-Felder",
+    "commandDefault": "Ohne diese Zeile gilt replace",
     "unsavedHintLater": "Ungespeicherte Änderung, Vorschau in der Tabelle. Mit „Übernehmen“ werden die {{count}} Schritte danach neu berechnet.",
     "unsavedHint": "Ungespeicherte Änderung, Vorschau in der Tabelle.",
     "savedHint": "Gespeichert. Änderungen werden erst mit „Übernehmen“ wirksam.",
@@ -601,6 +605,7 @@
   },
   "view": {
     "errors": "Fehler",
+    "warnings": "Warnungen",
     "duplicates": "Doppelt",
     "review": "Zu prüfen",
     "search": "Objektname oder Beschreibung suchen…",
@@ -620,8 +625,9 @@
   "field": {
     "state": {
       "has_error": "Hat Fehler",
+      "has_warning": "Hat Warnung",
       "duplicated_name": "Name doppelt",
-      "command": "Command",
+      "replacement_command": "Replacement-Command",
       "translation_complete": "Vollständig",
       "review": "Zu prüfen",
       "comment": "Kommentar",

@@ -60,7 +60,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -129,7 +129,7 @@
           "bactwin_description": "?_HZG_Nicht mehr verwenden??_?????_???_?????_?????_?????"
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -146,7 +146,7 @@
               }
             },
             {
-              "level": "error",
+              "level": "warning",
               "code": "COMBINATION_VIOLATION",
               "params": {
                 "field": "anlage",
@@ -155,7 +155,7 @@
               }
             }
           ],
-          "has_error": true
+          "has_error": false
         }
       }
     ]

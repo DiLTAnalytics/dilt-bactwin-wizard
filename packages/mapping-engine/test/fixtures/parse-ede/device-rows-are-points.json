@@ -64,7 +64,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -129,7 +129,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -194,7 +194,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -259,7 +259,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -324,7 +324,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -389,7 +389,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -454,7 +454,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -519,7 +519,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -584,7 +584,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -649,7 +649,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -714,7 +714,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -779,7 +779,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -844,7 +844,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -909,7 +909,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -974,7 +974,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1039,7 +1039,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1104,7 +1104,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1169,7 +1169,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1234,7 +1234,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1299,7 +1299,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1364,7 +1364,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1429,7 +1429,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1494,7 +1494,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1559,7 +1559,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1624,7 +1624,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1689,7 +1689,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1754,7 +1754,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1819,7 +1819,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1884,7 +1884,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -1949,7 +1949,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -2014,7 +2014,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
