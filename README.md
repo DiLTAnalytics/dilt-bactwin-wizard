@@ -50,7 +50,7 @@ Die Releases sind nicht code-signiert.
   öffnen**. Oder: `xattr -dr com.apple.quarantine "/Applications/BACtwin Wizard.app"`
 - **Windows:** SmartScreen → **Weitere Informationen → Trotzdem ausführen**. Mit AppLocker oder
   WDAC muss die IT die Datei freigeben.
-- **Linux:** `sudo apt install ./bactwin-wizard_*_amd64.deb`
+- **Linux:** `sudo apt install ./BACtwin-Wizard-*-linux-x64.deb`
 
 Download prüfen:
 

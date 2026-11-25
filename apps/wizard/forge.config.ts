@@ -5,9 +5,9 @@ import { MakerDMG } from '@electron-forge/maker-dmg'
 import { MakerSquirrel } from '@electron-forge/maker-squirrel'
 import { MakerDeb } from '@electron-forge/maker-deb'
 import { execFileSync } from 'node:child_process'
-import { rmSync } from 'node:fs'
+import { renameSync, rmSync } from 'node:fs'
 import { createRequire } from 'node:module'
-import { dirname, join } from 'node:path'
+import { basename, dirname, extname, join } from 'node:path'
 
 import { writeNotices } from './vite.notices.js'
 
@@ -22,6 +22,16 @@ const repoRoot = join(import.meta.dirname, '..', '..')
 // Bundled so Help works offline; same build as the Pages site (see scripts/build-docs.mjs).
 const docsSite = join(repoRoot, 'docs-site')
 
+const platformNames: Record<string, string> = { darwin: 'macos', win32: 'windows', linux: 'linux' }
+
+/** BACtwin-Wizard-<version>-<os>-<arch>.<ext>; the Windows installer ends in -Setup.exe. Squirrel's RELEASES and .nupkg keep their names. */
+function packageName(file: string, version: string, platform: string, arch: string): string | undefined {
+  const ext = extname(file)
+  if (!['.dmg', '.zip', '.deb', '.exe'].includes(ext)) return undefined
+  const stem = `BACtwin-Wizard-${version}-${platformNames[platform] ?? platform}-${arch}`
+  return ext === '.exe' ? `${stem}-Setup.exe` : stem + ext
+}
+
 const config: ForgeConfig = {
   hooks: {
     // Always rebuilt: a stale or missing docs-site would silently fall back to the website.
@@ -33,6 +43,17 @@ const config: ForgeConfig = {
       writeNotices(dirname(buildPath))
       rmSync(join(buildPath, '.vite', 'notices'), { recursive: true, force: true })
     },
+    postMake: async (_config, results) =>
+      results.map((result) => ({
+        ...result,
+        artifacts: result.artifacts.map((file) => {
+          const name = packageName(basename(file), result.packageJSON.version, result.platform, result.arch)
+          if (!name) return file
+          const target = join(dirname(file), name)
+          renameSync(file, target)
+          return target
+        }),
+      })),
   },
   packagerConfig: {
     name: 'BACtwin Wizard',
@@ -54,7 +75,7 @@ const config: ForgeConfig = {
       authors: 'DiLT Analytics GmbH',
     }),
     new MakerDeb({ options: { name: 'bactwin-wizard', bin: 'bactwin-wizard', productName: 'BACtwin Wizard', categories: ['Science'] } }),
-    new MakerZIP({}, ['darwin', 'linux']),
+    new MakerZIP({}, ['linux']),
   ],
   plugins: [
     new VitePlugin({
