@@ -75,7 +75,7 @@ const config: ForgeConfig = {
       authors: 'DiLT Analytics GmbH',
     }),
     new MakerDeb({ options: { name: 'bactwin-wizard', bin: 'bactwin-wizard', productName: 'BACtwin Wizard', categories: ['Science'] } }),
-    new MakerZIP({}, ['darwin', 'linux']),
+    new MakerZIP({}, ['linux']),
   ],
   plugins: [
     new VitePlugin({
