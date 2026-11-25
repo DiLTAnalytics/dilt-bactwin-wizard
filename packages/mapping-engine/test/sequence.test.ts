@@ -48,7 +48,7 @@ describe('the sequence file', () => {
       schema_version: SEQUENCE_FORMAT_VERSION,
       steps: [{
         name: 'Heizkreise',
-        filter: [rule({ negated: true, case_sensitive: true }), rule({ field: 'state.command', value: 'ignore', negated: true })].map(toCondition),
+        filter: [rule({ negated: true, case_sensitive: true }), rule({ field: 'state.replacement_command', value: 'ignore', negated: true })].map(toCondition),
         actions: [
           { field: 'bactwin.gewerk', value: 'HZG' },
           { field: 'bactwin.anlage_number', from: [{ field: 'ede.object_name', regex: 'HH(\\d+)' }], value: '$1' },
@@ -64,7 +64,7 @@ describe('the sequence file', () => {
     expect(file['steps']).toEqual([
       {
         name: 'Heizkreise',
-        filter: [{ field: 'bactwin.gewerk', regex: '(?-i:^(?!HZG$))' }, { field: 'state.command', regex: '^(?!ignore$)' }],
+        filter: [{ field: 'bactwin.gewerk', regex: '(?-i:^(?!HZG$))' }, { field: 'state.replacement_command', regex: '^(?!ignore$)' }],
         actions: seq.steps[0]!.actions,
       },
       { name: 'Kommentar', filter: [], actions: [{ field: 'state.comment', value: '' }] },
@@ -89,11 +89,11 @@ describe('the sequence file', () => {
   it.each([
     ['an unknown key', [{ name: 'x', filter: [], actions: [{ field: 'bactwin.gewerk', value: 'X', vlaue: 'Y' }] }], 'step 1, actions 1'],
     ['a write at a position', [{ name: 'x', actions: [{ field: 'bactwin.ort', value: 'X', at: 3 }] }], 'step 1, actions 1'],
-    ['a step without a name', [{ actions: [{ field: 'state.command', value: 'ignore' }] }], 'step 1, name'],
-    ['a blank name', [{ name: '  ', actions: [{ field: 'state.command', value: 'ignore' }] }], 'step 1, name'],
-    ['an unknown filter field', [{ name: 'x', filter: [{ field: 'ede.nope', regex: 'x' }], actions: [{ field: 'state.command', value: 'ignore' }] }], 'step 1, filter 1, field'],
+    ['a step without a name', [{ actions: [{ field: 'state.replacement_command', value: 'ignore' }] }], 'step 1, name'],
+    ['a blank name', [{ name: '  ', actions: [{ field: 'state.replacement_command', value: 'ignore' }] }], 'step 1, name'],
+    ['an unknown filter field', [{ name: 'x', filter: [{ field: 'ede.nope', regex: 'x' }], actions: [{ field: 'state.replacement_command', value: 'ignore' }] }], 'step 1, filter 1, field'],
     ['a field that cannot be written', [{ name: 'x', actions: [{ field: 'state.messages', value: 'x' }] }], 'step 1, actions 1'],
-    ['an invalid regex', [{ name: 'x', filter: [{ field: 'ede.object_name', regex: '(' }], actions: [{ field: 'state.command', value: 'ignore' }] }], 'not a valid regular expression'],
+    ['an invalid regex', [{ name: 'x', filter: [{ field: 'ede.object_name', regex: '(' }], actions: [{ field: 'state.replacement_command', value: 'ignore' }] }], 'not a valid regular expression'],
     ['an invalid source regex', [{ name: 'x', actions: [{ field: 'bactwin.ort', value: '$1', from: [{ field: 'ede.description', regex: '(' }] }] }], 'not a valid regular expression'],
     ['a flag set to text', [{ name: 'x', actions: [{ field: 'state.review', value: 'true' }] }], 'step 1, actions 1'],
     ['text set to a flag value', [{ name: 'x', actions: [{ field: 'bactwin.gewerk', value: true }] }], 'step 1, actions 1'],
@@ -118,11 +118,11 @@ describe('the sequence file', () => {
   })
 
   it.each([
-    ['^true$', [{ field: 'state.command', regex: '^ignore$' }]],
-    ['^false$', [{ field: 'state.command', regex: '^(?!ignore$)' }]],
+    ['^true$', [{ field: 'state.replacement_command', regex: '^ignore$' }]],
+    ['^false$', [{ field: 'state.replacement_command', regex: '^(?!ignore$)' }]],
     ['.', []],
-    ['^nope$', [{ field: 'state.command', regex: '(?!)' }]],
-  ])('upgrades a 1.0 condition %s on state.ignore to the same test on state.command', (regex, filter) => {
+    ['^nope$', [{ field: 'state.replacement_command', regex: '(?!)' }]],
+  ])('upgrades a 1.0 condition %s on state.ignore to the same test on state.replacement_command', (regex, filter) => {
     const read = readSequence({ schema_version: '1.0', steps: [{ name: 'x', filter: [{ field: 'state.ignore', regex }], actions: [{ field: 'state.review', value: true }] }] })
     expect(read.steps[0]!.filter).toEqual(filter)
   })
@@ -140,7 +140,7 @@ describe('the sequence file', () => {
   it('upgrades 1.0 ignore actions to commands and leaves 1.1 files alone', () => {
     const read = readSequence({ schema_version: '1.0', steps: [{ name: 'x', actions: [{ field: 'state.ignore', value: true }, { field: 'state.ignore', value: false }] }] })
     expect(read.schema_version).toBe(SEQUENCE_FORMAT_VERSION)
-    expect(read.steps[0]!.actions).toEqual([{ field: 'state.command', value: 'ignore' }, { field: 'state.command', value: 'replace' }])
+    expect(read.steps[0]!.actions).toEqual([{ field: 'state.replacement_command', value: 'ignore' }, { field: 'state.replacement_command', value: 'replace' }])
     expect(errorOf({ schema_version: '1.1', steps: [{ name: 'x', actions: [{ field: 'state.ignore', value: true }] }] })).toContain('step 1, actions 1')
   })
 

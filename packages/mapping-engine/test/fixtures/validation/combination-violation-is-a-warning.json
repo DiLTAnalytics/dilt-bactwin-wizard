@@ -1,7 +1,7 @@
 {
-  "id": "validation/combination-violation-is-an-error",
-  "title": "A combination absent from the catalogue is an error",
-  "why": "The write itself was allowed - guidance never refusal - so the only way the engineer learns about it is this message afterwards.",
+  "id": "validation/combination-violation-is-a-warning",
+  "title": "A combination absent from the catalogue is a warning",
+  "why": "The write itself was allowed - guidance never refusal - so the only way the engineer learns about it is this message afterwards. A warning, not an error, so large EDE files are not flooded with errors and real ones stand out.",
   "referenceData": "demo",
   "operation": {
     "kind": "validate",
@@ -60,7 +60,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -129,7 +129,7 @@
           "bactwin_description": "?_HZG_Lueftung??_Zuluftstrecke??_Luft_Ventilator??_Temperatursensor??_Gemessener Wert??"
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -138,7 +138,43 @@
           "duplicated_name": false,
           "messages": [
             {
-              "level": "error",
+              "level": "warning",
+              "code": "GEWERK_MISMATCH",
+              "params": {
+                "value": "LTA",
+                "block": "anlage",
+                "gewerk": "HZG"
+              }
+            },
+            {
+              "level": "warning",
+              "code": "GEWERK_MISMATCH",
+              "params": {
+                "value": "ZUL",
+                "block": "baugruppe",
+                "gewerk": "HZG"
+              }
+            },
+            {
+              "level": "warning",
+              "code": "GEWERK_MISMATCH",
+              "params": {
+                "value": "LU~",
+                "block": "medium_position",
+                "gewerk": "HZG"
+              }
+            },
+            {
+              "level": "warning",
+              "code": "GEWERK_MISMATCH",
+              "params": {
+                "value": "VEN",
+                "block": "aggregat",
+                "gewerk": "HZG"
+              }
+            },
+            {
+              "level": "warning",
               "code": "COMBINATION_VIOLATION",
               "params": {
                 "field": "anlage",
@@ -147,7 +183,7 @@
               }
             }
           ],
-          "has_error": true
+          "has_error": false
         }
       }
     ]

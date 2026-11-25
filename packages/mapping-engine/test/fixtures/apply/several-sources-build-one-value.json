@@ -60,7 +60,7 @@
           "bactwin_description": null
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -152,7 +152,7 @@
           "bactwin_description": "GS_140_010A1914_001_???_?????_?????_???_?????_?????_?????"
         },
         "state": {
-          "command": "replace",
+          "replacement_command": "replace",
           "review": false,
           "comment": "",
           "translation_complete": false,

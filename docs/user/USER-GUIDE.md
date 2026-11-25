@@ -56,8 +56,8 @@ Status je Datei: **aktuell**, **geändert**, **nicht gefunden**, **nicht erfasst
 - **Oben:** der Schritt-Editor (§5).
 - **Mitte:** die Tabelle, mit offenem Schritt als Vorschau (§6).
 - **Rechts:** der angeklickte Datenpunkt (§7).
-- **Unten:** Anzahl, Fortschritt, gesetzte Felder und die Zähler Fehler, Doppelt, Zu prüfen, Nicht
-  relevant. Ein Klick filtert die Tabelle darauf.
+- **Unten:** Anzahl, Fortschritt, gesetzte Felder und die Zähler Fehler, Warnungen, Doppelt, Zu prüfen,
+  ignore, doNotParse. Ein Klick filtert die Tabelle darauf.
 
 ## 5. Schritte
 
@@ -81,9 +81,10 @@ die Bedingungen um; das ändert nur die Anzeige.
 - **+ Quelle** setzt einen Wert aus mehreren Feldern zusammen; die Gruppen werden über alle Quellen
   durchgezählt (`$1$2$3`).
 - Passt ein Muster nicht, wird der Datenpunkt übersprungen.
-- **Command**, **Zu prüfen** und **Kommentar** kommen ebenfalls über **+ Feld**. **Command** ist
-  genau einer von **replace** (Standard), **ignore** (nicht relevant) und **doNotParse** (nur fürs
-  Datenlogging); der letzte Schritt gewinnt.
+- **Replacement-Command**, **Zu prüfen** und **Kommentar** kommen ebenfalls über **+ Feld**. Jeder Datenpunkt ist
+  **replace**, ohne dass ein Schritt das setzt; ein Schritt setzt **ignore** (nicht relevant) oder
+  **doNotParse** (nur fürs Datenlogging). **replace** in einem Schritt nimmt eine frühere Ausnahme
+  zurück; der letzte Schritt gewinnt.
 
 **Angebotene Keys** (oben in **Dann**) bestimmt nur, was die Liste anbietet:
 - **Facilimind** - nur Werte, die die Keys-Combinations für die ganze Gruppe erlauben (Standard).
@@ -110,12 +111,13 @@ Mit offenem Schritt:
 
 Ohne offenen Schritt: alle Datenpunkte nach allen Schritten.
 
-Der **Ansichtsfilter** (Suche in Objektname und Beschreibung, **Fehler**, **Doppelt**, **Zu prüfen**) ändert nur die Anzeige,
+Der **Ansichtsfilter** (Suche in Objektname und Beschreibung, **Fehler**, **Warnungen**, **Doppelt**, **Zu prüfen**) ändert nur die Anzeige,
 nie einen Schritt. Der Suchbegriff ist blau umrandet. Ein Klick auf eine Spaltenüberschrift sortiert; Rechtsklick fixiert oder setzt die
 Breite zurück.
 
 Balken vorn: rot (Fehler oder doppelt), grün (vollständig), gelb (in Arbeit).
-Symbole: durchgestrichenes Auge (ignore), Datenbank (doNotParse), Fähnchen (zu prüfen).
+Symbole: roter Kreis (Fehler), gelbes Dreieck (Warnung), durchgestrichenes Auge (ignore), Datenbank
+(doNotParse), Fähnchen (zu prüfen). Die Meldungen stehen im Tooltip.
 
 ## 7. Ein Datenpunkt
 
@@ -123,14 +125,19 @@ Klick auf eine Zeile öffnet ihn rechts; ↑/↓ blättern, Escape schließt. Me
 Feld, das sie betreffen. Oben steht der **Verlauf**:
 jeder Schritt, der ihn geändert hat; ein Klick öffnet den Schritt. Eine Korrektur hier wird mit
 **Setzen** ein eigener Schritt für nur diesen Datenpunkt, vorbelegt als „Korrektur <Objektname>“.
+Neben **Replacement-Command**, **Zu prüfen** und **Kommentar** steht, woher der Wert kommt: **Standard** (kein Schritt
+hat ihn geändert) oder der Schritt, der ihn zuletzt geändert hat; ein Klick öffnet ihn. Dasselbe zeigt der
+Tooltip der Symbole in der Tabelle.
 
-## 8. Fehler und doppelte Namen
+## 8. Fehler, Warnungen und doppelte Namen
 
-- **Fehler:** Ansichtsfilter **Fehler**. Ursachen: unbekannter oder veralteter Key, unvollständiger
-  Name, nicht in den Keys-Combinations.
+- **Fehler:** Ansichtsfilter **Fehler**. Ursachen: unbekannter Key, ungültiger Wert in der EDE-Datei.
+- **Warnungen:** Ansichtsfilter **Warnungen**. Ursachen: nicht in den Keys-Combinations, Key nicht für
+  das Gewerk vorgesehen (laut AMEV-Bibliothek), veralteter Key,
+  unbekannter Objekttyp oder Unit-Code, Datenpunkt fehlt in der EDE-Datei.
 - **Doppelt:** Ansichtsfilter **Doppelt**, Namen eindeutig machen (meist eine fehlende Nummer). Nur
   vollständige Namen zählen.
-- **ignore:** Datenpunkte ohne BACtwin-Namen per Schritt auf Command **ignore** setzen; sie zählen dann nicht
+- **ignore:** Datenpunkte ohne BACtwin-Namen per Schritt auf Replacement-Command **ignore** setzen; sie zählen dann nicht
   mehr zum Fortschritt.
 
 ## 9. Die Mapping-Sequenz
@@ -181,7 +188,7 @@ Dann die neueste Version installieren.
   **Zu prüfen = nein** (ändert nichts), dann **Wenn-Filter eines Schritts** mit diesem Schritt.
 - **Vollständig** heißt: jedes Segment der Namensvorlage ist gesetzt, außer den optionalen (bei AMEV
   Sub-Anlage-Nummer und Funktionserweiterung).
-- **CSV:** `Command` ist der Command des Datenpunkts. replace-Zeilen stehen nur mit vollständigem
+- **CSV:** `Command` ist das Replacement-Command des Datenpunkts. replace-Zeilen stehen nur mit vollständigem
   BACtwin-Namen drin. doNotParse-Zeilen stehen immer drin, ignore-Zeilen nur mit **ignore exportieren**;
   beide mit BACtwin-Namen nur wenn er vollständig ist. Device-Objekte (Objekttyp 8, ohne Zeitreihe)
   bleiben draußen. Der Dialog sagt vorher, wie viele ausgelassen werden.

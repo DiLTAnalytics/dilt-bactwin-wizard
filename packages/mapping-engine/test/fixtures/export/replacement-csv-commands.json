@@ -61,7 +61,7 @@
           "bactwin_description": "Halle_HZG_Verteilung1_Heizkreis2_Heizwasser_Zaehler3_Temperatursensor4_Gemessener Wert5"
         },
         "state": {
-          "command": "doNotParse",
+          "replacement_command": "doNotParse",
           "review": false,
           "comment": "needs a second look",
           "translation_complete": true,
@@ -126,7 +126,7 @@
           "bactwin_description": "?_???_?????_?????_???_?????_?????_?????"
         },
         "state": {
-          "command": "doNotParse",
+          "replacement_command": "doNotParse",
           "review": false,
           "comment": "",
           "translation_complete": false,
@@ -191,7 +191,7 @@
           "bactwin_description": "?_???_?????_?????_???_?????_?????_?????"
         },
         "state": {
-          "command": "ignore",
+          "replacement_command": "ignore",
           "review": false,
           "comment": "",
           "translation_complete": false,

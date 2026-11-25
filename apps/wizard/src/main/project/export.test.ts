@@ -41,7 +41,7 @@ describe('the data-point JSON export', () => {
     expect(Object.keys(points[1]!)).toEqual(['source', 'ede', 'bacnet', 'bactwin', 'state'])
     expect(points[1]!.ede!['object_name']).toBe('XXDILT__HH4_____RLTF1__ME___')
     expect(points[1]!.ede!['unit_code']).toBe(62)
-    expect(points[1]!.state!['command']).toBe('replace')
+    expect(points[1]!.state!['replacement_command']).toBe('replace')
   })
 })
 
@@ -49,7 +49,7 @@ describe('the export scope', () => {
   it('takes a step\'s hits regardless of the step open, and writes their command', async () => {
     const s = testSession()
     await importEde(s, [DEMO_EDE], { mode: 'new' })
-    await insertStep(s, { name: 'Logging', filter: [{ field: 'ede.object_name', regex: 'HH4' }], actions: [{ field: 'state.command', value: 'doNotParse' }] })
+    await insertStep(s, { name: 'Logging', filter: [{ field: 'ede.object_name', regex: 'HH4' }], actions: [{ field: 'state.replacement_command', value: 'doNotParse' }] })
     await insertStep(s, { name: 'Prüfen', filter: [], actions: [{ field: 'state.review', value: true }] })
     const hits = s.replay!.outcome(0)!.hits.length
     expect(hits).toBeGreaterThan(0)

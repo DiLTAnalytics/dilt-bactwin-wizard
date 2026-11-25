@@ -75,6 +75,7 @@ export function StatusBar() {
       </Popover.Root>
       <span className="ml-auto flex items-center gap-1">
         <CountButton chip="errors" label={t('status.errors')} value={n(s.errors)} tone="danger" />
+        <CountButton chip="warnings" label={t('status.warnings')} value={n(s.warnings)} tone="warning" />
         <CountButton chip="duplicates" label={t('status.duplicates')} value={n(s.duplicated_name)} tone="danger" />
         <CountButton chip="review" label={t('status.review')} value={n(s.review)} tone="warning" />
         <CountButton chip="ignored" label={t('status.ignored')} value={n(s.ignore)} tone="muted" />
