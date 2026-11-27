@@ -142,8 +142,8 @@ importers:
         specifier: ^8.17.1
         version: 8.20.0
       electron:
-        specifier: ^45.3.1
-        version: 45.3.1(supports-color@8.1.1)
+        specifier: ^45.4.1
+        version: 45.4.1(supports-color@8.1.1)
       read-excel-file:
         specifier: 9.3.15
         version: 9.3.15
@@ -1892,8 +1892,8 @@ packages:
     resolution: {integrity: sha512-j9ETcBGJaXxAY/b6UBpR7LZfjdU4BAO+yvr4ifqHEdyuc3UNCy91PDGkWKY5UQ4coHNYfnwFggrqD6QPeFGAlg==}
     engines: {node: '>=8.0.0'}
 
-  electron@45.3.1:
-    resolution: {integrity: sha512-1oYau2B4RXF27Df2fzvrFDJoy8AOSVlgS6gklo6wkLZ/QWJemJCJHkY4+uuacvSFUtR8IimiLukLNFoYP0fmjA==}
+  electron@45.4.1:
+    resolution: {integrity: sha512-DjsJ/eQhovkjf1vYFFyh5GB8NMx+L5bdYaonvGOlWselg3DQ0fwIF0N/+2hrPsoS4whmmNswh21ym/8dgt1y5Q==}
     engines: {node: '>= 22.12.0'}
     hasBin: true
 
@@ -4852,7 +4852,7 @@ snapshots:
       - supports-color
     optional: true
 
-  electron@45.3.1(supports-color@8.1.1):
+  electron@45.4.1(supports-color@8.1.1):
     dependencies:
       '@electron-internal/extract-zip': 1.0.5
       '@electron/get': 5.1.0(supports-color@8.1.1)
